@@ -5,7 +5,7 @@ function About() {
         <nav>
             <NavLink to="/">Back</NavLink>
         </nav>
-        <h1 className="text-4xl font-bold">About</h1>
+        <h1 className="text-4xl font-bold mt-5">About</h1>
     </>
 }
 
