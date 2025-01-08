@@ -1,0 +1,266 @@
+*,
+
+html , body {
+    padding: 0;
+    margin: 0;
+}
+
+
+@media (max-width: 500px) {
+ .div-device-profile {
+        height: 100%;
+        /* background-color: aqua; */
+        background-color: black;
+    }
+
+ .div-container-profile {
+    height: 100%;
+ }
+
+ .div-profile {
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+ }
+
+ .card-profile-mobile {
+    background-color: #333;
+    height: 200px;
+    width: 90%;
+    position: relative;
+    margin-top: 30px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border: 1px white solid;
+   
+ }
+
+ .img-background-profile {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+ }
+
+ 
+ .img-profile {
+    width: 100px; /* Ukuran foto profil */
+    height: 95px;
+    position: absolute;
+    border-radius: 50%; 
+    border: 3px solid white; /* Memberikan border putih */
+    bottom: 40px;
+    left: 10px;
+ }
+
+ .div-container-dataprofile {
+    /* display: flex; */
+    width: 100%;
+ }
+
+ .data-profile {
+    margin-left: 120px;
+ }
+
+ .p-data-profile {
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+ }
+
+ .div-tweet-useraccount {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+ }
+
+ .div-tweet {
+    /* height: 200px; */
+    width: 90%;
+    margin-top: 25px;
+    object-fit: cover;
+ }
+
+ .p-tweet-user {
+    color: white;
+ }
+
+ .div-navigation-bar {
+    background-color: black;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 8%;
+    display: flex;
+ }
+
+ .div-navigation-logo {
+    width: 20%;
+    /* background-color: black; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: smaller;
+}
+
+.img-unggahan-mobile {
+   width: 70%;
+   height: 100px;
+   margin-top: 10px;
+}
+
+.div-profile-desktop {
+   display: none;
+}
+
+.div-unggahan-desktop {
+   display: none;
+}
+
+}
+
+@media (min-width: 1001px) {
+    .div-profile {
+        display: none;
+    }
+    
+    .div-tweet-useraccount {
+        display: none;
+    }
+
+    .div-device-profile {
+      display: flex;
+      background-color: black;
+      width: 100%;
+      height: 100%;
+      flex-direction: row-reverse;
+    }
+
+    .div-sidebar {
+      background-color: black;
+      width: 23%;
+      height: 100vh;
+  }
+
+  .div-container-profile {
+   width: 77%;
+   height: 100%;
+   background-color: black;
+  }
+
+  .div-profile-desktop {
+   height: 50%;
+   /* display: flex;
+   flex-direction: column;
+   align-items: center;  */
+  }
+
+  .p-Profile-font-desktop {
+   font-size: 32px;
+   font-weight: 700;
+   color: white;
+   margin-top: 50px;
+   margin-left: 80px;
+  }
+
+  .card-profile-desktop {
+   background-color: black;
+    height: 260px;
+    width: 70%;
+    position: relative;
+    margin-top: 30px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border: 1px white solid;
+    left: 80px;
+  }
+
+  .img-background-desktop-profile {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+
+  .div-pictureprofile-desktop {
+   width: 100%;
+  }
+
+  .img-profile-desktop {
+   width: 120px; /* Ukuran foto profil */
+   height: 120px;
+   position: absolute;
+   border-radius: 50%; 
+   border: 3px solid white; /* Memberikan border putih */
+   bottom: 40px;
+   left: 40px;
+  }
+
+  .data-profile-desktop {
+   margin-left: 180px;
+   display: flex;
+   justify-content: space-between;
+  }
+
+  .p-dataprofile-desktop {
+   color: white;
+   font-weight: 600;
+   font-size: 25px;
+  }
+
+  .p-sincejoin {
+   font-size: 18px;
+  }
+
+  .button-editprofile-desktop {
+   background-color: #ffe786;
+   height: 40%;
+   padding-left: 30px;
+   padding-right: 30px;
+   padding-top: 8px;
+   padding-bottom: 8px;
+   margin-right: 28px;
+   margin-top: 10px;
+   border-radius: 5px;
+   color: black;
+   font-weight: 500;
+   font-size: 15px;
+   font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .div-unggahan-desktop {
+  margin-top: 15px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  }
+
+  .div-tweet-desktop {
+   width: 60%;
+   height: 100%x;
+   margin-left: 80px;
+   margin-top: 15px;
+  }
+
+  .div-title-unggahan-desktop {
+   color: white;
+   font-weight: 600;
+   font-size: 18px;
+   margin-top: 10px;
+  }
+
+  .img-unggahan-desktop {
+   width: 50%;
+   height: 150px;
+   margin-top: 15px;
+  }
+
+ }
