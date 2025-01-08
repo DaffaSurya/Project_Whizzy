@@ -8,6 +8,8 @@ export default {
         './resources/**/*.blade.php',
         './resources/**/*.jsx',
         './resources/**/*.js',
+         "./src/**/*.{html,js}",
+         "./node_modules/tw-elements/js/**/*.js"
     ],
     theme: {
         extend: {
@@ -16,5 +18,8 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [
+        require('daisyui'),
+        require('tw-elements/plugin.cjs')
+    ],
 };
