@@ -9,6 +9,13 @@ Route::get('/', function () {
 
 
 
+// Admin Route
+Route::prefix('admin')->group([
+
+]);
+
+
+
 
 
 
