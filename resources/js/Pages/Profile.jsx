@@ -137,16 +137,16 @@ const Profile = () => {
             {/* unggahan user for desktop */}
             <div className="div-unggahan-desktop">
                 <div className="div-tweet-desktop">
-                    <article class="rounded-xl border border-gray-700 bg-gray-800 p-4 ">
-                        <div class="flex items-center gap-4 ">
+                    <article className="rounded-xl border border-gray-700 bg-gray-800 p-4 ">
+                        <div className="flex items-center gap-4 ">
                             <img
                                 alt=""
                                 src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                class="size-16 rounded-full object-cover"
+                                className="size-16 rounded-full object-cover"
                             />
 
                             <div>
-                                <h3 class="text-lg font-medium text-white">@Karevlaneis</h3>
+                                <h3 className="text-lg font-medium text-white">@Karevlaneis</h3>
                             </div>
                         </div>
 
@@ -154,23 +154,23 @@ const Profile = () => {
                             <p>Bumi Manusia - Pramodya Ananta toer </p>
                         </div>
 
-                        <ul class="mt-4 space-y-2 text-white">
+                        <ul className="mt-4 space-y-2 text-white">
                             Punya mimpi tak akan pernah mudah. Habibie dan Ainun tahu itu. Cinta mereka terbangun dalam perjalanan mewujudkan mimpi. Dinginnya salju Jerman, pengorbanan, rasa sakit, kesendirian serta godaan harta dan kuasa saat mereka kembali ke Indonesia mengiringi perjalanan dua hidup menjadi satu.
                         </ul>
                     </article>
                 </div>
 
                 <div className="div-tweet-desktop">
-                    <article class="rounded-xl border border-gray-700 bg-gray-800 p-4">
-                        <div class="flex items-center gap-4">
+                    <article className="rounded-xl border border-gray-700 bg-gray-800 p-4">
+                        <div className="flex items-center gap-4">
                             <img
                                 alt=""
                                 src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                class="size-16 rounded-full object-cover"
+                                className="size-16 rounded-full object-cover"
                             />
 
                             <div>
-                                <h3 class="text-lg font-medium text-white">@Karevlaneis</h3>
+                                <h3 className="text-lg font-medium text-white">@Karevlaneis</h3>
                             </div>
                         </div>
 
@@ -178,7 +178,7 @@ const Profile = () => {
                             <p>Bumi Manusia - Pramodya Ananta toer </p>
                         </div>
 
-                        <ul class="mt-4 space-y-2 text-white">
+                        <ul className="mt-4 space-y-2 text-white">
                             Kalau kemanusiaan tersinggung, semua orang yang berperasaan dan berpikiran waras ikut tersinggung, kecuali orang gila dan orang yang berjiwa kriminal, biarpun dia sarjana.
                         </ul>
 

@@ -6,7 +6,7 @@ function Beranda() {
 
     const KomunitasContent = [
         { username: 'zinx', content: 'Eh sumpah naratornya keren bangett, jadi seakan ikut hidup di ceritanya' },
-        { username: 'mekYorMuv', content: 'Seru, tapi bingung ini maksudnya apa sih?' },
+        { username: 'mekYorMuv', content: 'Seru, tapi bingung ini maksudnya apa sih?', attachment: 'https://placehold.co/200' },
         { username: 'ahmad', content: 'Ini puisi lucu bangett, naratornya juga santai dan enak pas dengerinnya!' },
         { username: 'garden_oil', content: 'Novel yang bagus, tapi susah, tapi seru. Baru setengahnya sih, hihihihi' },
     ];
@@ -15,17 +15,17 @@ function Beranda() {
     return (
         <DefaultLayout>
             {/* Header */}
-            <div className="flex flex-row justify-center">
+            <div className="flex flex-row justify-center lg:pt-0 md:pt-8 sm:pt-8">
                 <div role="tablist" className="tabs tabs-lg tabs-bordered w-full justify-center ">
                     {/* Beranda */}
                     <input
                         type="radio"
                         name="my_tabs_1"
                         role="tab"
-                        className="tab px-20 lg:px-52"
+                        className="tab px-16 md:px-32 lg:px-52"
                         aria-label="Beranda"
                         defaultChecked />
-                    <div role="tabpanel" className="tab-content p-4 ">
+                    <div role="tabpanel" className="tab-content p-4">
                         {/* card */}
                         {KomunitasContent.map((item, index) => (
                             <a key={index} className="card mb-8 border-b-2 border-gray-700 rounded-none">
@@ -45,13 +45,20 @@ function Beranda() {
                                 <p className="mt-4 mb-4">
                                     {item.content}
                                 </p>
+                                {item.attachment && (
+                                    <img
+                                        src={item.attachment}
+                                        alt={item.attachment}
+                                        className="h-16 w-16 min-w-[256px] min-h-[128px] object-cover rounded-md mb-3"
+                                    />
+                                )}
                             </a>
                         ))}
                     </div>
                     {/* End Beranda */}
 
                     {/* Jelajah */}
-                    <input type="radio" name="my_tabs_1" role="tab" className="tab px-20 lg:px-52" aria-label="Jelajah" />
+                    <input type="radio" name="my_tabs_1" role="tab" className="tab px-16 md:px-32 lg:px-52" aria-label="Jelajah" />
                     <div role="tabpanel" className="tab-content p-4">
                         {/* card */}
 

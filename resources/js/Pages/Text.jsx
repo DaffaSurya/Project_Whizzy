@@ -139,9 +139,9 @@ const Text = () => {
                                 />
                             </div>
                             <div className="card-actions justify-center">
-                                <button className="button-favorit-dashboard">
+                                <a href="/Garitan-Filantropi/detail" className="button-favorit-dashboard">
                                     Explore The Story
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -174,9 +174,9 @@ const Text = () => {
                                     </h2>
                                     <p>Bahasa dan Sastra indonesia 2023 </p>
                                     <div className="card-actions justify-end">
-                                        <button className="button-explore-story">
+                                        <a href="/Garitan-Filantropi/detail" className="button-explore-story">
                                             Explore the Story
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -268,22 +268,22 @@ const Text = () => {
 
                 <div className="div-desktop-karyapilihan">
                     <section>
-                        <div class="mx-auto max-w-screen-xl px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
+                        <div className="mx-auto max-w-screen-xl px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
                             <header>
-                                <h2 class="text-xl font-bold text-white sm:text-2xl">
+                                <h2 className="text-xl font-bold text-white sm:text-2xl">
                                     Novel Pilihan
                                 </h2>
                             </header>
-                            <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                            <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
                                 <li>
                                     <a
                                         href="#"
-                                        class="group block overflow-hidden"
+                                        className="group block overflow-hidden"
                                     >
                                         <img
                                             src="https://arsip.festivalfilm.id/wp-content/uploads/2020/08/Bumi-Manusia-Poster.jpg"
                                             alt=""
-                                            // class="h-[150px] w-80 object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
+                                            // className="h-[150px] w-80 object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
                                             className="img-collection-desktop"
                                         />
                                     </a>
@@ -292,7 +292,7 @@ const Text = () => {
                                 <li>
                                     <a
                                         href="#"
-                                        class="group block overflow-hidden"
+                                        className="group block overflow-hidden"
                                     >
                                         <img
                                             src="https://th.bing.com/th/id/R.1f0e9f9313da45a89a551e167fed47f9?rik=RijiF9Y24H8HPw&riu=http%3a%2f%2ffarm4.staticflickr.com%2f3714%2f10661051763_3fb9e479a4_o.jpg&ehk=YHeOh%2fo5kyuUurA4C6H1pJQKqoUoJmvmq5H5hycwSkE%3d&risl=&pid=ImgRaw&r=0"
@@ -305,7 +305,7 @@ const Text = () => {
                                 <li>
                                     <a
                                         href="#"
-                                        class="group block overflow-hidden"
+                                        className="group block overflow-hidden"
                                     >
                                         <img
                                             src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1484031052i/1677677.jpg"
@@ -318,7 +318,7 @@ const Text = () => {
                                 <li>
                                     <a
                                         href="#"
-                                        class="group block overflow-hidden"
+                                        className="group block overflow-hidden"
                                     >
                                         <img
                                             src="https://mojokstore.com/wp-content/uploads/2018/04/ronggeng-dukuh-paruk-1.jpg"
@@ -331,7 +331,7 @@ const Text = () => {
                                 <li>
                                     <a
                                         href="#"
-                                        class="group block overflow-hidden"
+                                        className="group block overflow-hidden"
                                     >
                                         <img
                                             src="https://www.bahasaenglish.com/wp-content/uploads/2020/06/5-Menara.jpg"
@@ -344,7 +344,7 @@ const Text = () => {
                                 <li>
                                     <a
                                         href="#"
-                                        class="group block overflow-hidden"
+                                        className="group block overflow-hidden"
                                     >
                                         <img
                                             src="https://online.pubhtml5.com/ryfz/ypax/files/large/1.jpg"
@@ -357,7 +357,7 @@ const Text = () => {
                                 <li>
                                     <a
                                         href="#"
-                                        class="group block overflow-hidden"
+                                        className="group block overflow-hidden"
                                     >
                                         <img
                                             src="https://th.bing.com/th/id/OIP.Sx2CV2g1L1jfUw5Q3MGcPQAAAA?rs=1&pid=ImgDetMain"
@@ -370,7 +370,7 @@ const Text = () => {
                                 <li>
                                     <a
                                         href="#"
-                                        class="group block overflow-hidden"
+                                        className="group block overflow-hidden"
                                     >
                                         <img
                                             src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1484031052i/1677677.jpg"
@@ -383,7 +383,7 @@ const Text = () => {
                                 <li>
                                     <a
                                         href="#"
-                                        class="group block overflow-hidden"
+                                        className="group block overflow-hidden"
                                     >
                                         <img
                                             src="https://mojokstore.com/wp-content/uploads/2018/04/ronggeng-dukuh-paruk-1.jpg"
@@ -396,7 +396,7 @@ const Text = () => {
                                 <li>
                                     <a
                                         href="#"
-                                        class="group block overflow-hidden"
+                                        className="group block overflow-hidden"
                                     >
                                         <img
                                             src="https://www.bahasaenglish.com/wp-content/uploads/2020/06/5-Menara.jpg"
