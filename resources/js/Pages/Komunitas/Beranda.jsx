@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import DefaultLayout from "../../Layout/DefautLayout";
+import FloatingButton from "../../Components/FloatingButton";
 
 function Beranda() {
 
@@ -27,7 +28,7 @@ function Beranda() {
                     <div role="tabpanel" className="tab-content p-4 ">
                         {/* card */}
                         {KomunitasContent.map((item, index) => (
-                            <Link key={index} className="card mb-8 border-b-2 border-gray-700 rounded-none">
+                            <a key={index} className="card mb-8 border-b-2 border-gray-700 rounded-none">
                                 {/* Profile section */}
                                 <div className="flex items-center space-x-4">
                                     <img
@@ -44,7 +45,7 @@ function Beranda() {
                                 <p className="mt-4 mb-4">
                                     {item.content}
                                 </p>
-                            </Link>
+                            </a>
                         ))}
                     </div>
                     {/* End Beranda */}
@@ -53,28 +54,32 @@ function Beranda() {
                     <input type="radio" name="my_tabs_1" role="tab" className="tab px-20 lg:px-52" aria-label="Jelajah" />
                     <div role="tabpanel" className="tab-content p-4">
                         {/* card */}
-                        
-                            <Link className="card mb-8 border-b-2 border-gray-700 rounded-none">
-                                {/* Profile section */}
-                                <div className="flex items-center space-x-4">
-                                    <img
-                                        className="w-12 h-12 rounded-full"
-                                        src="https://placehold.co/400"
-                                        alt="Profile"
-                                    />
-                                    <div>
-                                        <h2 className="font-bold ">daffaSurya</h2>
-                                        <p className="text-sm ">@daffaSurya</p>
-                                    </div>
+
+                        <a className="card mb-8 border-b-2 border-gray-700 rounded-none">
+                            {/* Profile section */}
+                            <div className="flex items-center space-x-4">
+                                <img
+                                    className="w-12 h-12 rounded-full"
+                                    src="https://placehold.co/400"
+                                    alt="Profile"
+                                />
+                                <div>
+                                    <h2 className="font-bold ">daffaSurya</h2>
+                                    <p className="text-sm ">@daffaSurya</p>
                                 </div>
-                                {/* Tweet content */}
-                                <p className="mt-4 mb-4">
-                                    anjay kerenn
-                                </p>
-                            </Link>
-                        
+                            </div>
+                            {/* Tweet content */}
+                            <p className="mt-4 mb-4">
+                                anjay kerenn
+                            </p>
+                        </a>
+
                     </div>
                     {/* End Jelajah */}
+
+                    {/* Button */}
+                    <FloatingButton />
+
                 </div>
             </div>
 
