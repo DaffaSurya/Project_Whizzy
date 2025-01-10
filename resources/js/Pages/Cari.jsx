@@ -8,11 +8,11 @@ function Cari() {
             {/* Search bar */}
             <div className="flex justify-center items-center gap-4 pt-8 lg:px-0 lg:pt-0">
                 {/* Home Button */}
-                <Link to="/">
+                <a href="/">
                     <div className="p-4 bg-[#333333] rounded-full shadow-lg hover:scale-105 transition-transform">
                         <Home className="text-white w-6 h-6" />
                     </div>
-                </Link>
+                </a>
 
                 {/* Search Bar */}
                 <div className="flex items-center gap-3 w-full max-w-xl p-2 bg-[#333333] rounded-full shadow-lg">
