@@ -18,8 +18,11 @@ Route::get('/Komunitas', function () {
 Route::get('/Favorit', function () {
     return Inertia::render('Favorit');
 });
-Route::get('/ada', function () {
-    return Inertia::render('Komunitas/Detail');
+Route::get('/Garitan-Filantropi/detail', function () {
+    return Inertia::render('Mendengarkan');
+});
+Route::get('/Garitan-Filantropi/play', function () {
+    return Inertia::render('Audio');
 });
 
 
