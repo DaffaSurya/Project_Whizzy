@@ -16,10 +16,10 @@ const FloatingButton = () => {
                 {isOpen && (
                     <div className="absolute bottom-16 right-12 shadow-lg rounded-lg w-16 p-2 flex flex-col space-y-2">
                         <button className="w-fit h-fit p-4 rounded-full bg-yellow-400 text-black flex items-center justify-center hover:bg-yellow-500 transition">
-                            Forum
+                          <p>Forum</p>
                         </button>
                         <button className="w-fit h-fit p-4 rounded-full bg-yellow-400 text-black flex items-center justify-center hover:bg-yellow-500 transition">
-                            Unggah
+                          <p>unggah</p>
                         </button>
                     </div>
                 )}

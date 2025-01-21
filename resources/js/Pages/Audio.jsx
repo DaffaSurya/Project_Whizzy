@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import AudioPlayer from '../Components/AudioPlayer';
+import Garitan_Video from '../assets/Garitan_Filantropi.mp4';
 
 function Audio() {
 
@@ -25,7 +26,7 @@ function Audio() {
                             controls={false} // Disable native controls
                         >
                             <source
-                                src="https://docs.material-tailwind.com/demo.mp4"
+                                src={Garitan_Video}
                                 type="video/mp4"
                             />
                             Your browser does not support the video tag.
@@ -34,7 +35,7 @@ function Audio() {
 
                     {/* Video Title and Description */}
                     <div className="mt-5">
-                        <h1 className="text-3xl font-bold text-white">Garisan Filantropi</h1>
+                        <h1 className="text-3xl font-bold text-white">Garitan Filantropi</h1>
                         <p className="text-gray-300 font-light">
                             Mahasiswa dan Sastra Indonesia 2023
                         </p>

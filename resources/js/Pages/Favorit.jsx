@@ -1,6 +1,7 @@
 import DefaultLayout from "../Layout/DefautLayout";
 import "../Style/Favorit.css";
 import { NavLink } from "react-router-dom";
+import Garitan from "../assets/Garitan Filantropi.jpg";
 const Favorit = () => {
   return (
     <DefaultLayout>
@@ -11,6 +12,56 @@ const Favorit = () => {
       </div>
 
       {/* Font Markah in favorit for desktop end */}
+
+      <div className="div-tablet-Markah">
+      {/* Font Markah in favorit for tablet */}
+      <div className="container-content-tablet-booksave">
+      <p className="p-Markah-tablet"> Markah</p>
+      {/* Font Markah in favorit for tablet */}
+
+      {/* Content-booksave-tablet device */}
+        <div className="div-content-booksave">
+        <p className="p-tersimpan-tablet">Tersimpan</p>
+
+        <div className="div-content-tablet">
+         
+          <div className="grid grid-cols-2 gap-1 lg:grid-cols-4 lg:gap-2">
+            <div className="h-100 rounded-lg">
+              <img src="https://arsip.festivalfilm.id/wp-content/uploads/2020/08/Bumi-Manusia-Poster.jpg" className="img-bookmarks-tablet" />
+
+              <div className="div-content-deskripsi">
+                <p>Bumi Manusia</p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 512 512"><path fill="#ffe786" d="M400 0H176a64.11 64.11 0 0 0-62 48h228a74 74 0 0 1 74 74v304.89l22 17.6a16 16 0 0 0 19.34.5a16.41 16.41 0 0 0 6.66-13.42V64a64 64 0 0 0-64-64" /><path fill="#ffe786" d="M320 80H112a64 64 0 0 0-64 64v351.62A16.36 16.36 0 0 0 54.6 509a16 16 0 0 0 19.71-.71L216 388.92l141.69 119.32a16 16 0 0 0 19.6.79a16.4 16.4 0 0 0 6.71-13.44V144a64 64 0 0 0-64-64" /></svg>
+              </div>
+            </div>
+
+            <div className="h-100 rounded-lg">
+              <img src="https://cdn.gramedia.com/uploads/items/9789793062792_New-Edition-Laskar-Pelangi.jpg" className="img-bookmarks-tablet" />
+
+              <div className="div-content-deskripsi">
+                <p>Laskar pelangi</p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 512 512"><path fill="#ffe786" d="M400 0H176a64.11 64.11 0 0 0-62 48h228a74 74 0 0 1 74 74v304.89l22 17.6a16 16 0 0 0 19.34.5a16.41 16.41 0 0 0 6.66-13.42V64a64 64 0 0 0-64-64" /><path fill="#ffe786" d="M320 80H112a64 64 0 0 0-64 64v351.62A16.36 16.36 0 0 0 54.6 509a16 16 0 0 0 19.71-.71L216 388.92l141.69 119.32a16 16 0 0 0 19.6.79a16.4 16.4 0 0 0 6.71-13.44V144a64 64 0 0 0-64-64" /></svg>
+              </div>
+            </div>
+
+            <div className="h-100 rounded-lg">
+              <img src={Garitan} className="img-bookmarks-tablet" />
+
+              <div className="div-content-deskripsi">
+                <p>Garitan Filantropi</p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 512 512"><path fill="#ffe786" d="M400 0H176a64.11 64.11 0 0 0-62 48h228a74 74 0 0 1 74 74v304.89l22 17.6a16 16 0 0 0 19.34.5a16.41 16.41 0 0 0 6.66-13.42V64a64 64 0 0 0-64-64" /><path fill="#ffe786" d="M320 80H112a64 64 0 0 0-64 64v351.62A16.36 16.36 0 0 0 54.6 509a16 16 0 0 0 19.71-.71L216 388.92l141.69 119.32a16 16 0 0 0 19.6.79a16.4 16.4 0 0 0 6.71-13.44V144a64 64 0 0 0-64-64" /></svg>
+              </div>
+            </div>
+          </div>          
+        </div>
+        </div>
+       {/* Content-booksave-tablet device  end */}
+      </div>
+    
+      </div>
+     
+
+    
 
       {/* Bookmarks user in for mobile */}
       <div className="div-Book-Favorit">

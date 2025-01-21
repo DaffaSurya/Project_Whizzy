@@ -102,6 +102,159 @@ const Text = () => {
                 </div>
                 {/* carousel for Desktop end */}
 
+                {/* View for Tablet */}
+                    <div className="div-device-tablet">
+                       <p className='p-kreasiterbaru-tablet'>Kreasi Terbaru</p>
+
+                        {/* carousel for tablet */}
+
+                       <div className="div-carousel-tablet">
+                       <Swiper className="mySwiper">
+                            <SwiperSlide>
+                                <img
+                                    src="https://about.vidio.com/wp-content/uploads/2021/02/HDPM-Laskar-Pelangi-Mobile.jpg"
+                                    className="img-slide-carousel"
+                                />
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <img
+                                    src="https://www.cultura.id/wp-content/uploads/2019/08/bumi_manusia.jpg"
+                                    className="img-slide-carousel"
+                                />
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <img
+                                    src="https://img1.hotstarext.com/image/upload/f_auto,t_web_m_1x/sources/r1/cms/prod/6492/1006492-h-fce8b35dde85"
+                                    className="img-slide-carousel"
+                                />
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <img
+                                    src="https://www.viu.com/ott/id/articles/wp-content/uploads/2019/10/perahu-kertas-1.jpg"
+                                    className="img-slide-carousel"
+                                />
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <img
+                                    src="https://wekepo.com/wp-content/uploads/2019/10/Film-Tenggelamnya-Kapal-Van-der-Wijck.jpg"
+                                    className="img-slide-carousel"
+                                />
+                            </SwiperSlide>
+                            </Swiper>
+                       </div>
+
+                        {/* carousel for tablet end */}
+
+                        {/* tambah buku favorit lainnya for tablet */}
+
+                        <div className="div-favorit-dashboard-tablet"> 
+                            <p className="subjudul-favorit-tablet">Temukan Buku Favorit lainnya</p>
+
+                            <div className="div-content-favorit-tablet">
+                                <div className="card-favoritbook-tablet">
+                                <div className="card card-side bg-base-100 shadow-xl">
+                                 <figure>
+                                 <img
+                                 src={GaritanIMG}
+                                 className="img-favoritbook-tablet"
+                                 alt="Movie" />
+                                </figure>
+                                 <div className="card-body">
+                                 <h2 className="card-title text-white ">Garitan Filantropi</h2>
+                                <p className="text-sm">Mahasiswa dan Sastra indonesia 2023</p>
+                                <div className="card-actions justify-end">
+                                <button className="button-card-favorit-tablet">
+                                    <p>Explore the Story</p>
+                                </button>
+                                </div>
+                                </div>
+                            </div>
+                                </div>
+
+                                <div className="card-favoritbook-tablet">
+                                <div className="card card-side bg-base-100 shadow-xl">
+                                 <figure>
+                                 <img
+                                 src="https://arsip.festivalfilm.id/wp-content/uploads/2020/08/Bumi-Manusia-Poster.jpg"
+                                 className="img-favoritbook-tablet"
+                                 alt="Movie" />
+                                </figure>
+                                 <div className="card-body">
+                                 <h2 className="card-title text-white ">Bumi Manusia</h2>
+                                <p className="text-sm">Pramodya ananta toer</p>
+                                <div className="card-actions justify-end">
+                                <button className="button-card-favorit-tablet">
+                                    <p>Explore the Story</p>
+                                </button>
+                                </div>
+                                </div>
+                            </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* tambah buku favorit lainnya for tablet end */}
+
+                        {/* Novel pilihan for tablet  */}
+                            <div className="div-karyapilihan-tablet">
+                                <p className="p-karyapilihan-tablet">Novel Pilihan</p>
+                            <div className="div-content-karyapilihan-tablet">
+                                <div className="grid grid-cols-3 justify-items-center gap-3 py-3 px-4 mt-4">
+                                 <a href="#" className="group block overflow-hidden">
+                            <img
+                                src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1565658920i/1398034.jpg"
+                                alt=""
+                                className="h-[140px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[240px] rounded-lg"
+                            />
+                        </a>
+
+                        <a href="#" className="group block overflow-hidden">
+                            <img
+                                src={GaritanIMG}
+                                alt=""
+                                className="h-[140px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[240px] rounded-lg"
+                            />
+                        </a>
+
+                        <a href="#" className="group block overflow-hidden">
+                            <img
+                                src="https://upload.wikimedia.org/wikipedia/id/8/8e/Laskar_pelangi_sampul.jpg"
+                                alt=""
+                                className="h-[140px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[240px] rounded-lg"
+                            />
+                        </a>
+
+                        <a href="#" className="group block overflow-hidden">
+                            <img
+                                src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1484031052i/1677677.jpg"
+                                alt=""
+                                className="h-[140px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[240px] rounded-lg"
+                            />
+                        </a>
+
+                        <a href="#" className="group block overflow-hidden">
+                            <img
+                                src="https://ebooks.gramedia.com/ebook-covers/53333/image_highres/BLK_RDP2020706247.jpg"
+                                className="h-[140px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[240px] rounded-lg"
+                            />
+                        </a>
+
+                        <a href="#" className="group block overflow-hidden">
+                            <img
+                                src="https://ebooks.gramedia.com/ebook-covers/1682/image_highres/ID_GPU2013MTH02NLM.jpg"
+                                className="h-[140px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[240px] rounded-lg"
+                            />
+                        </a>
+                    </div>
+                    </div>
+                            <div>
+
+                            </div>
+                            </div>
+                        {/* Novel pilihan for tablet end */}
+                    </div>
+                {/* View for Tablet end */}
+
                 {/* Temukan buku favorit lainnya layout for mobile*/}
 
                 <div className="div-favorit-dashboard">
@@ -139,9 +292,11 @@ const Text = () => {
                                 />
                             </div>
                             <div className="card-actions justify-center">
+                                <button className="button-favorit-dashboard">
                                 <a href="/Garitan-Filantropi/detail" className="button-favorit-dashboard">
                                     Explore The Story
                                 </a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -174,9 +329,11 @@ const Text = () => {
                                     </h2>
                                     <p>Bahasa dan Sastra indonesia 2023 </p>
                                     <div className="card-actions justify-end">
+                                        <button className="button-explore-story">
                                         <a href="/Garitan-Filantropi/detail" className="button-explore-story">
                                             Explore the Story
                                         </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

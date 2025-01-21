@@ -167,6 +167,10 @@ html , body {
     .div-desktop-karyapilihan {
         display: none;
     }
+
+    .div-device-tablet {
+        display: none;
+    }
 }
 
 /* responsif untuk layar sangat kecil */
@@ -181,6 +185,127 @@ html , body {
 
 .div-navbar {
     display: none;
+}
+
+.div-navbar {
+    display: none;
+}
+
+.div-carousel-desktop {
+    display: none;
+}
+ 
+.div-favorit-dashboard {
+    display: none;
+}
+
+.div-carousel-banner {
+    display: none;
+}
+
+.div-favorit-desktop-dashboard {
+    display: none;
+}
+
+.div-karya-pilihan {
+    display: none;
+}
+
+.div-desktop-karyapilihan {
+    display: none;
+}
+
+.div-device-tablet {
+ background-color: black;
+ height: 100%;
+}
+
+.p-kreasiterbaru-tablet {
+    font-size: 24px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 20px;
+    color: white;
+    margin-left: 20px;
+}
+
+.div-carousel-tablet {
+    height: 30%;
+    display: flex;
+    align-items: center;
+
+}
+
+.img-slide-carousel {
+    height: 260px;
+    width: 80%;
+    margin-top: 10px;
+    border-radius: 12px;
+    margin-left: 20px;
+}
+
+.div-favorit-dashboard-tablet {
+    height: 40%;
+}
+
+.div-content-favorit-tablet {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ gap: 20px;
+ margin-top: 10px;
+
+}
+
+.subjudul-favorit-tablet {
+    font-weight: 600;
+    margin-left: 22px;
+    font-size: 20px;
+    color: white;
+    margin-top: 10px;
+}
+
+.card-favoritbook-tablet {
+    height: 200px;
+    width: 45%;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.img-favoritbook-tablet {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.button-card-favorit-tablet {
+    background-color: #FFE786;
+    width: 100%;
+    height: 100%;
+    padding: 2%;
+    color:  black;
+    font-weight: 600;
+    border-radius: 10px;
+    margin-top: 4px;
+}
+
+.p-karyapilihan-tablet {
+ font-size: 24px;
+ font-weight: 600;
+ margin-left: 22px;
+ color: white;
+}
+
+.div-karyapilihan-tablet {
+    width: 100%;
+    height: 100%;
+}
+
+.div-content-karyapilihan-tablet {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 }
@@ -209,6 +334,10 @@ html , body {
     }
 
     .div-favorit-dashboard {
+        display: none;
+    }
+
+    .div-device-tablet {
         display: none;
     }
 
@@ -278,8 +407,11 @@ html , body {
     }
 
     .img-favorit-desktop {
-        width: 300px;
+        width: 100%;
         height: 300px;
+        object-fit: cover;
+        display: block;
+
     }
 
     .button-explore-story {

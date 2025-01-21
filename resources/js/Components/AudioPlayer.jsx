@@ -58,8 +58,8 @@ const AudioPlayer = ({ videoRef }) => {
                         />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-xs sm:text-sm font-medium text-white truncate">Garisan Filantropi</span>
-                        <span className="text-xs text-zinc-400 truncate">Artist Name</span>
+                        <span className="text-xs sm:text-sm font-medium text-white truncate">Garitan Filantropi</span>
+                        <span className="text-xs text-zinc-400 truncate">Mahasiswa Sastra dan Bahasa indonesia 2023</span>
                     </div>
                 </div>
 

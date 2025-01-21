@@ -6,7 +6,7 @@ function Cari() {
     return (
         <DefaultLayout>
             {/* Search bar */}
-            <div className="flex justify-center items-center gap-4 pt-8 lg:px-0 lg:pt-0">
+            <div className="flex justify-center items-center gap-4 pt-8 lg:px-2 lg:pt-0">
                 {/* Home Button */}
                 <a href="/">
                     <div className="p-4 bg-[#333333] rounded-full shadow-lg hover:scale-105 transition-transform">

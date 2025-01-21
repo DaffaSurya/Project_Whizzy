@@ -25,6 +25,9 @@ Route::get('/Garitan-Filantropi/play', function () {
     return Inertia::render('Audio');
 });
 
+Route::get('/EditProfile', function() {
+    return Inertia::render('EditProfile');
+});
 
 
 
