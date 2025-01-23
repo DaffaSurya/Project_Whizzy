@@ -13,4 +13,10 @@
     @inertia
 </body>
 
+<style>
+    * {
+        -ms-high-contrast: none !important;
+    }
+</style>
+
 </html>

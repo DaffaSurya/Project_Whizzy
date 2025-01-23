@@ -1,40 +1,67 @@
 <?php
 
+use App\Http\Controllers\Admin\AudiobookController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ChapterController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Text');
-});
-Route::get('/Cari', function () {
-    return Inertia::render('Cari');
-});
-Route::get('/profile', function () {
-    return Inertia::render('Profile');
-});
-Route::get('/Komunitas', function () {
-    return Inertia::render('Komunitas/Beranda');
-});
-Route::get('/Favorit', function () {
-    return Inertia::render('Favorit');
-});
-Route::get('/Garitan-Filantropi/detail', function () {
-    return Inertia::render('Mendengarkan');
-});
-Route::get('/Garitan-Filantropi/play', function () {
-    return Inertia::render('Audio');
-});
+Route::inertia('/', 'Text');
+Route::inertia('/Cari', 'Cari');
+Route::inertia('/profile', 'Profile');
+Route::inertia('/Komunitas', 'Komunitas/Beranda');
+Route::inertia('/Favorit', 'Favorit');
+Route::inertia('/Garitan-Filantropi/detail', 'Mendengarkan');
+Route::inertia('/Garitan-Filantropi/play', 'Audio');
+Route::inertia('/EditProfile', 'EditProfile');
 
-Route::get('/EditProfile', function() {
-    return Inertia::render('EditProfile');
-});
+// Auth
+Route::inertia('/login', 'Auth/Login');
+Route::post('/authenticate', [LoginController::class, 'authenticate']);
+Route::post('/logout', [LoginController::class, 'logout']);
 
 
+// Admin Route
+Route::prefix('admin')->group(function () {
+    
+    // Dashboard
+    Route::get('/dashboard', action: [DashboardController::class, 'index']);
+    
+    // Users
+    Route::get('/users', [UsersController::class, 'index']);
+    Route::post('/users/store', [UsersController::class, 'store']);
+    Route::get('/users/edit/{id}', [UsersController::class, 'edit']);
+    Route::post('/users/update/{id}', [UsersController::class, 'update']);
 
-// // Admin Route
-// Route::prefix('admin')->group([
+    // Chapter
+    Route::get('/chapter', [ChapterController::class, 'index']);
+    Route::post('/chapter/store', [ChapterController::class, 'store']);
+    Route::get('/chapter/edit/{id}', [ChapterController::class, 'edit']);
+    Route::post('/chapter/update/{id}', [ChapterController::class, 'update']);
+    
+    // categories
+    Route::get('/category', [CategoryController::class, 'index']);
+    Route::post('/category/store', [CategoryController::class, 'store']);
+    Route::get('/category/detail/{id}', [CategoryController::class, 'edit']);
+    Route::get('/category/edit/{id}', [CategoryController::class, 'edit']);
+    Route::post('/category/update/{id}', [CategoryController::class, 'update']);
+    Route::get('/category/delete/{id}', [CategoryController::class, 'delete']);
 
-// ]);
+    // categories
+    Route::get('/audiobook', [AudiobookController::class, 'index']);
+    Route::get('/audiobook/create', [AudiobookController::class, 'create']);
+    Route::post('/audiobook/store', [AudiobookController::class, 'store']);
+    Route::get('/audiobook/detail/{id}', [AudiobookController::class, 'detail']);
+
+    // chapter
+    Route::get('/chapter', [ChapterController::class, 'index']);
+    Route::get('/chapter/create/{id}', [ChapterController::class, 'create']);
+    Route::post('/chapter/store', [ChapterController::class, 'store']);
+    Route::get('/chapter/detail/{id}', [ChapterController::class, 'detail']);
+});
 
 
 
