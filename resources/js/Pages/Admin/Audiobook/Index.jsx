@@ -5,6 +5,7 @@ import { Link } from '@inertiajs/react'
 import TableView from '../../../Components/TableView'
 import GridView from '../../../Components/GridView'
 import Toast from '../../../Components/Toast'
+import Pagination from '../../../Components/Pagination'
 
 const Index = ({ karya }) => {
   const [view, setView] = useState("table");
@@ -42,6 +43,9 @@ const Index = ({ karya }) => {
           <GridView data={karya.data} />
         )}
       </div>
+
+      {/* pagination */}
+      <Pagination links={karya.links} total={karya.total} />
 
     </AdminLayout>
   )

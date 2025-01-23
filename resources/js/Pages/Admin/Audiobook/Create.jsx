@@ -188,6 +188,7 @@ const Create = ({ categories }) => {
 
                         <button
                             type="submit"
+                            disabled={loading}
                             className="mt-3 me-2 btn btn-sm bg-yellow-400 text-black hover:bg-yellow-500 focus:ring-2 focus:ring-yellow-400"
                         >
                             <Save size={20} /> Submit
