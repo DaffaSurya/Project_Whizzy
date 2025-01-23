@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AudiobookController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ChapterController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\TrashController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,8 @@ Route::inertia('/EditProfile', 'EditProfile');
 Route::inertia('/login', 'Auth/Login');
 Route::post('/authenticate', [LoginController::class, 'authenticate']);
 Route::post('/logout', [LoginController::class, 'logout']);
+
+// user
 
 
 // Admin Route
@@ -55,12 +58,18 @@ Route::prefix('admin')->group(function () {
     Route::get('/audiobook/create', [AudiobookController::class, 'create']);
     Route::post('/audiobook/store', [AudiobookController::class, 'store']);
     Route::get('/audiobook/detail/{id}', [AudiobookController::class, 'detail']);
+    Route::get('/audiobook/softDelete/{id}', [AudiobookController::class, 'softDelete']);
 
     // chapter
     Route::get('/chapter', [ChapterController::class, 'index']);
     Route::get('/chapter/create/{id}', [ChapterController::class, 'create']);
     Route::post('/chapter/store', [ChapterController::class, 'store']);
     Route::get('/chapter/detail/{id}', [ChapterController::class, 'detail']);
+
+    // trash
+    Route::get('/trash', [TrashController::class, 'index']);
+    Route::get('/trash/restore/{id}', [AudiobookController::class, 'restore']);
+    Route::get('/trash/hardDelete/{id}', [AudiobookController::class, 'hardDelete']);
 });
 
 

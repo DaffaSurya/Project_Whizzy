@@ -66,5 +66,33 @@ class AudiobookController extends Controller
         return Inertia::render('Admin/Audiobook/Detail', ['karya' => $karya]);
     }
 
+    public function restore($id)
+    {
+        $audiobook = KaryaModel::onlyTrashed()->findOrFail($id);
+        $audiobook->restore(); // Mengembalikan data
+        return Inertia::location('/admin/trash');
+    }
+
+    public function softDelete($id)
+    {
+        $audiobook = KaryaModel::findOrFail($id);
+        $audiobook->delete(); // Menghapus dengan soft delete
+        return ;
+    }
+    public function hardDelete($id)
+    {
+        $audiobook = KaryaModel::withTrashed()->findOrFail($id);
+
+        if ($audiobook->cover_karya) {
+            $filePath = str_replace('/storage', 'public', $audiobook->cover_karya);
+            if (Storage::exists($filePath)) {
+                Storage::delete($filePath); // Delete the file
+            }
+        }
+
+        $audiobook->forceDelete();
+
+        return ;
+    }
 
 }

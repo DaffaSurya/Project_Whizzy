@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import AdminLayout from '../../../Layout/AdminLayout'
 import { Plus, UserRoundPen, Trash2, Eye, Save } from 'lucide-react'
-import { Link  } from '@inertiajs/react'
+import { Link } from '@inertiajs/react'
 import Axios from 'axios'
 import Toast from '../../../Components/Toast'
+import Pagination from '../../../Components/Pagination'
 
 const Index = ({ categories }) => {
 
@@ -42,6 +43,8 @@ const Index = ({ categories }) => {
     }
   }
 
+  console.log(categories);
+
   return (
     <AdminLayout title="Categories">
       {/* Toolbar */}
@@ -72,7 +75,6 @@ const Index = ({ categories }) => {
                   <td className=" px-4 py-2">{item.nama_kategori}</td>
                   <td className="px-4 py-2">{new Date(item.created_at).toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' })}</td>
                   <td className=" px-4 py-2 gap-4">
-                    <Link href={`/admin/category/detail/${item.id}`} className="btn btn-outline btn-sm border-0 hover:bg-transparent hover:text-green-400"><Eye size={20} /> Detail</Link>
                     <Link href={`/admin/category/edit/${item.id}`} className="btn btn-outline btn-sm border-0 hover:bg-transparent hover:text-yellow-400"><UserRoundPen size={20} /> Edit</Link>
                     <Link href={`/admin/category/delete/${item.id}`} className="btn btn-outline btn-sm border-0 hover:bg-transparent hover:text-red-500"><Trash2 size={20} /> Delete</Link>
                   </td>
@@ -91,6 +93,9 @@ const Index = ({ categories }) => {
           </tbody>
         </table>
       </div>
+
+      {/* pagination */}
+      <Pagination links={categories.links} total={categories.total} />
 
       {/* Add category modal */}
       <input type="checkbox" id="addCategory" className="modal-toggle" />

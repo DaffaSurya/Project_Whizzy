@@ -3,6 +3,7 @@ import AdminLayout from '../../../Layout/AdminLayout'
 import { Eye, Plus } from 'lucide-react'
 import TableView from '../../../Components/TableView'
 import { Link } from '@inertiajs/react'
+import Pagination from '../../../Components/Pagination'
 
 const Index = ({ karya }) => {
   return (
@@ -61,6 +62,9 @@ const Index = ({ karya }) => {
           </tbody>
         </table>
       </div>
+
+      {/* pagination */}
+      <Pagination links={karya.links} total={karya.total} />
 
 
     </AdminLayout>

@@ -35,7 +35,7 @@ const TableView = ({ data }) => {
                                 <td className=" px-4 py-2 gap-4">
                                     <Link href={`/admin/audiobook/detail/${item.id}`} className="btn btn-outline btn-sm border-0 hover:bg-transparent hover:text-green-400"><Eye size={20} /> Detail</Link>
                                     <Link href={`/admin/audiobook/edit/${item.id}`} className="btn btn-outline btn-sm border-0 hover:bg-transparent hover:text-yellow-400"><UserRoundPen size={20} /> Edit</Link>
-                                    <Link href={`/admin/audiobook/delete/${item.id}`} className="btn btn-outline btn-sm border-0 hover:bg-transparent hover:text-red-500"><Trash2 size={20} /> Delete</Link>
+                                    <Link href={`/admin/audiobook/softDelete/${item.id}`} className="btn btn-outline btn-sm border-0 hover:bg-transparent hover:text-red-500"><Trash2 size={20} /> Delete</Link>
                                 </td>
                             </tr>
                         ))

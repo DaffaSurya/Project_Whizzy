@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('cover_karya');
             $table->text('deskripsi_karya');
             $table->string('status');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

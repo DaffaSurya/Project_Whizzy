@@ -3,6 +3,7 @@ import AdminLayout from '../../../Layout/AdminLayout'
 import Axios from 'axios';
 import { UserRoundPen, Trash2, Plus, Eye } from 'lucide-react';
 import { Link, usePage } from '@inertiajs/react';
+import Pagination from '../../../Components/Pagination';
 
 const Index = ({ users }) => {
   const { errors, flash } = usePage().props;
@@ -84,6 +85,9 @@ const Index = ({ users }) => {
           </tbody>
         </table>
       </div>
+
+      {/* pagination */}
+      <Pagination links={users.links} total={users.total} />
 
       {/* Add user modal */}
       <input type="checkbox" id="addUser" className="modal-toggle" />
