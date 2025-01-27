@@ -10,30 +10,34 @@ const Create = ({ categories }) => {
 
     // loading
     const [loading, setLoading] = useState(false);
-    
+
     // toast
     const [toastVisible, setToastVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
 
     // image preview
     const [image, setImage] = useState(null);
-    const [file, setFile] = useState(null); // To store the actual file for upload
+    const [progress, setProgress] = useState(0);
+    const [fileData, setFileData] = useState({
+        cover_karya: null,
+        ilustrasi_karya: null,
+    });
 
     const handleImageChange = (event) => {
-        const selectedFile = event.target.files[0];
-        if (selectedFile) {
-            const reader = new FileReader();
+        const { name, files } = event.target;
 
-            // Set the file for upload (without base64 conversion)
-            setFile(selectedFile);
+        if (files && files.length > 0) {
+            const file = files[0];
+            console.log(`Input Name: ${name}, File Name: ${file.name}`);
 
-            // Set image preview using FileReader
-            reader.onload = () => {
-                setImage(reader.result);
-            };
-            reader.readAsDataURL(selectedFile); // Convert the file to base64 for preview
+            // Update the corresponding file in the state
+            setFileData((prevState) => ({
+                ...prevState,
+                [name]: file,
+            }));
         }
     };
+
 
     // category multiple select
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -61,17 +65,30 @@ const Create = ({ categories }) => {
         selectedCategories.forEach(categoryId => {
             data.append('categories[]', categoryId);
         });
-        // Append the actual file for upload
-        if (file) {
-            data.append('cover_karya', file);
+
+        // Append files
+        if (fileData.cover_karya) {
+            data.append('cover_karya', fileData.cover_karya);
+        }
+        if (fileData.ilustrasi_karya) {
+            data.append('ilustrasi_karya', fileData.ilustrasi_karya);
         }
 
         try {
+            for (const [key, value] of data.entries()) {
+                console.log(key, value);
+            }
+
             // Make the POST request with form data
             const response = await Axios.post('/admin/audiobook/store', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    setProgress(percentCompleted);
+                },
+
             });
 
             // Optionally redirect or show a success message here
@@ -79,6 +96,7 @@ const Create = ({ categories }) => {
 
 
         } catch (error) {
+            setLoading(false);
             // Handle error
             if (error.response) {
                 console.log("Error data:", error.response.data);
@@ -91,6 +109,18 @@ const Create = ({ categories }) => {
 
     return (
         <AdminLayout title="Audiobook | Create">
+
+            {/* Progress bar */}
+            {loading && (
+                <div className="w-full bg-gray-200 rounded h-4 mb-4">
+                    <div
+                        className="bg-yellow-400 h-4 rounded"
+                        style={{ width: `${progress}%` }}
+                    ></div>
+                </div>
+            )}
+
+
             <form onSubmit={newKarya} className="w-full space-y-4">
                 <div className="grid grid-cols-3 gap-5">
 
@@ -191,7 +221,7 @@ const Create = ({ categories }) => {
                             disabled={loading}
                             className="mt-3 me-2 btn btn-sm bg-yellow-400 text-black hover:bg-yellow-500 focus:ring-2 focus:ring-yellow-400"
                         >
-                            <Save size={20} /> Submit
+                            <Save size={20} /> {loading ? 'Uploading...' : 'Submit'}
                         </button>
                         <Link href='/admin/audiobook' className='mt-3 me-2 btn btn-sm bg-transparent hover:bg-transparent text-gray-600 border-0'><Ban size={20} /> Cancel</Link>
                     </div>
@@ -200,17 +230,21 @@ const Create = ({ categories }) => {
                     <div className="">
                         <label className="form-control w-full file-input-xl">
                             <div className="label">
-                                <span className="label-text">Cover Karya</span>
+                                <span className="label-text">Cover Karya <span className='text-sm text-gray-600'>.jpg .jpeg .png | max 1mb</span></span>
                             </div>
                             <input
                                 type="file"
                                 name='cover_karya'
+                                accept="image/png, image/jpg, image/jpeg"
                                 className="w-full"
                                 onChange={handleImageChange}
                             />
                         </label>
                         {image && <img src={image} alt="Image Preview" className="mt-4" />}
                     </div>
+
+
+
 
                 </div>
             </form>

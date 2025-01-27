@@ -4,9 +4,14 @@ use App\Http\Controllers\Admin\AudiobookController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ChapterController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ForumController;
 use App\Http\Controllers\Admin\TrashController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\KomentarChapterController;
+use App\Http\Controllers\User\SearchController;
+use App\Models\KomentarChapterModel;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -20,11 +25,9 @@ Route::inertia('/Garitan-Filantropi/play', 'Audio');
 Route::inertia('/EditProfile', 'EditProfile');
 
 // Auth
-Route::inertia('/login', 'Auth/Login');
+Route::inertia('/login', 'Auth/Login')->name('login');
 Route::post('/authenticate', [LoginController::class, 'authenticate']);
-Route::post('/logout', [LoginController::class, 'logout']);
-
-// user
+Route::get('/logout', [LoginController::class, 'logout']);
 
 
 // Admin Route
@@ -70,7 +73,37 @@ Route::prefix('admin')->group(function () {
     Route::get('/trash', [TrashController::class, 'index']);
     Route::get('/trash/restore/{id}', [AudiobookController::class, 'restore']);
     Route::get('/trash/hardDelete/{id}', [AudiobookController::class, 'hardDelete']);
+
+    // forum
+    Route::get('/forum', [ForumController::class, 'index']);
+    Route::get('/forum/create/', [ForumController::class, 'create']);
+    Route::post('/forum/store', [ForumController::class, 'store']);
+    Route::get('/forum/detail/{id}', [ForumController::class, 'detail']);
+    
+    // homepage settings
+    Route::get('/homepage-settings', [HomepageController::class, 'index']);
+    Route::post('/homepage-settings/store-featured', [HomepageController::class, 'store_featured']);
 });
+
+// Users Route
+Route::get('/forum/unggah', [ForumController::class, 'unggah']);
+
+// karya 
+Route::get('/karya/{id}/{slug}', [AudiobookController::class, 'showKarya']);
+Route::get('/karya/{slug}/{id}/chapter/{chapterId}', [AudiobookController::class, 'playChapter']);
+
+// Komentar di setiap chapter
+Route::post('/komentar/store/{userId}/{chapterId}', [KomentarChapterController::class, 'store']);
+
+
+// Cari
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+
+
+
+
+
+
 
 
 

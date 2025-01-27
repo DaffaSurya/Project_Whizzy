@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chapter', function (Blueprint $table) {
+        Schema::create('komentar_chapter', function (Blueprint $table) {
             $table->id();
-            $table->string('judul_chapter');
-            $table->foreignId('karya_id')->references('id')->on('karya');
-            $table->string('status');
-            $table->string('audio_file');
-            $table->string('ilustrasi_karya');
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('chapter_id')->references('id')->on('chapter');
+            $table->text('komentar');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chapter');
+        Schema::dropIfExists('komentar_chapter');
     }
 };

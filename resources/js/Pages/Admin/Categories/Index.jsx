@@ -43,7 +43,7 @@ const Index = ({ categories }) => {
     }
   }
 
-  console.log(categories);
+  // console.log(categories);
 
   return (
     <AdminLayout title="Categories">

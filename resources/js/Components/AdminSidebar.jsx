@@ -5,7 +5,6 @@ import {
   BookOpen,
   FolderTree,
   Users,
-  Palette,
   Settings,
   ChartBarStacked,
   Users2,
@@ -38,8 +37,9 @@ const AdminSidebar = () => {
     { href: "/admin/category", icon: ChartBarStacked, label: "Categories", category: "content" },
     { href: "/admin/chapter", icon: FolderTree, label: "Chapter", category: "content" },
     { href: "/admin/users", icon: Users, label: "Users", category: "content" },
-    { href: "/admin/komunitas", icon: Users2, label: "Forum", category: "komunitas" },
+    { href: "/admin/forum", icon: Users2, label: "Forum", category: "komunitas" },
     { href: "/admin/trash", icon: Trash2, label: "Trash", category: "tools" },
+    { href: "/admin/homepage-settings", icon: Settings, label: "Homepage Settings", category: "tools" },
   ];
 
   const currentPath = window.location.pathname;

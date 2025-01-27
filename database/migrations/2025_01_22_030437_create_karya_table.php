@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('judul_karya');
             $table->string('penyunting');
             $table->text('cover_karya');
+            $table->text('ilustrasi_karya')->nullable();
             $table->text('deskripsi_karya');
             $table->string('status');
+            $table->string('slug');
             $table->softDeletes();
             $table->timestamps();
         });

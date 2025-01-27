@@ -13,20 +13,30 @@ class LoginController extends Controller
     {
     }
     public function authenticate(Request $request)
-    {   
+    {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'email' => 'required',
+            'password' => 'required',
         ]);
 
         if (Auth::attempt($credentials)) {
-            return response()->json(['message' => 'login successful', 'redirectTo'], 200);
+            return response()->json(['message' => 'login successful', 'redirectTo' => '/admin/dashboard'], 200);
         }
 
-        return response()->json(['message' => 'email or password doenst match in our database']. 404);
-
+        return response()->json(['message' => 'email or password doesn\'t match in our database'], 404);
     }
-    public function logout()
+
+    public function logout(Request $request)
     {
+        // Log the user out
+        Auth::logout();
+
+        // Optionally, invalidate the session
+        $request->session()->invalidate();
+
+        // Regenerate the session token
+        $request->session()->regenerateToken();
+
+        return Inertia::location('/');
     }
 }

@@ -1,11 +1,14 @@
 import React from 'react';
-import { Home, Search, User, Users, Bookmark } from 'lucide-react';
-import { Link } from '@inertiajs/react';
+import { Home, Search, User, Users, Bookmark, LogOut } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
 
 export default function Sidebar() {
   const currentPath = window.location.pathname; // Get current path
 
   const isActive = (path) => currentPath === path ? 'text-yellow-200' : 'text-white'; // Check if the path is active
+
+  // get current logged users
+  const currentUser = usePage().props.auth.user;
 
   return (
     <>
@@ -52,13 +55,27 @@ export default function Sidebar() {
             </nav>
 
             {/* profile */}
-            <Link
-              href="/Favorit"
-              className={`group flex items-center px-6 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/Favorit')}`}
-            >
-              <Bookmark className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/Favorit')}`} aria-hidden="true" />
-              Username
-            </Link>
+            <div className="flex justify-between items-center px-6 py-2 text-sm font-medium rounded-md">
+              {currentUser ? (
+                <>
+                  <span>{currentUser.username}</span>
+                  <Link
+                    href="/logout"
+                    className="text-red-500 hover:text-red-700 text-sm font-medium"
+                  >
+                    Logout
+                  </Link>
+                </>
+              ) : (
+                <Link
+                  href="/login"
+                  className="hover:text-yellow-200 text-sm font-medium"
+                >
+                  Login
+                </Link>
+              )}
+            </div>
+
 
           </div>
         </div>

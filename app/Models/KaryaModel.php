@@ -19,4 +19,14 @@ class KaryaModel extends Model
         return $this->belongsToMany(CategoryModel::class, 'karya_category', 'karya_id', 'category_id');
     }
 
+    public function chapters()
+    {
+        return $this->hasMany(ChapterModel::class, 'karya_id');
+    }
+
+    public function featured()
+    {
+        return $this->hasMany(FeaturedModel::class, 'featured_audiobook');
+    }
+
 }

@@ -1,572 +1,227 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import GaritanIMG from "../assets/Garitan Filantropi.jpg";
 import "react-multi-carousel/lib/styles.css";
 import "../Style/style.css";
 
+import { Link } from '@inertiajs/react'
 import "swiper/css";
 import DefaultLayout from "../Layout/DefautLayout";
+import { useEffect, useState } from "react";
+import Axios from "axios";
 
 const Text = () => {
+
+    const [karya, setKarya] = useState(null);
+    const [featured, setFeatured] = useState({ data: [] });
+
+
+    console.log(featured.data[0])
+
+    // Fetch Karya data
+    async function getKarya() {
+        try {
+            const response = await Axios.get("/api/karya-list");
+            setKarya(response.data);  // Set the entire response data
+        } catch (error) {
+            console.error("Error fetching Karya:", error);
+            alert("An error occurred while fetching data.");
+        }
+    }
+
+    // Fetch Featured Karya data
+    async function getFeatured() {
+        try {
+            const response = await Axios.get("/api/featured-karya");
+            setFeatured(response.data);  // Set the entire response data
+        } catch (error) {
+            console.error("Error fetching Featured Karya:", error);
+            alert("An error occurred while fetching data.");
+        }
+    }
+
+    function truncateText(text, limit = 120) {
+        if (!text) return "";  // Handle null or undefined text
+        return text.length > limit ? text.slice(0, limit) + "..." : text;
+    }
+
+    // Fetch data when the component mounts
+    useEffect(() => {
+        getKarya();
+        getFeatured();
+    }, []);
+
+    const books = [
+        {
+            id: 1,
+            title: "Garitan Filantropi",
+            description: "Bahasa dan Sastra Indonesia 2023",
+            image: "/api/placeholder/400/320",
+            link: "/Garitan-Filantropi/detail"
+        },
+        {
+            id: 2,
+            title: "Bumi Manusia",
+            description: "Pramodya Ananta Toer",
+            image: "https://th.bing.com/th/id/OIP.0XksT2Jm_x8jEfaxsMaoLAHaLH?rs=1&pid=ImgDetMain"
+        }
+    ];
+
     return (
         <DefaultLayout>
 
-            {/* navbar / Header  for Mobile*/}
-            <div className="div-navbar">
-                <div className="div-session1">
-                    <img
-                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        className="img-header-profile"
-                    />
-                    <p className="Name-profile">Hai , Kareva</p>
-                </div>
-            </div>
-            {/* navbar / Header  for Mobile*/}
+            <div className="flex flex-col pb-24 lg:px-8">
 
-            {/* Carousel for Mobile */}
-            <div className="div-carousel-banner">
-                <Swiper className="mySwiper">
-                    <SwiperSlide>
+                {/* users name */}
+                {/* <div className="flex flex-row pb-5">
+                    <div className="flex flex-row items-center gap-4">
                         <img
-                            src="https://m.media-amazon.com/images/M/MV5BMjc0ZGU0M2QtNzZkMS00NzI2LTg0OGEtNTE3OTU5MzUyZmFjXkEyXkFqcGdeQXVyNzEzNjU1NDg@._V1_.jpg"
-                            className="img-slide-carousel"
+                            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            className="w-12 h-12 rounded-full fit object-cover"
                         />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img
-                            src="https://www.cultura.id/wp-content/uploads/2019/08/bumi_manusia.jpg"
-                            className="img-slide-carousel"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img
-                            src="https://img1.hotstarext.com/image/upload/f_auto,t_web_m_1x/sources/r1/cms/prod/6492/1006492-h-fce8b35dde85"
-                            className="img-slide-carousel"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img
-                            src="https://www.viu.com/ott/id/articles/wp-content/uploads/2019/10/perahu-kertas-1.jpg"
-                            className="img-slide-carousel"
-                        />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img
-                            src="https://wekepo.com/wp-content/uploads/2019/10/Film-Tenggelamnya-Kapal-Van-der-Wijck.jpg"
-                            className="img-slide-carousel"
-                        />
-                    </SwiperSlide>
-                </Swiper>
-            </div>
+                        <p className="">Selamat Datang , <span className="text-yellow-200 font-bold">Kareva</span></p>
+                    </div>
+                </div> */}
 
-            {/* carousel for Mobile end */}
+                {/* carousel */}
+                <div className="carousel flex flex-col pb-5">
+                    <h1 className="text-2xl font-bold pb-3">Kreasi Terbaru</h1>
 
-            {/* carousel for Desktop */}
-            <div className="div-carousel-desktop">
-                <p className="p-carousel-desktop">Kreasi Terbaru</p>
-
-                <div className="div-carousel">
-                    <Swiper className="mySwiper">
+                    <Swiper className="w-full rounded-3xl">
                         <SwiperSlide>
-                            <img
-                                src="https://about.vidio.com/wp-content/uploads/2021/02/HDPM-Laskar-Pelangi-Mobile.jpg"
-                                className="img-slide-carousel"
-                            />
+                            <div className="relative group">
+                                <img
+                                    src="https://about.vidio.com/wp-content/uploads/2021/02/HDPM-Laskar-Pelangi-Mobile.jpg"
+                                    className="object-cover w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]"
+                                />
+                                <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-80 transition-opacity duration-300"></div>
+                                <div className="absolute inset-0 flex flex-col items-end justify-end px-4 pb-6 lg:pb-12 sm:px-16 text-start text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <h2 className="text-xl font-bold text-start w-full">Laskar Pelangi</h2>
+                                    <p className="text-sm sm:text-base">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maxime dolorem qui dicta sint ex quam perspiciatis voluptatum molestias, veniam, fugiat doloribus voluptatibus, doloremque ratione. Sapiente neque eos odio tenetur culpa?</p>
+                                </div>
+                            </div>
                         </SwiperSlide>
                         <SwiperSlide>
                             <img
                                 src="https://www.cultura.id/wp-content/uploads/2019/08/bumi_manusia.jpg"
-                                className="img-slide-carousel"
+                                className="object-cover w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]"
                             />
                         </SwiperSlide>
                         <SwiperSlide>
                             <img
                                 src="https://img1.hotstarext.com/image/upload/f_auto,t_web_m_1x/sources/r1/cms/prod/6492/1006492-h-fce8b35dde85"
-                                className="img-slide-carousel"
+                                className="object-cover w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]"
                             />
                         </SwiperSlide>
                         <SwiperSlide>
                             <img
                                 src="https://www.viu.com/ott/id/articles/wp-content/uploads/2019/10/perahu-kertas-1.jpg"
-                                className="img-slide-carousel"
+                                className="object-cover w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]"
                             />
                         </SwiperSlide>
                         <SwiperSlide>
                             <img
                                 src="https://wekepo.com/wp-content/uploads/2019/10/Film-Tenggelamnya-Kapal-Van-der-Wijck.jpg"
-                                className="img-slide-carousel"
-                            />
-                        </SwiperSlide>
-                    </Swiper>
-                </div>
-            </div>
-            {/* carousel for Desktop end */}
-
-            {/* View for Tablet */}
-            <div className="div-device-tablet">
-                <p className='p-kreasiterbaru-tablet'>Kreasi Terbaru</p>
-
-                {/* carousel for tablet */}
-
-                <div className="div-carousel-tablet">
-                    <Swiper className="mySwiper">
-                        <SwiperSlide>
-                            <img
-                                src="https://about.vidio.com/wp-content/uploads/2021/02/HDPM-Laskar-Pelangi-Mobile.jpg"
-                                className="img-slide-carousel"
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img
-                                src="https://www.cultura.id/wp-content/uploads/2019/08/bumi_manusia.jpg"
-                                className="img-slide-carousel"
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img
-                                src="https://img1.hotstarext.com/image/upload/f_auto,t_web_m_1x/sources/r1/cms/prod/6492/1006492-h-fce8b35dde85"
-                                className="img-slide-carousel"
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img
-                                src="https://www.viu.com/ott/id/articles/wp-content/uploads/2019/10/perahu-kertas-1.jpg"
-                                className="img-slide-carousel"
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img
-                                src="https://wekepo.com/wp-content/uploads/2019/10/Film-Tenggelamnya-Kapal-Van-der-Wijck.jpg"
-                                className="img-slide-carousel"
+                                className="object-cover w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]"
                             />
                         </SwiperSlide>
                     </Swiper>
                 </div>
 
-                {/* carousel for tablet end */}
 
-                {/* tambah buku favorit lainnya for tablet */}
 
-                <div className="div-favorit-dashboard-tablet">
-                    <p className="subjudul-favorit-tablet">Temukan Buku Favorit lainnya</p>
+                {/* Temukan buku favorit lainnya layout for desktop */}
+                <div className="py-8">
+                    <h1 className="text-xl md:text-2xl mb-6 font-bold">
+                        Temukan Buku Favoritmu berikutnya
+                    </h1>
 
-                    <div className="div-content-favorit-tablet">
-                        <div className="card-favoritbook-tablet">
-                            <div className="card card-side bg-base-100 shadow-xl">
-                                <figure>
-                                    <img
-                                        src={GaritanIMG}
-                                        className="img-favoritbook-tablet"
-                                        alt="Movie" />
-                                </figure>
-                                <div className="card-body">
-                                    <h2 className="card-title text-white ">Garitan Filantropi</h2>
-                                    <p className="text-sm">Mahasiswa dan Sastra indonesia 2023</p>
-                                    <div className="card-actions justify-end">
-                                        <button className="button-card-favorit-tablet">
-                                            <p>Explore the Story</p>
-                                        </button>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 justify-start">
+                        {featured && Array.isArray(featured.data) && featured.data.length > 0 ? (
+                            featured.data.map((item) => (
+                                <div className="w-full">
+                                    <div className="flex bg-black rounded-xl shadow-xl border border-gray-700 h-64 overflow-hidden">
+                                        <div className="flex-shrink-0">
+                                            <img
+                                                src={item.karya.cover_karya}
+                                                alt={item.karya.judul_karya}
+                                                className="w-36 lg:w-48 h-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col p-4 flex-grow">
+                                            <h2 className="text-lg font-semibold mb-2">
+                                                {item.karya.judul_karya}
+                                            </h2>
+                                            <p className="text-sm text-gray-600 mb-4">
+                                                {truncateText(item.karya.deskripsi_karya)}
+                                            </p>
+                                            <div className="mt-auto">
+                                                <Link
+                                                    href={`/karya/${item.karya.slug}/${item.karya.id}` || "#"}
+                                                    className="inline-block bg-yellow-400 text-black py-2 px-4 rounded hover:bg-yellow-500 transition-colors"
+                                                >
+                                                    Explore the Story
+                                                </Link>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div className="card-favoritbook-tablet">
-                            <div className="card card-side bg-base-100 shadow-xl">
-                                <figure>
-                                    <img
-                                        src="https://arsip.festivalfilm.id/wp-content/uploads/2020/08/Bumi-Manusia-Poster.jpg"
-                                        className="img-favoritbook-tablet"
-                                        alt="Movie" />
-                                </figure>
-                                <div className="card-body">
-                                    <h2 className="card-title text-white ">Bumi Manusia</h2>
-                                    <p className="text-sm">Pramodya ananta toer</p>
-                                    <div className="card-actions justify-end">
-                                        <button className="button-card-favorit-tablet">
-                                            <p>Explore the Story</p>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* tambah buku favorit lainnya for tablet end */}
-
-                {/* Novel pilihan for tablet  */}
-                <div className="div-karyapilihan-tablet">
-                    <p className="p-karyapilihan-tablet">Novel Pilihan</p>
-                    <div className="div-content-karyapilihan-tablet">
-                        <div className="grid grid-cols-3 justify-items-center gap-3 py-3 px-4 mt-4">
-                            <a href="#" className="group block overflow-hidden">
-                                <img
-                                    src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1565658920i/1398034.jpg"
-                                    alt=""
-                                    className="h-[140px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[240px] rounded-lg"
-                                />
-                            </a>
-
-                            <a href="#" className="group block overflow-hidden">
-                                <img
-                                    src={GaritanIMG}
-                                    alt=""
-                                    className="h-[140px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[240px] rounded-lg"
-                                />
-                            </a>
-
-                            <a href="#" className="group block overflow-hidden">
-                                <img
-                                    src="https://upload.wikimedia.org/wikipedia/id/8/8e/Laskar_pelangi_sampul.jpg"
-                                    alt=""
-                                    className="h-[140px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[240px] rounded-lg"
-                                />
-                            </a>
-
-                            <a href="#" className="group block overflow-hidden">
-                                <img
-                                    src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1484031052i/1677677.jpg"
-                                    alt=""
-                                    className="h-[140px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[240px] rounded-lg"
-                                />
-                            </a>
-
-                            <a href="#" className="group block overflow-hidden">
-                                <img
-                                    src="https://ebooks.gramedia.com/ebook-covers/53333/image_highres/BLK_RDP2020706247.jpg"
-                                    className="h-[140px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[240px] rounded-lg"
-                                />
-                            </a>
-
-                            <a href="#" className="group block overflow-hidden">
-                                <img
-                                    src="https://ebooks.gramedia.com/ebook-covers/1682/image_highres/ID_GPU2013MTH02NLM.jpg"
-                                    className="h-[140px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[240px] rounded-lg"
-                                />
-                            </a>
-                        </div>
-                    </div>
-                    <div>
+                            ))
+                        ) : (
+                            <span className="col-span-full text-center text-white loading loading-dots loading-md"></span>
+                        )}
 
                     </div>
                 </div>
-                {/* Novel pilihan for tablet end */}
-            </div>
-            {/* View for Tablet end */}
 
-            {/* Temukan buku favorit lainnya layout for mobile*/}
 
-            <div className="div-favorit-dashboard">
-                <p className="subjudul">Temukan Buku Favorit lainnya</p>
+                {/* Temukan buku favorit lainnya layout for desktop end */}
 
-                <div className="card card-side bg-black shadow-xl mt-6">
-                    <figure>
-                        <img
-                            src={GaritanIMG}
-                            className="img-favorit-dashboard"
-                            alt="Movie"
-                        />
-                    </figure>
-                    <div className="card-body">
-                        <h2 className="card-title">Garitan Filantropi</h2>
-                        <p className="subjudul-card">
-                            Bahasa dan Sastra Indonesia 2023
-                        </p>
-                        <div className="div-review-star">
-                            <img
-                                src="https://static.vecteezy.com/system/resources/thumbnails/023/980/239/small/yellow-star-watercolor-illustration-png.png"
-                                className="star-review"
-                            />
-                            <img
-                                src="https://static.vecteezy.com/system/resources/thumbnails/023/980/239/small/yellow-star-watercolor-illustration-png.png"
-                                className="star-review"
-                            />
-                            <img
-                                src="https://static.vecteezy.com/system/resources/thumbnails/023/980/239/small/yellow-star-watercolor-illustration-png.png"
-                                className="star-review"
-                            />
-                            <img
-                                src="https://static.vecteezy.com/system/resources/thumbnails/023/980/239/small/yellow-star-watercolor-illustration-png.png"
-                                className="star-review"
-                            />
-                        </div>
-                        <div className="card-actions justify-center">
-                            <button className="button-favorit-dashboard">
-                                <a href="/Garitan-Filantropi/detail" className="button-favorit-dashboard">
-                                    Explore The Story
-                                </a>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div></div>
-            </div>
-
-            {/* Temukan buku favorit lainnya layout end for mobile*/}
-
-            {/* Temukan buku favorit lainnya layout for desktop */}
-
-            <div className="div-favorit-desktop-dashboard">
-                <p className="p-TambahBukuFavorit">
-                    Temukan Buku Favoritmu berikutnya
-                </p>
-
-                <div className="div-favoritbook-desktop">
-                    <div className="div-card-favoritbook">
-                        <div className="card card-side bg-base-100 shadow-xl border border-white">
-                            <figure>
-                                <img
-                                    src={GaritanIMG}
-                                    alt="Movie"
-                                    className="img-favorit-desktop"
-                                />
-                            </figure>
-                            <div className="card-body">
-                                <h2 className="card-title">
-                                    {" "}
-                                    Garitan Filantropi{" "}
-                                </h2>
-                                <p>Bahasa dan Sastra indonesia 2023 </p>
-                                <div className="card-actions justify-end">
-                                    <button className="button-explore-story">
-                                        <a href="/Garitan-Filantropi/detail" className="button-explore-story">
-                                            Explore the Story
-                                        </a>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="div-card-favoritbook-2">
-                        <div className="card card-side bg-base-100 shadow-xl border border-white">
-                            <figure>
-                                <img
-                                    src="https://th.bing.com/th/id/OIP.0XksT2Jm_x8jEfaxsMaoLAHaLH?rs=1&pid=ImgDetMain"
-                                    alt="Movie"
-                                    className="img-favorit-desktop"
-                                />
-                            </figure>
-                            <div className="card-body">
-                                <h2 className="card-title">
-                                    {" "}
-                                    Bumi Manusia
-                                </h2>
-                                <p>Pramodya ananta Toer</p>
-                                <div className="card-actions justify-end">
-                                    <button className="button-explore-story">
-                                        Explore the Story
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Temukan buku favorit lainnya layout for desktop end */}
-
-            {/* novel pilihan anda for mobile */}
-            <div className="div-karya-pilihan">
-                <p className="p-karyapilihan">Novel Pilihan</p>
-
-                <div className="grid grid-cols-2 justify-items-center mt-3 gap-5 py-1">
-                    <a href="#" className="group block overflow-hidden">
-                        <img
-                            src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1565658920i/1398034.jpg"
-                            alt=""
-                            className="h-[240px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[420px] rounded-lg"
-                        />
-                    </a>
-
-                    <a href="#" className="group block overflow-hidden">
-                        <img
-                            src={GaritanIMG}
-                            alt=""
-                            className="h-[240px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[450px] rounded-lg"
-                        />
-                    </a>
-
-                    <a href="#" className="group block overflow-hidden">
-                        <img
-                            src="https://upload.wikimedia.org/wikipedia/id/8/8e/Laskar_pelangi_sampul.jpg"
-                            alt=""
-                            className="h-[240px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[450px] rounded-lg"
-                        />
-                    </a>
-
-                    <a href="#" className="group block overflow-hidden">
-                        <img
-                            src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1484031052i/1677677.jpg"
-                            alt=""
-                            className="h-[240px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[450px] rounded-lg"
-                        />
-                    </a>
-
-                    <a href="#" className="group block overflow-hidden">
-                        <img
-                            src="https://ebooks.gramedia.com/ebook-covers/53333/image_highres/BLK_RDP2020706247.jpg"
-                            className="h-[240px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[450px] rounded-lg"
-                        />
-                    </a>
-
-                    <a href="#" className="group block overflow-hidden">
-                        <img
-                            src="https://ebooks.gramedia.com/ebook-covers/1682/image_highres/ID_GPU2013MTH02NLM.jpg"
-                            className="h-[240px] w-40 object-cover transition duration-500 group-hover:scale-105 sm:h-[450px] rounded-lg"
-                        />
-                    </a>
-                </div>
-            </div>
-            {/* novel pilhan anda end  for mobile*/}
-
-            {/* novel pilihan anda for desktop */}
-
-            <div className="div-desktop-karyapilihan">
-                <section>
-                    <div className="mx-auto max-w-screen-xl px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
+                <div>
+                    <div className="novel">
                         <header>
                             <h2 className="text-xl font-bold text-white sm:text-2xl">
                                 Novel Pilihan
                             </h2>
                         </header>
-                        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-                            <li>
-                                <a
-                                    href="#"
-                                    className="group block overflow-hidden"
-                                >
-                                    <img
-                                        src="https://arsip.festivalfilm.id/wp-content/uploads/2020/08/Bumi-Manusia-Poster.jpg"
-                                        alt=""
-                                        // className="h-[150px] w-80 object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
-                                        className="img-collection-desktop"
-                                    />
-                                </a>
-                            </li>
+                        <ul className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                            {karya && karya.data ? (
+                                karya.data.map((item) => (
+                                    <li key={item.id}>
+                                        <div
 
-                            <li>
-                                <a
-                                    href="#"
-                                    className="group block overflow-hidden"
-                                >
-                                    <img
-                                        src="https://th.bing.com/th/id/R.1f0e9f9313da45a89a551e167fed47f9?rik=RijiF9Y24H8HPw&riu=http%3a%2f%2ffarm4.staticflickr.com%2f3714%2f10661051763_3fb9e479a4_o.jpg&ehk=YHeOh%2fo5kyuUurA4C6H1pJQKqoUoJmvmq5H5hycwSkE%3d&risl=&pid=ImgRaw&r=0"
-                                        alt=""
-                                        className="img-collection-desktop"
-                                    />
-                                </a>
-                            </li>
+                                            className="group block overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow relative">
+                                            <div className="relative w-full pt-[150%] bg-gray-800 rounded-lg overflow-hidden">
+                                                <img
+                                                    src={item.cover_karya}
+                                                    alt={item.judul_karya}
+                                                    className="absolute top-0 left-0 w-full h-full object-cover transition-opacity group-hover:opacity-30"
+                                                    loading="lazy"
+                                                />
+                                                <div className="absolute top-0 left-0 w-full h-full bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
+                                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <div className="text-center text-white p-4">
+                                                        <h3 className="text-xl font-semibold">{item.judul_karya}</h3>
+                                                        <a
+                                                            href={`/karya/${item.slug}/${item.id}`}
+                                                            className="mt-2 inline-block px-6 py-2 text-sm font-medium text-black bg-yellow-400 rounded-lg hover:bg-yellow-600 transition-colors">
+                                                            View Details
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))
+                            ) : (
+                                <span className="col-span-full text-center text-white loading loading-dots loading-md"></span>
 
-                            <li>
-                                <a
-                                    href="#"
-                                    className="group block overflow-hidden"
-                                >
-                                    <img
-                                        src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1484031052i/1677677.jpg"
-                                        alt=""
-                                        className="img-collection-desktop"
-                                    />
-                                </a>
-                            </li>
-
-                            <li>
-                                <a
-                                    href="#"
-                                    className="group block overflow-hidden"
-                                >
-                                    <img
-                                        src="https://mojokstore.com/wp-content/uploads/2018/04/ronggeng-dukuh-paruk-1.jpg"
-                                        alt=""
-                                        className="img-collection-desktop"
-                                    />
-                                </a>
-                            </li>
-
-                            <li>
-                                <a
-                                    href="#"
-                                    className="group block overflow-hidden"
-                                >
-                                    <img
-                                        src="https://www.bahasaenglish.com/wp-content/uploads/2020/06/5-Menara.jpg"
-                                        alt=""
-                                        className="img-collection-desktop"
-                                    />
-                                </a>
-                            </li>
-
-                            <li>
-                                <a
-                                    href="#"
-                                    className="group block overflow-hidden"
-                                >
-                                    <img
-                                        src="https://online.pubhtml5.com/ryfz/ypax/files/large/1.jpg"
-                                        alt=""
-                                        className="img-collection-desktop"
-                                    />
-                                </a>
-                            </li>
-
-                            <li>
-                                <a
-                                    href="#"
-                                    className="group block overflow-hidden"
-                                >
-                                    <img
-                                        src="https://th.bing.com/th/id/OIP.Sx2CV2g1L1jfUw5Q3MGcPQAAAA?rs=1&pid=ImgDetMain"
-                                        alt=""
-                                        className="img-collection-desktop"
-                                    />
-                                </a>
-                            </li>
-
-                            <li>
-                                <a
-                                    href="#"
-                                    className="group block overflow-hidden"
-                                >
-                                    <img
-                                        src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1484031052i/1677677.jpg"
-                                        alt=""
-                                        className="img-collection-desktop"
-                                    />
-                                </a>
-                            </li>
-
-                            <li>
-                                <a
-                                    href="#"
-                                    className="group block overflow-hidden"
-                                >
-                                    <img
-                                        src="https://mojokstore.com/wp-content/uploads/2018/04/ronggeng-dukuh-paruk-1.jpg"
-                                        alt=""
-                                        className="img-collection-desktop"
-                                    />
-                                </a>
-                            </li>
-
-                            <li>
-                                <a
-                                    href="#"
-                                    className="group block overflow-hidden"
-                                >
-                                    <img
-                                        src="https://www.bahasaenglish.com/wp-content/uploads/2020/06/5-Menara.jpg"
-                                        alt=""
-                                        className="img-collection-desktop"
-                                    />
-                                </a>
-                            </li>
+                            )}
                         </ul>
                     </div>
-                </section>
+
+                </div>
             </div>
-            {/* novel pilihan anda for desktop */}
 
         </DefaultLayout>
     );

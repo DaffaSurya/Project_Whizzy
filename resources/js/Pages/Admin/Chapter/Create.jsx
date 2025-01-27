@@ -26,14 +26,22 @@ const Create = ({ karya, chapter }) => {
         formData.append("status", e.target.status.value);
         formData.append("karya_id", karya.id);
 
-        // Append the audio file to FormData
-        const audioFile = e.target.audio_file.files[0]; // Assuming the input field is named "audio_file"
+        // Get the files
+        const ilustrasiKaryaFile = e.target.ilustrasi_karya.files[0]; // For .mp4 file
+        const audioFile = e.target.audio_file.files[0]; // For .mp3 file
+
+        // Check and append the video file
+        if (ilustrasiKaryaFile) {
+            formData.append("ilustrasi_karya", ilustrasiKaryaFile);
+        }
+
+        // Check and append the audio file
         if (audioFile) {
             formData.append("audio_file", audioFile);
         }
 
         try {
-            console.log(formData);
+            console.log(formData); // Optional, to check the data being sent
             const response = await Axios.post(`/admin/chapter/store`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data", // Ensure the correct content type for file upload
@@ -45,6 +53,8 @@ const Create = ({ karya, chapter }) => {
 
             window.location.reload();
         } catch (error) {
+            setLoading(false);
+
             if (error.response) {
                 console.log("Error data:", error.response.data);
                 console.log("Error status:", error.response.status);
@@ -54,6 +64,7 @@ const Create = ({ karya, chapter }) => {
             setLoading(false);
         }
     }
+
 
     // audio
     const [playing, setPlaying] = useState(null); // To track which audio is playing
@@ -133,14 +144,14 @@ const Create = ({ karya, chapter }) => {
                                             <td className="flex flex-row px-4 py-2 gap-4">
                                                 <audio
                                                     id={`audio-${index}`}
-                                                    src={`/storage/${item.audio_file}`}
+                                                    src={`/${item.audio_file}`}
                                                     type="audio/mp3"
                                                 />
                                                 <button
                                                     className="btn btn-outline btn-sm px-0 border-0 hover:bg-transparent hover:text-green-400"
                                                     onClick={() => handlePlayPause(document.getElementById(`audio-${index}`), index)}
                                                 >
-                                                    {playing === index ? <Pause size={20} />  : <Play size={20} />}
+                                                    {playing === index ? <Pause size={20} /> : <Play size={20} />}
                                                 </button>
                                                 <Link href={`/admin/audiobook/edit/${item.id}`} className="btn btn-outline btn-sm px-0 border-0 hover:bg-transparent hover:text-yellow-400"><UserRoundPen size={20} /> Edit</Link>
                                                 <Link href={`/admin/audiobook/delete/${item.id}`} className="btn btn-outline btn-sm px-0 border-0 hover:bg-transparent hover:text-red-500"><Trash2 size={20} /> Delete</Link>
@@ -181,7 +192,13 @@ const Create = ({ karya, chapter }) => {
                             />
                         </div>
 
-                        <div className="mb-3">
+                        <div className="mb-3 flex flex-col">
+                            <label htmlFor="">Ilustrasi Karya <span className='text-sm text-gray-600'>.mp4 | Max 5MB</span></label>
+                            <input type="file" name="ilustrasi_karya" accept="video/mp4" required />
+                        </div>
+
+                        <div className="mb-3 flex flex-col">
+                            <label htmlFor="">Audio <span className='text-sm text-gray-600'>.mp3 | Max 3MB</span></label>
                             <input type="file" name="audio_file" accept="audio/*" required />
                         </div>
 
