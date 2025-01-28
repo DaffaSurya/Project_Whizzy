@@ -39,10 +39,10 @@ export default function Sidebar() {
                 Profil
               </Link>
               <Link
-                href="/Komunitas"
-                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/Komunitas')}`}
+                href="komunitas/all"
+                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/komunitas/all')}`}
               >
-                <Users className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/Komunitas')}`} aria-hidden="true" />
+                <Users className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/komunitas/all')}`} aria-hidden="true" />
                 Komunitas
               </Link>
               <Link

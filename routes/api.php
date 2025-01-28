@@ -14,3 +14,4 @@ Route::get('/featured-karya', function (Request $request) {
     return response()->json(['data' => FeaturedModel::with('karya')->get()]);
 });
 
+

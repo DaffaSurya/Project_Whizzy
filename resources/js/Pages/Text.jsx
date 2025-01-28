@@ -51,22 +51,6 @@ const Text = () => {
         getFeatured();
     }, []);
 
-    const books = [
-        {
-            id: 1,
-            title: "Garitan Filantropi",
-            description: "Bahasa dan Sastra Indonesia 2023",
-            image: "/api/placeholder/400/320",
-            link: "/Garitan-Filantropi/detail"
-        },
-        {
-            id: 2,
-            title: "Bumi Manusia",
-            description: "Pramodya Ananta Toer",
-            image: "https://th.bing.com/th/id/OIP.0XksT2Jm_x8jEfaxsMaoLAHaLH?rs=1&pid=ImgDetMain"
-        }
-    ];
-
     return (
         <DefaultLayout>
 
@@ -132,14 +116,14 @@ const Text = () => {
 
                 {/* Temukan buku favorit lainnya layout for desktop */}
                 <div className="py-8">
-                    <h1 className="text-xl md:text-2xl mb-6 font-bold">
+                    <h2 className="text-xl md:text-2xl mb-6 text-white font-bold">
                         Temukan Buku Favoritmu berikutnya
-                    </h1>
+                    </h2>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 justify-start">
                         {featured && Array.isArray(featured.data) && featured.data.length > 0 ? (
                             featured.data.map((item) => (
-                                <div className="w-full">
+                                <div className="w-full" key={item.karya.id}>
                                     <div className="flex bg-black rounded-xl shadow-xl border border-gray-700 h-64 overflow-hidden">
                                         <div className="flex-shrink-0">
                                             <img
@@ -167,9 +151,14 @@ const Text = () => {
                                     </div>
                                 </div>
                             ))
+                        ) : featured && Array.isArray(featured.data) && featured.data.length === 0 ? (
+                            <div className="col-span-full text-center text-white py-8">
+                                <p className="text-lg">Belum ada karya yang disorot</p>
+                            </div>
                         ) : (
                             <span className="col-span-full text-center text-white loading loading-dots loading-md"></span>
                         )}
+
 
                     </div>
                 </div>
@@ -186,37 +175,42 @@ const Text = () => {
                         </header>
                         <ul className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                             {karya && karya.data ? (
-                                karya.data.map((item) => (
-                                    <li key={item.id}>
-                                        <div
-
-                                            className="group block overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow relative">
-                                            <div className="relative w-full pt-[150%] bg-gray-800 rounded-lg overflow-hidden">
-                                                <img
-                                                    src={item.cover_karya}
-                                                    alt={item.judul_karya}
-                                                    className="absolute top-0 left-0 w-full h-full object-cover transition-opacity group-hover:opacity-30"
-                                                    loading="lazy"
-                                                />
-                                                <div className="absolute top-0 left-0 w-full h-full bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
-                                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <div className="text-center text-white p-4">
-                                                        <h3 className="text-xl font-semibold">{item.judul_karya}</h3>
-                                                        <a
-                                                            href={`/karya/${item.slug}/${item.id}`}
-                                                            className="mt-2 inline-block px-6 py-2 text-sm font-medium text-black bg-yellow-400 rounded-lg hover:bg-yellow-600 transition-colors">
-                                                            View Details
-                                                        </a>
+                                karya.data.length > 0 ? (
+                                    karya.data.map((item) => (
+                                        <li key={item.id}>
+                                            <div className="group block overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow relative">
+                                                <div className="relative w-full pt-[150%] bg-gray-800 rounded-lg overflow-hidden">
+                                                    <img
+                                                        src={item.cover_karya}
+                                                        alt={item.judul_karya}
+                                                        className="absolute top-0 left-0 w-full h-full object-cover transition-opacity group-hover:opacity-30"
+                                                        loading="lazy"
+                                                    />
+                                                    <div className="absolute top-0 left-0 w-full h-full bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
+                                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <div className="text-center text-white p-4">
+                                                            <h3 className="text-xl font-semibold">{item.judul_karya}</h3>
+                                                            <a
+                                                                href={`/karya/${item.slug}/${item.id}`}
+                                                                className="mt-2 inline-block px-6 py-2 text-sm font-medium text-black bg-yellow-400 rounded-lg hover:bg-yellow-600 transition-colors"
+                                                            >
+                                                                View Details
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                ))
+                                        </li>
+                                    ))
+                                ) : (
+                                    <div className="col-span-full text-center text-white py-8">
+                                        <p className="text-lg">Belum ada karya nih, nantikan terus ya...</p>
+                                    </div>
+                                )
                             ) : (
                                 <span className="col-span-full text-center text-white loading loading-dots loading-md"></span>
-
                             )}
+
                         </ul>
                     </div>
 

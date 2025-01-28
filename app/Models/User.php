@@ -52,4 +52,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(KomentarChapterModel::class, 'user_id');
     }
+
+    public function komunitas()
+    {
+        return $this->hasMany(KomunitasModel::class, 'user_id');
+    }
+
+    public function commentsKomunitas()
+    {
+        return $this->belongsTo(KomentarKomunitasModel::class);
+
+    }
 }

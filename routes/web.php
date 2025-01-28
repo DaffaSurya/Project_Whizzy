@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\KomentarChapterController;
+use App\Http\Controllers\User\KomunitasController;
 use App\Http\Controllers\User\SearchController;
 use App\Models\KomentarChapterModel;
 use Illuminate\Support\Facades\Route;
@@ -97,7 +98,18 @@ Route::post('/komentar/store/{userId}/{chapterId}', [KomentarChapterController::
 
 
 // Cari
-Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::get('/search', [SearchController::class, 'search']);
+
+// Komunitas
+Route::get('/komunitas/all', [KomunitasController::class, 'index']);
+Route::get('/komunitas/show/{id}', [KomunitasController::class, 'detail']);
+Route::post('/komunitas/store/{id}', [KomunitasController::class, 'store']);
+
+// Komunitas Comments
+Route::post('/komunitas/storeComments/{id}/{userid}', [KomunitasController::class, 'storeComments']);
+
+
+
 
 
 
