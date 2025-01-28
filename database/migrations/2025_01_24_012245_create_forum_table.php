@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chapter', function (Blueprint $table) {
+        Schema::create('forum', function (Blueprint $table) {
             $table->id();
-            $table->string('judul_chapter');
-            $table->foreignId('karya_id')->references('id')->on('karya');
-            $table->string('status');
-            $table->string('audio_file');
-            $table->string('ilustrasi_karya');
+            $table->string('nama_forum');
+            $table->text('deskripsi_forum');
+            $table->text('attachment')->nullable();
+            $table->string('slug')->unique();
+            // $table->foreignId('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chapter');
+        Schema::dropIfExists('forum');
     }
 };

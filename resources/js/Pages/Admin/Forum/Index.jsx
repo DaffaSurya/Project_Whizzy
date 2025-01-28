@@ -1,58 +1,20 @@
 import React, { useState } from 'react'
 import AdminLayout from '../../../Layout/AdminLayout'
-import { Plus, UserRoundPen, Trash2, Eye, Save } from 'lucide-react'
-import { Link } from '@inertiajs/react'
-import Axios from 'axios'
-import Toast from '../../../Components/Toast'
 import Pagination from '../../../Components/Pagination'
+import { Plus, Trash2, UserRoundPen } from 'lucide-react';
 
-const Index = ({ categories }) => {
+const Index = ({ forum }) => {
 
   const [loading, setLoading] = useState(false);
-  const [toastVisible, setToastVisible] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
-
-  async function newCategory(e) {
-    e.preventDefault();
-
-    setLoading(true);
-
-    const data = {
-      nama_kategori: e.target.nama_kategori.value,
-    }
-
-    try {
-      const response = await Axios.post('/admin/category/store', data);
-
-      document.getElementById('addCategory').checked = false;
-
-      setToastVisible(true);
-      setToastMessage("Item moved successfully.");
-
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    } catch (error) {
-      if (error.response) {
-        console.log("Error data:", error.response.data);
-        console.log("Error status:", error.response.status);
-        console.log("Error headers:", error.response.headers);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  // console.log(categories);
 
   return (
-    <AdminLayout title="Categories">
-      {/* Toolbar */}
+    <AdminLayout title={`Forum`}>
+
+      {/* toolbar */}
       <div className="flex">
-        <label htmlFor="addCategory" className="btn btn-outline btn-sm text-white hover:bg-yellow-400"><Plus size={18} /> New Category</label>
+        <label htmlFor="addCategory" className="btn btn-outline btn-sm text-white hover:bg-yellow-400"><Plus size={18} /> New Forum</label>
       </div>
 
-      <Toast show={toastVisible} message={toastMessage} />
 
       {/* table */}
       <div className="overflow-x-auto rounded-md border border-slate-800">
@@ -61,14 +23,14 @@ const Index = ({ categories }) => {
             <tr>
               <th></th>
               <th>ID</th>
-              <th>Nama Kategory</th>
+              <th>Nama Forum</th>
               <th>Created at</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {categories.data.length > 0 ? (
-              categories.data.map((item) => (
+            {forum.data.length > 0 ? (
+              forum.data.map((item) => (
                 <tr key={item.id}>
                   <td className=" px-4 py-2"></td>
                   <td className=" px-4 py-2">{item.id}</td>
@@ -86,7 +48,7 @@ const Index = ({ categories }) => {
                   colSpan="6"
                   className=" px-4 py-5 text-center text-gray-500"
                 >
-                  No categories found.
+                  No Forum found.
                 </td>
               </tr>
             )}
@@ -95,7 +57,8 @@ const Index = ({ categories }) => {
       </div>
 
       {/* pagination */}
-      <Pagination links={categories.links} total={categories.total} />
+      <Pagination links={forum.links} total={forum.total} />
+
 
       {/* Add category modal */}
       <input type="checkbox" id="addCategory" className="modal-toggle" />
@@ -103,7 +66,7 @@ const Index = ({ categories }) => {
         <div className="modal-box bg-black border border-gray-600 rounded-lg">
           <h3 className="text-lg font-bold mb-3">Create New Category</h3>
 
-          <form onSubmit={newCategory}>
+          <form >
             <input type="text" name='nama_kategori' placeholder="Fantasy..." className="input input-bordered my-2 input-md w-full" />
 
             <button type='submit' disabled={loading} className={`btn btn-sm px-4 py-1 mt-3 ${loading

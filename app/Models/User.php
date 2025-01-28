@@ -47,4 +47,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function komentar()
+    {
+        return $this->hasMany(KomentarChapterModel::class, 'user_id');
+    }
+
+    public function komunitas()
+    {
+        return $this->hasMany(KomunitasModel::class, 'user_id');
+    }
+
+    public function commentsKomunitas()
+    {
+        return $this->belongsTo(KomentarKomunitasModel::class);
+
+    }
 }

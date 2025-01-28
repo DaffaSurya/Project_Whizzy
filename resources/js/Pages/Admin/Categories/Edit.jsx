@@ -6,7 +6,7 @@ import { Link } from '@inertiajs/react'
 const Edit = ({ category }) => {
   return (
     <AdminLayout title={`Category - Detail - ${category.nama_kategori}`}>
-      <form >
+      <form>
         <label class="form-control w-full max-w-xs">
           <div class="label">
             <span class="label-text">Nama Kategori</span>
