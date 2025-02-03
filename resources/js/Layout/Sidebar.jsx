@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Search, User, Users, Bookmark, LogOut } from 'lucide-react';
+import { Home, Search, User, Users, Bookmark, LogOut , Star} from 'lucide-react';
 import { Link, usePage } from '@inertiajs/react';
 
 export default function Sidebar() {
@@ -52,6 +52,15 @@ export default function Sidebar() {
                 <Bookmark className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/Favorit')}`} aria-hidden="true" />
                 Markah
               </Link>
+
+              <Link
+                href="/Review"
+                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/Review')}`}
+              >
+                <Star className={`mr-3 flex-shrink-0 h-6 w-6  ${isActive('/Review')}`} aria-hidden= "true" />
+                Review dan Saran
+              </Link>
+
             </nav>
 
             {/* profile */}

@@ -24,6 +24,7 @@ Route::inertia('/Favorit', 'Favorit');
 Route::inertia('/Garitan-Filantropi/detail', 'Mendengarkan');
 Route::inertia('/Garitan-Filantropi/play', 'Audio');
 Route::inertia('/EditProfile', 'EditProfile');
+Route::inertia('/Review', 'Review');
 
 // Auth
 Route::inertia('/login', 'Auth/Login')->name('login');

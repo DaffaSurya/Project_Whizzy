@@ -165,10 +165,68 @@ const Audio = () => {
             </div>
 
             {/* Edit profile for desktop */}
-                <div className="">
+                <div className="div-editprofile-desktop">
+                  <p className="p-editprofile-font-desktop">Edit Profile</p>
 
+                  <div className="card-editprofile-desktop">
+                    <img
+                        src="https://wallpapercat.com/w/full/7/0/2/1290-3840x2160-desktop-4k-among-us-background.jpg"
+                        className="img-background-desktop-profile"
+                    />
+
+                    <div className="div-container-editprofile-desktop">
+                        <div className="div-picture-editprofile-desktop">
+                         <img
+                            src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            className="img-editprofile-desktop"
+                            />
+                        </div>
+                    </div>
+
+                    
+                    <div className="data-profile-desktop">
+                            <div className="div-container-data-profile-desktop">
+                                <p className="p-dataprofile-desktop">
+                                    @Karevlaneis
+                                </p>
+                                <p className="p-sincejoin">Since 2020 Join</p>
+                            </div>
+
+                        <div className="button-changepicture-desktop">
+                           <div className="changepicture-desktop">
+                             <p className="edit-profile-desktop">Change Picture</p>
+                           </div>
+
+                           <div className="icon-changepicture-desktop">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#000000" d="m21.7 13.35l-1 1l-2.05-2.05l1-1a.55.55 0 0 1 .77 0l1.28 1.28c.21.21.21.56 0 .77M12 18.94l6.06-6.06l2.05 2.05L14.06 21H12zM12 14c-4.42 0-8 1.79-8 4v2h6v-1.89l4-4c-.66-.08-1.33-.11-2-.11m0-10a4 4 0 0 0-4 4a4 4 0 0 0 4 4a4 4 0 0 0 4-4a4 4 0 0 0-4-4"/></svg>
+                           </div>
+                        </div>
+                        </div>
+                  </div>
+
+                  <form action="">
+                  <div className="div-bar-editprofile-desktop">
+                    <p>Username</p>
+                    <div className="div-bar-editprofilewithbutton-desktop">
+                    <input type="text" placeholder="@Karevlaneis" className="input-editprofile-desktop"/>
+                    <button className="button-save-editprofile">Save Button</button>
+                    </div>
+                  </div>
+
+                   
+                  <div className="div-bar-editprofile-desktop">
+                    <p>Email</p>
+                    <input type="email" placeholder="karavlaneis@gmail.com" className="input-editprofile-desktop"/>
+                  </div>
+
+                   
+                  <div className="div-bar-editprofile-desktop">
+                    <p>Password</p>
+                    <input type="password" placeholder="****" className="input-editprofile-desktop"/>
+                  </div>
+                  </form>
                 </div>
-            {/* edit profile for desktop end */}
+                {/* edit profile for desktop end */}
         </DefaultLayout>
     );
 };
