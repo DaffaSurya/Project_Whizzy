@@ -32,7 +32,7 @@ class ChapterController extends Controller
             'karya_id' => 'required',
             'status' => 'required',
             'audio_file' => 'required|mimes:mp3,wav,ogg|max:5120',
-            'ilustrasi_karya' => 'nullable|file|mimes:mp4|max:5110000', // Validate audio file
+            'ilustrasi_karya' => 'nullable|file|mimes:mp4|max:10000', // Validate audio file
         ]);
 
         // Handle ilustrasi_karya file upload

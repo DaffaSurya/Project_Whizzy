@@ -43,7 +43,7 @@ const AdminSidebar = () => {
     // { href: "#", icon: Users2, label: "Forum", category: "komunitas" },
     { href: "/admin/trash", icon: Trash2, label: "Trash", category: "tools" },
     { href: "/admin/homepage-settings", icon: Settings, label: "Homepage Settings", category: "tools" },
-    { href: "/", icon: CornerDownLeft, label: "Back to Home", category: "tools" },
+    { href: "/  ", icon: CornerDownLeft, label: "Back to Home", category: "tools" },
   ];
 
   const currentPath = window.location.pathname;

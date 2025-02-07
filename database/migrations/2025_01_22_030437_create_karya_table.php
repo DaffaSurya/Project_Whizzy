@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('judul_karya');
             $table->string('penyunting');
-            $table->text('cover_karya');
+            $table->text('cover_karya')->nullable();
             $table->text('ilustrasi_karya')->nullable();
             $table->text('deskripsi_karya');
             $table->string('status');

@@ -206,8 +206,8 @@ const Create = ({ karya, chapter }) => {
                         </div>
 
                         <div className="mb-3 flex flex-col">
-                            <label htmlFor="">Ilustrasi Karya <span className='text-sm text-gray-600'>.mp4 | Max 10MB</span></label>
-                            <input type="file" name="ilustrasi_karya" accept="video/mp4" required />
+                            <label htmlFor="">Ilustrasi Karya <span className='text-sm text-gray-600'>Optional | .mp4 | Max 10MB</span></label>
+                            <input type="file" name="ilustrasi_karya" accept="video/mp4" />
                         </div>
 
                         <div className="mb-3 flex flex-col">
