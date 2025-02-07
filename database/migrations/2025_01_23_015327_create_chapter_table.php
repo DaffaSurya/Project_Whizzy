@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('karya_id')->references('id')->on('karya');
             $table->string('status');
             $table->string('audio_file');
-            $table->string('ilustrasi_karya');
+            $table->string('ilustrasi_karya')->nullable();
             $table->timestamps();
         });
     }
