@@ -123,6 +123,7 @@ const Create = ({ karya, chapter }) => {
                                 <tr>
                                     <th></th>
                                     <th>Judul Chapter</th>
+                                    <th>Status</th>
                                     <th>Created at</th>
                                     <th></th>
                                 </tr>
@@ -133,6 +134,17 @@ const Create = ({ karya, chapter }) => {
                                         <tr key={item.id}>
                                             <td className="px-4 py-2">{index + 1}</td>
                                             <td className="px-4 py-2">{item.judul_chapter}</td>
+                                            <td className="px-4 py-2">
+                                                {item.status === 'published' ? (
+                                                    <span className="text-green-500">Published</span>
+                                                ) : item.status === 'draft' ? (
+                                                    <span className="text-yellow-500">Draft</span>
+                                                ) : item.status === 'archived' ? (
+                                                    <span className="text-red-500">Archived</span>
+                                                ) : (
+                                                    <span className="text-gray-500">Unknown</span>
+                                                )}
+                                            </td>
                                             <td className="px-4 py-2">
                                                 {new Date(item.created_at).toLocaleDateString("en-GB", {
                                                     weekday: "short",
@@ -148,12 +160,13 @@ const Create = ({ karya, chapter }) => {
                                                     type="audio/mp3"
                                                 />
                                                 <button
+                                                    disabled={true}
                                                     className="btn btn-outline btn-sm px-0 border-0 hover:bg-transparent hover:text-green-400"
                                                     onClick={() => handlePlayPause(document.getElementById(`audio-${index}`), index)}
                                                 >
                                                     {playing === index ? <Pause size={20} /> : <Play size={20} />}
                                                 </button>
-                                                <Link href={`/admin/audiobook/edit/${item.id}`} className="btn btn-outline btn-sm px-0 border-0 hover:bg-transparent hover:text-yellow-400"><UserRoundPen size={20} /> Edit</Link>
+                                                <Link disabled={true} href={`/admin/audiobook/edit/${item.id}`} className="btn btn-outline btn-sm px-0 border-0 hover:bg-transparent hover:text-yellow-400"><UserRoundPen size={20} /> Edit</Link>
                                                 <Link href={`/admin/audiobook/delete/${item.id}`} className="btn btn-outline btn-sm px-0 border-0 hover:bg-transparent hover:text-red-500"><Trash2 size={20} /> Delete</Link>
                                             </td>
                                         </tr>
@@ -193,12 +206,12 @@ const Create = ({ karya, chapter }) => {
                         </div>
 
                         <div className="mb-3 flex flex-col">
-                            <label htmlFor="">Ilustrasi Karya <span className='text-sm text-gray-600'>.mp4 | Max 5MB</span></label>
+                            <label htmlFor="">Ilustrasi Karya <span className='text-sm text-gray-600'>.mp4 | Max 10MB</span></label>
                             <input type="file" name="ilustrasi_karya" accept="video/mp4" required />
                         </div>
 
                         <div className="mb-3 flex flex-col">
-                            <label htmlFor="">Audio <span className='text-sm text-gray-600'>.mp3 | Max 3MB</span></label>
+                            <label htmlFor="">Audio <span className='text-sm text-gray-600'>.mp3 | Max 5MB</span></label>
                             <input type="file" name="audio_file" accept="audio/*" required />
                         </div>
 
@@ -218,8 +231,9 @@ const Create = ({ karya, chapter }) => {
                                 <option value="" disabled selected>
                                     Select Status
                                 </option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
+                                <option value="published">Published</option>
+                                <option value="draft">Draft</option>
+                                <option value="archived">Archived</option>
                             </select>
                         </div>
 

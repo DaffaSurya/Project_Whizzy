@@ -10,17 +10,23 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\KomentarChapterController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\KomunitasController;
+use App\Http\Controllers\User\LikesController;
+use App\Http\Controllers\User\LikesModel;
+use App\Http\Controllers\User\MarkahController;
 use App\Http\Controllers\User\SearchController;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\AuthMiddleware;
 use App\Models\KomentarChapterModel;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::inertia('/', 'Text');
 Route::inertia('/Cari', 'Cari');
-Route::inertia('/profile', 'Profile');
+Route::inertia('/register', 'Register');
 Route::inertia('/Komunitas', 'Komunitas/Beranda');
-Route::inertia('/Favorit', 'Favorit');
 Route::inertia('/Garitan-Filantropi/detail', 'Mendengarkan');
 Route::inertia('/Garitan-Filantropi/play', 'Audio');
 Route::inertia('/EditProfile', 'EditProfile');
@@ -33,11 +39,11 @@ Route::get('/logout', [LoginController::class, 'logout']);
 
 
 // Admin Route
-Route::prefix('admin')->group(function () {
-    
+Route::prefix('admin')->middleware(AdminMiddleware::class)->group(function () {
+
     // Dashboard
     Route::get('/dashboard', action: [DashboardController::class, 'index']);
-    
+
     // Users
     Route::get('/users', [UsersController::class, 'index']);
     Route::post('/users/store', [UsersController::class, 'store']);
@@ -49,7 +55,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/chapter/store', [ChapterController::class, 'store']);
     Route::get('/chapter/edit/{id}', [ChapterController::class, 'edit']);
     Route::post('/chapter/update/{id}', [ChapterController::class, 'update']);
-    
+
     // categories
     Route::get('/category', [CategoryController::class, 'index']);
     Route::post('/category/store', [CategoryController::class, 'store']);
@@ -62,6 +68,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/audiobook', [AudiobookController::class, 'index']);
     Route::get('/audiobook/create', [AudiobookController::class, 'create']);
     Route::post('/audiobook/store', [AudiobookController::class, 'store']);
+    Route::get('/audiobook/edit/{id}', [AudiobookController::class, 'edit']);
+    Route::post('/audiobook/update/{id}', [AudiobookController::class, 'update']);
     Route::get('/audiobook/detail/{id}', [AudiobookController::class, 'detail']);
     Route::get('/audiobook/softDelete/{id}', [AudiobookController::class, 'softDelete']);
 
@@ -81,33 +89,66 @@ Route::prefix('admin')->group(function () {
     Route::get('/forum/create/', [ForumController::class, 'create']);
     Route::post('/forum/store', [ForumController::class, 'store']);
     Route::get('/forum/detail/{id}', [ForumController::class, 'detail']);
-    
+
     // homepage settings
     Route::get('/homepage-settings', [HomepageController::class, 'index']);
     Route::post('/homepage-settings/store-featured', [HomepageController::class, 'store_featured']);
+    Route::post('/homepage-settings/store-carousel', [HomepageController::class, 'store_carousel']);
 });
 
-// Users Route
-Route::get('/forum/unggah', [ForumController::class, 'unggah']);
 
-// karya 
-Route::get('/karya/{id}/{slug}', [AudiobookController::class, 'showKarya']);
-Route::get('/karya/{slug}/{id}/chapter/{chapterId}', [AudiobookController::class, 'playChapter']);
+Route::middleware(AuthMiddleware::class)->group(function(){
 
-// Komentar di setiap chapter
-Route::post('/komentar/store/{userId}/{chapterId}', [KomentarChapterController::class, 'store']);
+    // karya 
+    Route::get('/karya/{id}/{slug}', [AudiobookController::class, 'showKarya']);
+    Route::get('/karya/{slug}/{id}/chapter/{chapterId}', [AudiobookController::class, 'playChapter']);
+
+    // Users Route
+    Route::get('/forum/unggah', [ForumController::class, 'unggah']);
+
+    // Komentar di setiap chapter
+    Route::post('/komentar/store/{userId}/{chapterId}', [KomentarChapterController::class, 'store']);
+    
+    // Komunitas
+    Route::get('/komunitas/all', [KomunitasController::class, 'index']);
+    Route::get('/komunitas/show/{id}', [KomunitasController::class, 'detail']);
+    Route::post('/komunitas/store/{id}', [KomunitasController::class, 'store']);
+    Route::get('/komunitas/delete/{id}', [KomunitasController::class, 'delete']);
+
+    // Komunitas Comments
+    Route::post('/komunitas/storeComments/{id}/{userid}', [KomunitasController::class, 'storeComments']);
+
+    // Profile
+    Route::get('/profile/{id}/{username}', [ProfileController::class, 'index']);
+    Route::get('/yang-disukai/{id}/{username}', [ProfileController::class, 'likes']);
+    
+    Route::post('/profile/{id}/{username}/update', [ProfileController::class, 'update']);
+    Route::get('/profile/{id}/{username}/delete-profile-picture', [ProfileController::class, 'deleteProfilePicture']);
+    Route::get('/profile/{id}/{username}/delete-cover-picture', [ProfileController::class, 'deleteCoverPicture']);
+    
+    // Markah
+    Route::get('/markah/{id}/all', [MarkahController::class, 'index']);
+    Route::get('/markah/{id}/{karya_id}/save', [MarkahController::class, 'store']);
+    Route::delete('/markah/{karya_id}/delete', [MarkahController::class, 'delete']);
+
+    
+    // Likes
+    Route::get('/like/{id}/{post_id}', [LikesController::class, 'like']);
+    Route::get('/dislike/{id}/{post_id}', [LikesController::class, 'dislike']);
+    Route::get('/check-like/{user_id}/{post_id}', [LikesController::class, 'checkLike']);
+
+});
 
 
 // Cari
 Route::get('/search', [SearchController::class, 'search']);
 
-// Komunitas
-Route::get('/komunitas/all', [KomunitasController::class, 'index']);
-Route::get('/komunitas/show/{id}', [KomunitasController::class, 'detail']);
-Route::post('/komunitas/store/{id}', [KomunitasController::class, 'store']);
 
-// Komunitas Comments
-Route::post('/komunitas/storeComments/{id}/{userid}', [KomunitasController::class, 'storeComments']);
+
+
+
+
+
 
 
 

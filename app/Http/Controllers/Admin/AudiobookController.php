@@ -16,7 +16,7 @@ class AudiobookController extends Controller
 {
     public function index()
     {
-        $karya = KaryaModel::with('categories')->paginate(10);
+        $karya = KaryaModel::orderBy('created_at', 'desc')->with('categories')->paginate(10);
         return Inertia::render('Admin/Audiobook/Index', ['karya' => $karya]);
     }
 
@@ -33,7 +33,7 @@ class AudiobookController extends Controller
             'judul_karya' => 'required|string|max:255',
             'penyunting' => 'required|string|max:255',
             'deskripsi_karya' => 'required|string',
-            'status' => 'required|in:active,inactive',
+            'status' => 'required',
             'categories' => 'required|array',
             'categories.*' => 'exists:category,id', // Ensure all selected categories exist in 'category' table
             'cover_karya' => 'nullable|file|mimes:jpg,jpeg,png|max:1024', // Handle file validation
@@ -73,6 +73,43 @@ class AudiobookController extends Controller
 
         return response()->json(['message' => 'Success', 'data' => $audiobook], 200);
     }
+
+    public function edit($id)
+    {
+        $karya = KaryaModel::with('categories')->findOrFail($id);
+        return Inertia::render('Admin/Audiobook/Edit', [
+            'karya' => $karya,
+            'categories' => CategoryModel::all(), // Fetch categories for selection
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'judul_karya' => 'required|string',
+            'penyunting' => 'required|string',
+            'deskripsi_karya' => 'required|string',
+            'status' => 'required|string',
+            'categories' => 'array', // Pastikan ini array
+        ]);
+
+        $karya = KaryaModel::findOrFail($id);
+        $karya->update([
+            'judul_karya' => $validated['judul_karya'],
+            'penyunting' => $validated['penyunting'],
+            'deskripsi_karya' => $validated['deskripsi_karya'],
+            'status' => $validated['status'],
+            'slug' => Str::slug($validated['judul_karya']),
+        ]);
+
+        // Pastikan hubungan kategori diperbarui melalui tabel pivot
+        if ($request->has('categories')) {
+            $karya->categories()->sync($validated['categories']);
+        }
+
+        return response()->json(['message' => 'Karya updated successfully']);
+    }
+
 
     public function detail($id)
     {

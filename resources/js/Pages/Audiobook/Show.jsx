@@ -1,11 +1,11 @@
 import React from 'react'
 import DefaultLayout from '../../Layout/DefautLayout'
 import { ArrowLeft, Bookmark, Play } from 'lucide-react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 const Show = ({ karya }) => {
 
-    // console.log(karya.chapters);
+    const currentUser = usePage().props.auth.user; 
 
     return (
         <DefaultLayout>
@@ -14,13 +14,11 @@ const Show = ({ karya }) => {
             {/* detail karya */}
             <div className="detail-karya flex lg:flex-row flex-col justify-start lg:px-32 gap-10 lg:mt-0 mt-10">
 
-
                 <img
                     src={karya.cover_karya}
                     alt="Movie"
                     className="rounded-lg object-cover h-72 md:h-96 lg:h-64"
                 />
-
 
                 {/* properties */}
                 <div className="properties flex flex-col text-left justify-between">
@@ -47,7 +45,7 @@ const Show = ({ karya }) => {
 
                     <div className="grid grid-cols-12 w-full justify-between gap-5">
                         <a href="/Garitan-Filantropi/play" className="col-span-10 btn bg-[#FFE786] text-black hover:bg-yellow-400 w-full">Mulai Mendengarkan</a>
-                        <a href="" className="col-span-2 btn"><Bookmark /></a>
+                        <Link href={`/markah/${currentUser.id}/${karya.id}/save`} className="col-span-2 btn"><Bookmark /></Link>
                     </div>
 
                 </div>
@@ -67,7 +65,7 @@ const Show = ({ karya }) => {
                 <div className="section-2 grid grid-rows-2 lg:grid-cols-12 py-8 justify-start gap-8">
                     <div className="sinopsis text-white col-span-6 lg:col-span-8">
                         <h1 className="font-bold text-xl">Sinopsis</h1>
-                        <p>
+                        <p className='whitespace-pre-line'>
                             {karya.deskripsi_karya}
                         </p>
                     </div>

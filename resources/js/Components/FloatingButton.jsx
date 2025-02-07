@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { usePage } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import Axios from 'axios';
 
 const FloatingButton = ({ currentUserid }) => {
@@ -17,6 +17,16 @@ const FloatingButton = ({ currentUserid }) => {
 
     const [toastVisible, setToastVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
+    const [imagePreview, setImagePreview] = useState(null);
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            setImagePreview(URL.createObjectURL(file));
+        } else {
+            setImagePreview(null);
+        }
+    };
 
     const newCuitan = async (e) => {
         e.preventDefault();
@@ -37,9 +47,8 @@ const FloatingButton = ({ currentUserid }) => {
             setToastMessage("Item moved successfully.");
             setToastVisible(true);
 
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
+            router.visit('/komunitas/all')
+           
         } catch (error) {
             if (error.response) {
                 console.error("Error data:", error.response.data);
@@ -80,31 +89,54 @@ const FloatingButton = ({ currentUserid }) => {
             {/* Add category modal */}
             <input type="checkbox" id="addCategory" className="modal-toggle" />
             <div className="modal modal-middle" role="dialog">
-                <div className="modal-box w-[40rem] bg-black border border-gray-600 rounded-lg">
-                    <h3 className="text-lg font-bold mb-3">Unggah Cuitan</h3>
+                <div className="modal-box w-max-[40rem] bg-black border border-gray-600 rounded-lg p-6">
+                    <h3 className="text-2xl font-semibold text-white mb-4">Unggah Cuitan</h3>
 
                     <form onSubmit={newCuitan}>
-                        <input type="file" name="attachment" className="" />
-                        <textarea
-                            name="content"
-                            rows={10}
-                            placeholder="Apa yang ada di pikiranmu sekarang?"
-                            className="textarea textarea-ghost w-full bg-black"
-                        />
+                        <div className="mb-4">
+                            <span className='text-gray-600'>*optional, max 1mb</span>
+                            <input
+                                type="file"
+                                name="attachment"
+                                className="file-input file-input-bordered w-full bg-[#2a2a2a] text-white border-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                onChange={handleFileChange}
+                            />
+                        </div>
+
+                        {imagePreview && (
+                            <div className="mb-4">
+                                <img
+                                    src={imagePreview}
+                                    alt="Preview"
+                                    className="w-full h-56 object-cover rounded-md shadow-md"
+                                />
+                            </div>
+                        )}
+
+                        <div className="mb-6">
+                            <textarea
+                                name="content"
+                                rows={10}
+                                placeholder="Apa yang ada di pikiranmu sekarang?"
+                                className="textarea textarea-ghost w-full bg-[#2a2a2a] text-white border-2 border-gray-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 resize-none"
+                            />
+                        </div>
+
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`btn btn-sm px-4 py-1 mt-3 ${loading
+                            className={`btn btn-sm px-6 py-2 mt-3 w-full ${loading
                                 ? 'bg-yellow-600 text-white cursor-not-allowed'
                                 : 'bg-yellow-400 text-black hover:bg-yellow-500'
-                                }`}
+                                } rounded-md transition duration-300 ease-in-out`}
                         >
                             {loading ? 'Processing...' : 'Bagikan'}
                         </button>
                     </form>
                 </div>
-                <label className="modal-backdrop" htmlFor="addCategory">Close</label>
+                <label className="modal-backdrop bg-opacity-60" htmlFor="addCategory">Close</label>
             </div>
+
 
             {toastVisible && (
                 <div className="toast toast-success">

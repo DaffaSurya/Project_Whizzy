@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DefaultLayout from "../../Layout/DefautLayout";
 import { ArrowLeft, MoreHorizontal, MessageCircle, Repeat2, Heart, Share, Bookmark } from 'lucide-react';
-import { usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import Axios from "axios";
 
 
@@ -12,14 +12,62 @@ function Detail({ detail }) {
     const currentUser = usePage().props.auth.user;
     const parent_id = detail.id;
 
+    const [isLiked, setIsLiked] = useState(detail.user_liked);
+    const [likesCount, setLikesCount] = useState(detail.likes_count);
+
     const [content, setContent] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     console.log(detail);
 
+    // likes
+    const handleLike = async () => {
+        try {
+            if (isLiked) {
+                // Dislike action
+                router.get(`/dislike/${currentUser.id}/${detail.id}`, {}, {
+                    onSuccess: () => {
+                        setLikesCount((prev) => prev - 1);
+                        setIsLiked(false);
+                    },
+                });
+            } else {
+                // Like action
+                router.get(`/like/${currentUser.id}/${detail.id}`, {}, {
+                    onSuccess: () => {
+                        setLikesCount((prev) => prev + 1);
+                        setIsLiked(true);
+                    },
+                });
+            }
+        } catch (error) {
+            console.error("Error handling like/dislike:", error);
+        }
+    };
+
+    useEffect(() => {
+        // Fetch if user has liked the post
+        Axios.get(`/check-like/${currentUser.id}/${detail.id}`).then((res) => {
+            setIsLiked(res.data.liked);
+        });
+    }, [currentUser.id, detail.id]);
+
+    function timeAgo(createdAt) {
+        const seconds = Math.round((new Date() - new Date(createdAt)) / 1000);
+        const minutes = Math.round(seconds / 60);
+        const hours = Math.round(minutes / 60);
+        const days = Math.round(hours / 24);
+        const rtf = new Intl.RelativeTimeFormat('id', { numeric: 'auto' });
+
+        if (seconds < 60) return rtf.format(-seconds, 'second'); // 'detik' in Indonesian locale
+        if (minutes < 60) return rtf.format(-minutes, 'minute'); // 'menit'
+        if (hours < 24) return rtf.format(-hours, 'hour'); // 'jam'
+        return rtf.format(-days, 'day'); // 'hari'
+    }
+
     // add comments function
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         setIsSubmitting(true);
         const data = {
             parent_id: parent_id, // Corrected syntax
@@ -48,31 +96,29 @@ function Detail({ detail }) {
             } else {
                 console.error('Error submitting comment:', error.message);
             }
-        } 
+        }
     };
-
-
 
 
     return (
         <>
             <DefaultLayout>
                 {/* Header */}
-                <header className="mx-8 sticky top-0 backdrop-blur-md bg-black/70 border-b border-gray-800">
-                    <div className="flex items-center px-4 py-3 space-x-6">
-                        <ArrowLeft className="w-5 h-5" />
+                <header className="mx-0 sticky top-0 backdrop-blur-md bg-black/70  border-gray-800">
+                    <Link href="/komunitas/all" className="flex items-center px-4 py-3 space-x-6 ">
+                        <ArrowLeft className="w-5 h-5 hover:text-yellow-400" />
                         <h1 className="text-xl font-bold">Post</h1>
-                    </div>
+                    </Link>
                 </header>
 
                 {/* Main Content */}
-                <main className="px-8">
+                <main className="px-0">
                     {/* Tweet Content */}
-                    <article className="p-4 border-b border-gray-800">
+                    <article className="py-4 border-b border-gray-800">
                         {/* Tweet Header */}
                         <div className="flex items-start justify-between">
                             <div className="flex space-x-3">
-                                <div className="w-12 h-12 rounded-full bg-gray-700" />
+                                <img src={detail.user.profile_pict || "https://placehold.co/400"} className="w-12 h-12 object-cover rounded-full bg-gray-700" />
                                 <div>
                                     <div className="flex flex-col">
                                         <span className="font-bold hover:underline">{detail.user.username}</span>
@@ -91,26 +137,30 @@ function Detail({ detail }) {
 
                         {/* Tweet Timestamp */}
                         <div className="mt-4 flex space-x-1 text-gray-500 text-sm">
-                            <span>{detail.created_at}</span>
+                            <span>{timeAgo(detail.created_at)}</span>
                         </div>
-
 
 
                         {/* Interaction Buttons */}
                         <div className="flex justify-start gap-10 mt-4 pt-4 border-t border-gray-800">
 
-                            <button className="flex items-center gap-3 hover:text-pink-500">
-                                <Heart className="w-5 h-5" />
+                            <button
+                                onClick={handleLike}
+                                className={`flex items-center gap-3 ${isLiked ? 'text-pink-500' : 'text-gray-500'}`}
+                            >
+                                <Heart className="w-5 h-5" fill={isLiked ? "currentColor" : "none"} />
                                 <div className="flex space-x-1">
-                                    <span className="font-bold">2,048</span>
-                                    <span className="text-gray-500">Likes</span>
+                                    <span className="font-bold">{likesCount}</span>
+                                    <span>Likes</span>
                                 </div>
                             </button>
+
 
                             <button className="hover:text-blue-500">
                                 <Share className="w-5 h-5" />
                             </button>
                         </div>
+
                     </article>
 
                     {/* Reply Input */}
@@ -149,15 +199,11 @@ function Detail({ detail }) {
                                         <span className="text-gray-500">
                                             @{komentar.user.username.toLowerCase()}
                                         </span>
-                                        {komentar.created_at && (
+                                       
                                             <span className="text-gray-500">
-                                                ·{" "}
-                                                {new Date(komentar.created_at).toLocaleTimeString(
-                                                    "en-US",
-                                                    { hour: "2-digit", minute: "2-digit" }
-                                                )}
+                                               {timeAgo(komentar.created_at)}
                                             </span>
-                                        )}
+                                        
                                     </div>
 
                                     <p className="mt-1" style={{ whiteSpace: 'pre-wrap' }}>{komentar.content}</p>

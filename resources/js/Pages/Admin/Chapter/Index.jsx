@@ -34,7 +34,17 @@ const Index = ({ karya }) => {
                   <td className="px-4 py-2"></td>
                   <td className="px-4 py-2">{index + 1}</td>
                   <td className="px-4 py-2">{item.judul_karya}</td>
-                  <td className="px-4 py-2">{item.status}</td>
+                  <td className="px-4 py-2">
+                    {item.status === 'published' ? (
+                      <span className="text-green-500">Published</span>
+                    ) : item.status === 'draft' ? (
+                      <span className="text-yellow-500">Draft</span>
+                    ) : item.status === 'archived' ? (
+                      <span className="text-red-500">Archived</span>
+                    ) : (
+                      <span className="text-gray-500">Unknown</span>
+                    )}
+                  </td>
                   <td className="px-4 py-2">
                     {new Date(item.created_at).toLocaleDateString("en-GB", {
                       weekday: "short",
@@ -45,7 +55,7 @@ const Index = ({ karya }) => {
                   </td>
                   <td className=" px-4 py-2 gap-4">
                     <Link href={`/admin/chapter/create/${item.id}`} className="btn btn-outline btn-sm border-0 hover:bg-transparent hover:text-yellow-400"><Plus size={20} /> Add Chapter</Link>
-                    <Link href={`/admin/chapter/detail/${item.id}`} className="btn btn-outline btn-sm border-0 hover:bg-transparent hover:text-green-400"><Eye size={20} /> Detail</Link>
+                    {/* <Link href={`/admin/chapter/detail/${item.id}`} className="btn btn-outline btn-sm border-0 hover:bg-transparent hover:text-green-400"><Eye size={20} /> Detail</Link> */}
                   </td>
                 </tr>
               ))

@@ -12,6 +12,8 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import logo from '../../../public/logo.png';
+
 
 const AdminSidebar = () => {
   // State to handle sidebar visibility
@@ -27,7 +29,7 @@ const AdminSidebar = () => {
   const categories = [
     { id: "analytics", label: "Analytics" },
     { id: "content", label: "Content" },
-    { id: "komunitas", label: "Komunitas" },
+    // { id: "komunitas", label: "Komunitas" },
     { id: "tools", label: "Tools" },
   ];
 
@@ -37,7 +39,7 @@ const AdminSidebar = () => {
     { href: "/admin/category", icon: ChartBarStacked, label: "Categories", category: "content" },
     { href: "/admin/chapter", icon: FolderTree, label: "Chapter", category: "content" },
     { href: "/admin/users", icon: Users, label: "Users", category: "content" },
-    { href: "/admin/forum", icon: Users2, label: "Forum", category: "komunitas" },
+    // { href: "#", icon: Users2, label: "Forum", category: "komunitas" },
     { href: "/admin/trash", icon: Trash2, label: "Trash", category: "tools" },
     { href: "/admin/homepage-settings", icon: Settings, label: "Homepage Settings", category: "tools" },
   ];
@@ -64,7 +66,7 @@ const AdminSidebar = () => {
           } transition-transform duration-300 lg:translate-x-0`}
       >
         <Link href="/admin">
-          <img src="https://placehold.co/400" alt="Admin Logo" className="w-auto h-12" />
+          <img src={logo} alt="Admin Logo" className="w-auto h-12" />
         </Link>
 
         <div className="flex flex-col justify-between flex-1 mt-6">

@@ -1,14 +1,18 @@
 import React from 'react';
-import { Home, Search, User, Users, Bookmark, LogOut , Star} from 'lucide-react';
+import { Home, Search, User, Users, Bookmark, LogOut, Star } from 'lucide-react';
 import { Link, usePage } from '@inertiajs/react';
+import logo from '../../../public/logo.png';
 
 export default function Sidebar() {
   const currentPath = window.location.pathname; // Get current path
 
-  const isActive = (path) => currentPath === path ? 'text-yellow-200' : 'text-white'; // Check if the path is active
+  const isActive = (path) =>
+    path === '/' ? (currentPath === '/' ? 'text-yellow-400' : 'text-white')
+      : (currentPath.startsWith(path) ? 'text-yellow-400' : 'text-white');
 
   // get current logged users
   const currentUser = usePage().props.auth.user;
+
 
   return (
     <>
@@ -24,6 +28,7 @@ export default function Sidebar() {
                 <Home className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/')}`} aria-hidden="true" />
                 Beranda
               </Link>
+
               <Link
                 href="/Cari"
                 className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/Cari')}`}
@@ -31,33 +36,53 @@ export default function Sidebar() {
                 <Search className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/Cari')}`} aria-hidden="true" />
                 Cari
               </Link>
+              {currentUser ? (
+                <Link
+                  href={`/profile/${currentUser.id}/${currentUser.username}`}
+                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/profile')}`}
+                >
+                  <User className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/profile')}`} />
+                  Profil
+                </Link>
+              ) : (
+                <Link
+                  href={`/login`}
+                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/profile')}`}
+                >
+                  <User className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/profile')}`} />
+                  Profil
+                </Link>
+              )}
               <Link
-                href="/profile"
-                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/profile')}`}
+                href="/komunitas/all"
+                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/komunitas')}`}
               >
-                <User className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/profile')}`} aria-hidden="true" />
-                Profil
-              </Link>
-              <Link
-                href="komunitas/all"
-                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/komunitas/all')}`}
-              >
-                <Users className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/komunitas/all')}`} aria-hidden="true" />
+                <Users className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/komunitas')}`} aria-hidden="true" />
                 Komunitas
               </Link>
-              <Link
-                href="/Favorit"
-                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/Favorit')}`}
-              >
-                <Bookmark className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/Favorit')}`} aria-hidden="true" />
-                Markah
-              </Link>
+              {currentUser ? (
+                <Link
+                  href={`/markah/${currentUser.id}/all`}
+                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/markah')}`}
+                >
+                  <Bookmark className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/markah')}`} aria-hidden="true" />
+                  Markah
+                </Link>
 
+              ) : (
+                <Link
+                  href="/login"
+                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/markah')}`}
+                >
+                  <Bookmark className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/markah')}`} aria-hidden="true" />
+                  Markah
+                </Link>
+              )}
               <Link
                 href="/Review"
                 className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/Review')}`}
               >
-                <Star className={`mr-3 flex-shrink-0 h-6 w-6  ${isActive('/Review')}`} aria-hidden= "true" />
+                <Star className={`mr-3 flex-shrink-0 h-6 w-6  ${isActive('/Review')}`} aria-hidden="true" />
                 Review dan Saran
               </Link>
 
@@ -107,13 +132,24 @@ export default function Sidebar() {
             <Search className={`mb-1 h-6 w-6 ${isActive('/Cari')}`} aria-hidden="true" />
             Cari
           </Link>
-          <Link
-            href="/profile"
-            className={`hover:bg-white/10 group flex flex-col items-center px-2 py-2 text-xs font-medium ${isActive('/profile')}`}
-          >
-            <User className={`mb-1 h-6 w-6 ${isActive('/profile')}`} aria-hidden="true" />
-            Profil
-          </Link>
+          {currentUser ? (
+            <Link
+              href={`/profile/${currentUser.id}/${currentUser.username}`}
+              className={`hover:bg-white/10 group flex flex-col items-center px-2 py-2 text-xs font-medium ${isActive('/profile')}`}
+            >
+              <User className={`mb-1 h-6 w-6 ${isActive('/profile')}`} aria-hidden="true" />
+              Profil
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="hover:bg-white/10 group flex flex-col items-center px-2 py-2 text-xs font-medium"
+            >
+              <User className="mb-1 h-6 w-6" aria-hidden="true" />
+              Profle
+            </Link>
+          )}
+
           <Link
             href="/Komunitas"
             className={`hover:bg-white/10 group flex flex-col items-center px-2 py-2 text-xs font-medium ${isActive('/Komunitas')}`}

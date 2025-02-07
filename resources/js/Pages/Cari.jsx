@@ -6,15 +6,17 @@ import DefaultLayout from '../Layout/DefautLayout'
 import Axios from 'axios';
 
 const Cari = ({ initialResults = [], initialQuery = '' }) => {
-    const [query, setQuery] = useState(initialQuery);
-    const [results, setResults] = useState(initialResults);
+    const [query, setQuery] = useState('');
+    const [karyaResults, setKaryaResults] = useState([]);
+    const [userResults, setUserResults] = useState([]);
     const [loading, setLoading] = useState(false);
 
     // Debounced API call
     const fetchResults = useCallback(
         debounce(async (searchQuery) => {
             if (!searchQuery) {
-                setResults([]);
+                setKaryaResults([]);
+                setUserResults([]);
                 return;
             }
 
@@ -24,13 +26,15 @@ const Cari = ({ initialResults = [], initialQuery = '' }) => {
                     params: { query: searchQuery },
                 });
                 console.log('API Response:', response.data);
-                setResults(response.data.results || []);
+
+                setKaryaResults(response.data.karya_results || []);
+                setUserResults(response.data.user_results || []);
             } catch (error) {
                 console.error('Error fetching search results:', error);
             } finally {
                 setLoading(false);
             }
-        }, 300),
+        }, 800),
         []
     );
 
@@ -61,13 +65,6 @@ const Cari = ({ initialResults = [], initialQuery = '' }) => {
         <DefaultLayout>
             {/* Search bar */}
             <div className="flex justify-center items-center gap-4 pt-8 lg:px-2 lg:pt-0">
-                {/* Home Button */}
-                {/* <a href="/">
-                    <div className="p-4 bg-[#333333] rounded-full shadow-lg hover:scale-105 transition-transform">
-                        <Home className="text-white w-6 h-6" />
-                    </div>
-                </a> */}
-
                 {/* Search Bar */}
                 <div className="flex items-center gap-3 w-full max-w-xl p-2 bg-[#333333] rounded-full shadow-lg">
                     <Search className="text-gray-400 w-6 h-6" />
@@ -79,12 +76,12 @@ const Cari = ({ initialResults = [], initialQuery = '' }) => {
                         placeholder="Search here..."
                         className="flex-1 bg-transparent text-white placeholder-gray-400 focus:outline-none"
                     />
-                    <button
+                    {/* <button
                         onClick={() => fetchResults(query)}
                         className="px-4 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 transition-colors"
                     >
                         Go
-                    </button>
+                    </button> */}
                 </div>
             </div>
 
@@ -93,48 +90,93 @@ const Cari = ({ initialResults = [], initialQuery = '' }) => {
                 <div className="flex flex-col gap-5 justify-start">
                     {loading ? (
                         <div className="col-span-2 text-center text-white">
-                            <span class="loading loading-spinner loading-md"></span>
+                            <span className="loading loading-spinner loading-md"></span>
                         </div>
-                    ) : results.length > 0 ? (
-                        results.map((result, index) => (
-                            <div className="w-full" key={index}>
-                                <div className="flex bg-black rounded-xl shadow-xl border border-gray-700 h-42 overflow-hidden">
-                                    {/* Image Section */}
-                                    <div className="flex-shrink-0">
-                                        <img
-                                            src={result.cover_karya || '/default-placeholder.png'}
-                                            alt={result.judul_karya || 'Image placeholder'}
-                                            className="w-36 lg:w-48 h-full object-cover"
-                                        />
-                                    </div>
-                                    {/* Content Section */}
-                                    <div className="flex flex-col p-4 flex-grow">
-                                        <h2 className="text-lg font-semibold mb-2">
-                                            {result.judul_karya}
-                                        </h2>
-                                        <p className="text-sm text-gray-600 mb-4">
-                                            {result.penyunting || 'Explore this item.'}
-                                        </p>
-                                        <div className="mt-auto">
-                                            <Link
-                                                href={`/karya/${result.slug}/${result.id}`}
-                                                className="inline-block bg-yellow-400 text-black py-2 px-4 rounded hover:bg-yellow-500 transition-colors"
+                    ) : (
+                        <>
+                            {/* User Search Results */}
+                            {userResults.length > 0 && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-white mb-3">Users</h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                        {userResults.map((user) => (
+                                            <div
+                                                key={user.id}
+                                                className="flex items-center bg-[#222] p-4 rounded-xl shadow-md border border-gray-700"
                                             >
-                                                Explore the Story
-                                            </Link>
-                                        </div>
+                                                <img
+                                                    src={user.profile_pict || "https://placehold.co/50"}
+                                                    alt="User Avatar"
+                                                    className="w-12 h-12 object-cover rounded-full mr-4"
+                                                />
+                                                <div>
+                                                    <h4 className="text-white font-semibold">{user.fullname}</h4>
+                                                    <p className="text-gray-400">@{user.username}</p>
+                                                    <Link
+                                                        href={`/profile/${user.id}`}
+                                                        className="text-yellow-400 hover:underline text-sm"
+                                                    >
+                                                        View Profile
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
-                            </div>
-                        ))
-                    ) : (
-                        <div className="col-span-2 text-center text-white">
-                            No results found.
-                        </div>
+                            )}
+
+                            {/* Karya Search Results */}
+                            {karyaResults.length > 0 && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-white mb-3">Works</h3>
+                                    <div className="flex flex-col gap-5">
+                                        {karyaResults.map((result, index) => (
+                                            <div className="w-full" key={index}>
+                                                <div className="flex bg-black rounded-xl shadow-xl border border-gray-700 h-42 overflow-hidden">
+                                                    {/* Image Section */}
+                                                    <div className="flex-shrink-0">
+                                                        <img
+                                                            src={result.cover_karya || '/default-placeholder.png'}
+                                                            alt={result.judul_karya || 'Image placeholder'}
+                                                            className="w-36 lg:w-48 h-full object-cover"
+                                                        />
+                                                    </div>
+                                                    {/* Content Section */}
+                                                    <div className="flex flex-col p-4 flex-grow">
+                                                        <h2 className="text-lg font-semibold mb-2 text-white">
+                                                            {result.judul_karya}
+                                                        </h2>
+                                                        <p className="text-sm text-gray-400 mb-4">
+                                                            {result.penyunting || 'Explore this item.'}
+                                                        </p>
+                                                        <div className="mt-auto">
+                                                            <Link
+                                                                href={`/karya/${result.slug}/${result.id}`}
+                                                                className="inline-block bg-yellow-400 text-black py-2 px-4 rounded hover:bg-yellow-500 transition-colors"
+                                                            >
+                                                                Explore the Story
+                                                            </Link>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* No Results Found */}
+                            {userResults.length === 0 && karyaResults.length === 0 && query && (
+                                <div className="col-span-2 text-center text-white">
+                                    No results found.
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             </div>
         </DefaultLayout>
+
     );
 };
 

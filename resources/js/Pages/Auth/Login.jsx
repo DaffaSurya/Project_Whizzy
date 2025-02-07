@@ -1,144 +1,148 @@
-import React, { useState } from 'react'
-import { useForm } from '@inertiajs/react'
-import axios from 'axios';
-import { router } from '@inertiajs/react'
-
+import { useState } from "react"
+import { Link } from "@inertiajs/react"
+import axios from "axios"
+import { router } from "@inertiajs/react"
+import { EyeIcon, EyeOffIcon } from "lucide-react"
 
 const Login = () => {
-
-    const [errors, setErrors] = useState({});
-    const [loginError, setLoginError] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrors] = useState({})
+    const [loginError, setLoginError] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
 
     async function login(e) {
-        e.preventDefault();
+        e.preventDefault()
 
-        setIsLoading(true);
+        setIsLoading(true)
 
         const data = {
             email: e.target.email.value,
             password: e.target.password.value,
-            rememberMe: e.target.rememberMe.checked, // rememberMe is a checkbox, should use `.checked`
-        };
+            rememberMe: e.target.rememberMe.checked,
+        }
 
         try {
-            const response = await axios.post('/authenticate', data);
-            
-            router.visit('/'); 
+            const response = await axios.post("/authenticate", data)
 
-            setIsLoading(true);
+            router.visit("/")
 
+            setIsLoading(false)
         } catch (error) {
-            setIsLoading(false);
+            setIsLoading(false)
             if (error.response) {
-                console.log("Error data:", error.response.data);
-                console.log("Error status:", error.response.status);
-                console.log("Error headers:", error.response.headers);
+                console.log("Error data:", error.response.data)
+                console.log("Error status:", error.response.status)
+                console.log("Error headers:", error.response.headers)
 
-                // Check if error is related to validation or a custom message
                 if (error.response.status === 404) {
-                    setLoginError(error.response.data.message); // Custom error message
-                    setErrors({}); // Reset validation errors
+                    setLoginError(error.response.data.message)
+                    setErrors({})
                 } else if (error.response.data.errors) {
-                    setLoginError(null); // Clear custom error message
-                    setErrors(error.response.data.errors); // Set validation errors
+                    setLoginError(null)
+                    setErrors(error.response.data.errors)
                 }
             }
         }
     }
 
     return (
-        <div className="min-h-screen bg-black flex items-center justify-center p-4">
-            <div className="w-full max-w-[400px] bg-zinc-900 rounded-xl p-6">
-                {/* Logo and Title */}
-                <div className="space-y-3 mb-6">
-                    <div className="flex items-center gap-2">
-                        <img
-                            src="https://placehold.co/400"
-                            alt="Halooo Logo"
-                            className="w-6 h-6"
-                        />
-                        <h1 className="text-xl font-semibold text-white">Whizzy</h1>
-                    </div>
-                </div>
+        <div className="flex h-screen bg-black">
+            {/* Image Section */}
+            <div className="hidden lg:flex w-1/2 bg-white justify-center items-center">
+                <img src="https://i.postimg.cc/15j6NgVS/2-1.png" alt="Login" className="max-w-lg rounded-lg" />
+            </div>
 
-                {/* Display Custom Error */}
-                {loginError && (
-                    <div className="text-red-500 text-xs mt-4 text-start mb-3">
-                        {loginError} {/* Display the custom error message */}
+            {/* Form Section */}
+            <div className="w-full lg:w-1/2 flex items-center justify-center">
+                <div className="max-w-md w-full p-6">
+                    <div className="space-y-3 mb-6">
+                        <div className="flex items-center gap-2">
+                            <img src="https://placehold.co/400" alt="Whizzy Logo" className="w-6 h-6" />
+                            <h1 className="text-xl font-semibold">Whizzy</h1>
+                        </div>
                     </div>
-                )}
 
-                {/* Form */}
-                <form onSubmit={login} method="post">
-                    <div className="space-y-4">
-                        {/* Email Input */}
+                    {loginError && <div className="text-red-500 text-xs mt-4 text-start mb-3">{loginError}</div>}
+
+                    <form onSubmit={login} method="post" className="space-y-4">
                         <div>
+                            <label htmlFor="email" className="block text-sm font-medium">
+                                Email or Phone Number
+                            </label>
                             <input
                                 type="text"
+                                id="email"
                                 name="email"
                                 placeholder="Email atau nomor telepon"
-
-
-                                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400"
+                                required
                             />
-
                         </div>
 
-                        {/* Password Input */}
-                        <div className="relative">
-                            <input
-                                type="password"
-                                name="password"
-                                placeholder="Masukkan password"
-
-
-                                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                            />
-
-                            <a href="#" className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-blue-500 hover:text-blue-400">
-                                Forgot password?
-                            </a>
+                        <div>
+                            <label htmlFor="password" className="block text-sm font-medium">
+                                Password
+                            </label>
+                            <div className="mt-1 relative">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    id="password"
+                                    name="password"
+                                    placeholder="Masukkan password"
+                                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? (
+                                        <EyeOffIcon className="h-5 w-5 text-gray-400" />
+                                    ) : (
+                                        <EyeIcon className="h-5 w-5 text-gray-400" />
+                                    )}
+                                </button>
+                            </div>
                         </div>
 
-                        {/* Remember Me */}
                         <div className="flex items-center justify-between">
                             <label className="flex items-center space-x-2 cursor-pointer">
                                 <input
                                     type="checkbox"
                                     name="rememberMe"
-
-
-                                    className="w-4 h-4 bg-zinc-700 rounded border-zinc-600 text-yellow-500 focus:ring-yellow-500 focus:ring-offset-zinc-900"
+                                    className="h-4 w-4 text-yellow-400 focus:ring-yellow-400 border-gray-300 rounded"
                                 />
-                                <span className="text-sm text-zinc-400">Remember me</span>
+                                <span className="text-sm">Remember me</span>
                             </label>
+                            <a href="#" className="text-sm font-medium text-gray-500 hover:text-yellow-500">
+                                Lupa Password ?
+                            </a>
                         </div>
 
-                        {/* Login Button */}
                         <button
                             type="submit"
-                            className={`w-full py-2 rounded-lg font-medium transition-colors ${isLoading
-                                    ? "bg-yellow-300 text-black cursor-not-allowed"
-                                    : "bg-yellow-500 hover:bg-yellow-600 text-black"
+                            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black ${isLoading
+                                    ? "bg-yellow-300 cursor-not-allowed"
+                                    : "bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400"
                                 }`}
-                            disabled={isLoading} // Disable button while loading
+                            disabled={isLoading}
                         >
-                            {isLoading ? "Logging in..." : "Login"} {/* Change button text */}
+                            {isLoading ? "Logging in..." : "Login"}
                         </button>
-                    </div>
-                </form>
+                    </form>
 
-                {/* Sign Up Link */}
-                <div className="text-center text-sm text-zinc-400 mt-5">
-                    Don't have an account?{" "}
-                    <a href="#" className="text-blue-500 hover:text-blue-400">
-                        Sign up now
-                    </a>
+                    <p className="mt-4 text-center text-sm text-gray-600">
+                        Belum Punya Akun ?{" "}
+                        <Link href="/register" className="font-medium text-yellow-400">
+                            Buat Sekarang
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
 export default Login
+

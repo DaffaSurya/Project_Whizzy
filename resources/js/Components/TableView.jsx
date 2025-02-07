@@ -23,7 +23,17 @@ const TableView = ({ data }) => {
                                 <td className="px-4 py-2"></td>
                                 <td className="px-4 py-2">{index + 1}</td>
                                 <td className="px-4 py-2">{item.judul_karya}</td>
-                                <td className="px-4 py-2">{item.status}</td>
+                                <td className="px-4 py-2">
+                                    {item.status === 'published' ? (
+                                        <span className="text-green-500">Published</span>
+                                    ) : item.status === 'draft' ? (
+                                        <span className="text-yellow-500">Draft</span>
+                                    ) : item.status === 'archived' ? (
+                                        <span className="text-red-500">Archived</span>
+                                    ) : (
+                                        <span className="text-gray-500">Unknown</span>
+                                    )}
+                                </td>
                                 <td className="px-4 py-2">
                                     {new Date(item.created_at).toLocaleDateString("en-GB", {
                                         weekday: "short",

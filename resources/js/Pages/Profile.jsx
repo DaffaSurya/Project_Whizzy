@@ -1,346 +1,373 @@
-import DefaultLayout from "../Layout/DefautLayout";
-import "../Style/Profile.css";
-import { NavLink } from "react-router-dom";
-const Profile = () => {
+import { CalendarIcon, Camera, LinkIcon, MapPinIcon, Plus, Trash2 } from "lucide-react"
+import DefaultLayout from '../Layout/DefautLayout'
+import { Link, router, useForm, usePage } from "@inertiajs/react"
+import { useState } from "react";
+import Axios from "axios";
+
+const Profile = ({ user, post }) => {
+
+    const { data, setData } = useForm({
+        username: user.username || "",
+        fullname: user.fullname || "",
+        email: user.email || "",
+        bio: user.bio || "",
+        profile_pict: null,
+        cover_pict: null,
+    });
+
+    const currentUser = usePage().props.auth.user;
+    const [profilePreview, setProfilePreview] = useState(user.profile_pict || null);
+    const [coverPreview, setCoverPreview] = useState(user.cover_pict || null);
+    const [processing, setProcessing] = useState(false);
+
+    const [likesCount, setLikesCount] = useState(post.likes_count); // Initialize likes count
+    const [isLiked, setIsLiked] = useState(post.is_liked || false); // Track if the user has liked the post
+
+    const handleChange = (e) => {
+        setData(e.target.name, e.target.value);
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setData(e.target.name, file);
+            if (e.target.name === "profile_pict") setProfilePreview(URL.createObjectURL(file));
+            if (e.target.name === "cover_pict") setCoverPreview(URL.createObjectURL(file));
+        }
+    };
+
+    function timeAgo(createdAt) {
+        const seconds = Math.round((new Date() - new Date(createdAt)) / 1000);
+        const minutes = Math.round(seconds / 60);
+        const hours = Math.round(minutes / 60);
+        const days = Math.round(hours / 24);
+        const rtf = new Intl.RelativeTimeFormat('id', { numeric: 'auto' });
+
+        if (seconds < 60) return rtf.format(-seconds, 'second'); // 'detik' in Indonesian locale
+        if (minutes < 60) return rtf.format(-minutes, 'minute'); // 'menit'
+        if (hours < 24) return rtf.format(-hours, 'hour'); // 'jam'
+        return rtf.format(-days, 'day'); // 'hari'
+    }
+
+    const handleLike = async (postId) => {
+        try {
+            if (isLiked) {
+                await Axios.post(`/dislike/${currentUser.id}/${postId}`);
+                setLikesCount((prev) => prev - 1);
+                setIsLiked(false);
+            } else {
+                await Axios.post(`/like/${currentUser.id}/${postId}`);
+                setLikesCount((prev) => prev + 1);
+                setIsLiked(true);
+            }
+        } catch (error) {
+            console.error('Error handling like/dislike:', error);
+        }
+    }
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setProcessing(true);
+
+        const formData = new FormData();
+        formData.append("username", data.username);
+        formData.append("fullname", data.fullname);
+        formData.append("email", data.email);
+        formData.append("bio", data.bio);
+        if (data.profile_pict) formData.append("profile_pict", data.profile_pict);
+        if (data.cover_pict) formData.append("cover_pict", data.cover_pict);
+
+        try {
+            const response = await Axios.post(`/profile/${currentUser.id}/${currentUser.username}/update`, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+            router.push(`/profile/${currentUser.id}/adminuser`)
+        } catch (error) {
+            console.error("Error updating profile:", error);
+        }
+    };
+
+    const deleteProfilePicture = async () => {
+        try {
+            await axios.post(`/profile/${user.id}/${currentUser.username}/delete-profile-picture`);
+            alert("Profile picture deleted successfully!");
+        } catch (error) {
+            console.error("Error deleting profile picture:", error);
+        }
+    };
+
+    const deleteCoverPicture = async () => {
+        try {
+            await axios.post(`/profile/${user.id}/${currentUser.username}/delete-cover-picture`);
+            alert("Cover picture deleted successfully!");
+        } catch (error) {
+            console.error("Error deleting cover picture:", error);
+        }
+    };
+
+    console.log(post)
     return (
         <DefaultLayout>
-            {/* card profile for mobile */}
-            <div className="div-profile">
-                {/* profile-background for mobile */}
-                <div className="card-profile-mobile">
+            <div className="bg-black text-white min-h-screen">
+                {/* Header */}
+                <header className="relative lg:pt-0 pt-6">
                     <img
-                        src="https://wallpapercat.com/w/full/7/0/2/1290-3840x2160-desktop-4k-among-us-background.jpg"
-                        className="img-background-profile"
+                        src={user.cover_pict || "https://placehold.co/1200x200"}
+                        alt="Profile header"
+                        className="w-full h-48 object-cover rounded-xl"
+                        lazy={true}
                     />
-                    <div className="div-container-dataprofile">
-                        <div className="div-profile-picture">
-                            <img
-                                src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                className="img-profile"
-                            />
+                    <div className="absolute bottom-0 left-4 transform translate-y-1/2">
+                        <img
+                            src={
+                                user.profile_pict ||
+                                "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
+                            }
+                            alt="Profile picture"
+                            className="w-32 h-32 object-cover rounded-full border-4 border-black"
+                            lazy={true}
+                        />
+                    </div>
+                </header>
+
+                {/* Profile Info */}
+                <div className="grid lg:grid-cols-3 mt-16 px-4">
+                    <div className="info col-span-2 lg:order-first order-last">
+                        <h1 className="text-xl font-bold">{user.fullname}</h1>
+                        <p className="text-gray-500">@{user.username}</p>
+                        <p className="mt-2">{user.bio}</p>
+
+                        <div className="flex flex-wrap gap-y-2 mt-2 text-gray-500">
+                            <div className="flex items-center">
+                                <CalendarIcon className="w-4 h-4 mr-1" />
+                                <span>Bergabung di {new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+                            </div>
                         </div>
 
-                        <div className="data-profile">
-                            <p className="p-data-profile">@Karevlaneis</p>
-                            <p className="p-data-sinceJoin">Since 2020 Join</p>
+                        {/* <div className="flex mt-4">
+                            <div className="mr-4">
+                                <span className="font-bold">1,234</span> <span className="text-gray-500">Following</span>
+                            </div>
+                            <div>
+                                <span className="font-bold">5,678</span> <span className="text-gray-500">Followers</span>
+                            </div>
+                        </div> */}
+                    </div>
+                    <div className="flex items-center justify-end my-4 h-10">
+                        {/* <button className="bg-yellow-400 text-black font-bold px-4 py-2 rounded-full">Edit profile</button> */}
+                        <label htmlFor="addCategory" className="btn bg-yellow-400 text-black font-bold px-4 rounded-full hover:bg-yellow-500"><Plus size={18} /> Edit profile</label>
 
-                            {/* edit profile button */}
-                            <a href="/EditProfile">
-                                <div className="div-Editprofile-mobile">
-                                    <p>Edit Profile</p>
-                                </div>
-                            </a>
-                            {/* edit profile button */}
-                        </div>
                     </div>
                 </div>
-                {/* profile-background for mobile */}
+
+                {/* Tabs */}
+                <div className="flex border-b border-gray-800 mt-4">
+                    <button className="flex-1 py-4 font-bold text-yellow-400 border-b-2 border-yellow-400">Postingan & Komentar</button>
+                    {/* <button className="flex-1 py-4 text-gray-500">Yang Disukai</button> */}
+                </div>
+
+                {/* Tweet Feed */}
+                <div className="px-4">
+
+                    {post.length === 0 ? (
+                        <p className="text-center mt-10 text-gray-500">Belum ada postingan</p>
+                    ) : (
+                        post.map((item) =>
+                            <div key={item.id} className="py-4 border-b border-gray-800">
+                                <Link href={`/komunitas/show/${item.id}`} className="flex">
+                                    <img src={user.profile_pict || "https://placehold.co/400"} alt="User avatar" className="w-12 h-12 object-cover rounded-full mr-3" />
+                                    <div className="w-full">
+
+                                        {/* info */}
+                                        <span className="text-gray-500 text-sm">
+                                            {item.parent_id ? " membalas postingan" : " posted"}
+                                        </span>
+
+                                        <div className="flex items-center">
+                                            <span className="font-bold mr-2">{user.fullname}</span>
+                                            <span className="text-gray-500">{user.username} · {timeAgo(item.created_at)}</span>
+                                        </div>
+                                        <p className="mt-1 whitespace-pre-line">{item.content}</p>
+                                        {item.attachment && (
+                                            <img src={item.attachment} alt="attachment" className="mt-2 object-fit max-w-72 rounded-xl" />
+                                        )}
+                                        <div className="flex justify-between gap-5 mt-3 text-gray-500">
+                                            <div className="flex gap-5">
+                                                <button onClick={() => router.visit(`/like/${currentUser.id}/${item.id}`)} className="flex items-center hover:text-pink-500">
+                                                    <svg
+                                                        className="w-5 h-5 mr-1"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                                                        ></path>
+                                                    </svg>
+                                                    {likesCount}
+                                                </button>
+                                                {/* <button className="flex items-center">
+                                                <svg
+                                                    className="w-5 h-5 mr-1"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                                                    ></path>
+                                                </svg>
+                                            </button> */}
+                                                <button className="flex items-center">
+                                                    <svg
+                                                        className="w-5 h-5 mr-1"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                                        ></path>
+                                                    </svg>
+                                                    {item.comment_count}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Link>
+                                <div className="">
+                                    <Link href={`/komunitas/delete/${item.id}`} className="text-gray-500 hover:text-red-500"><Trash2 size={20} /></Link>
+                                </div>
+                            </div>
+                        )
+                    )}
+
+                    {/* More tweets would go here */}
+                </div>
             </div>
-            {/* card profile for mobile */}
 
-            {/* card profile for desktop */}
-            <div className="div-profile-desktop">
-                <p className="p-Profile-font-desktop">Profile</p>
+            {/* Add category modal */}
+            <input type="checkbox" id="addCategory" className="modal-toggle" />
+            <div className="modal" role="dialog">
+                <div className="modal-box w-11/12 max-w-3xl bg-black border border-gray-600 rounded-lg">
+                    <h3 className="text-2xl font-bold mb-6 text-white">Edit Profile</h3>
 
-                <div className="card-profile-desktop">
-                    <img
-                        src="https://wallpapercat.com/w/full/7/0/2/1290-3840x2160-desktop-4k-among-us-background.jpg"
-                        className="img-background-desktop-profile"
-                    />
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {/* Cover Photo */}
+                        <div className="relative w-full h-48 bg-gray-700 rounded-lg overflow-hidden">
+                            {coverPreview ? (
+                                <img src={coverPreview || "/placeholder.svg"} alt="Cover" className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="flex items-center justify-center h-full">
+                                    <span className="text-gray-400">No Cover Photo</span>
+                                </div>
+                            )}
+                            <label className="absolute bottom-3 right-3 p-2 bg-yellow-400 text-black rounded-full hover:bg-yellow-600 cursor-pointer transition-colors duration-200">
+                                <Camera size={20} />
+                                <input type="file" name="cover_pict" className="hidden" onChange={handleFileChange} accept="image/*" />
+                            </label>
+                        </div>
 
-                    <div className="div-container-dataprofile-desktop">
-                        <div className="div-pictureprofile-desktop">
-                            <img
-                                src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                className="img-profile-desktop"
+                        {/* Profile Picture */}
+                        <div className="relative flex flex-col items-center">
+                            <div className="w-32 h-32 rounded-full bg-gray-700 overflow-hidden flex items-center justify-center border-4 border-black -mt-16">
+                                {profilePreview ? (
+                                    <img src={profilePreview || "/placeholder.svg"} alt="Profile" className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="text-gray-400">No Profile Image</span>
+                                )}
+                            </div>
+                            <label className="absolute bottom-0 transform translate-y-1/2 p-2 rounded-full bg-yellow-400 text-black hover:bg-yellow-600 cursor-pointer transition-colors duration-200">
+                                <Camera size={20} />
+                                <input type="file" name="profile_pict" className="hidden" onChange={handleFileChange} accept="image/*" />
+                            </label>
+                        </div>
+
+                        {/* Delete Picture Links */}
+                        <div className="flex justify-center gap-2 space-x-4 text-sm">
+                            <Link
+                                href={`/profile/${currentUser.id}/${currentUser.username}/delete-profile-picture`}
+                                className="text-gray-500 hover:text-red-400 transition-colors duration-200"
+                            >
+                                Delete Profile Picture
+                            </Link>
+                            <Link
+                                href={`/profile/${currentUser.id}/${currentUser.username}/delete-cover-picture`}
+                                className="text-gray-500 hover:text-red-400 transition-colors duration-200"
+                            >
+                                Delete Cover Picture
+                            </Link>
+                        </div>
+
+                        {/* Input Fields */}
+                        <div className="space-y-4">
+                            <input
+                                type="text"
+                                name="username"
+                                value={data.username}
+                                onChange={handleChange}
+                                placeholder="Username"
+                                className="w-full bg-gray-800 text-white border border-gray-700 rounded-md p-3 focus:border-yellow-500 focus:ring focus:ring-yellow-200 focus:ring-opacity-50"
+                            />
+                            <input
+                                type="text"
+                                name="fullname"
+                                value={data.fullname}
+                                onChange={handleChange}
+                                placeholder="Full Name"
+                                className="w-full bg-gray-800 text-white border border-gray-700 rounded-md p-3 focus:border-yellow-500 focus:ring focus:ring-yellow-200 focus:ring-opacity-50"
+                            />
+                            <input
+                                type="email"
+                                name="email"
+                                value={data.email}
+                                onChange={handleChange}
+                                placeholder="Email"
+                                className="w-full bg-gray-800 text-white border border-gray-700 rounded-md p-3 focus:border-yellow-500 focus:ring focus:ring-yellow-200 focus:ring-opacity-50"
+                            />
+                            <textarea
+                                name="bio"
+                                placeholder="Bio"
+                                rows="4"
+                                value={data.bio}
+                                onChange={handleChange}
+                                className="w-full bg-gray-800 text-white border border-gray-700 rounded-md p-3 focus:border-yellow-500 focus:ring focus:ring-yellow-200 focus:ring-opacity-50"
                             />
                         </div>
 
-                        <div className="data-profile-desktop">
-                            <div className="div-container-data-profile-desktop">
-                                <p className="p-dataprofile-desktop">
-                                    @Karevlaneis
-                                </p>
-                                <p className="p-sincejoin">Since 2020 Join</p>
-                            </div>
-
-                            <a href="/EditProfile" className="button-editprofile-desktop">
-                            <button>
-                                Edit Profile
+                        {/* Submit Button */}
+                        <div className="flex justify-end">
+                            <button
+                                type="submit"
+                                className="btn btn-outline text-white hover:bg-yellow-400 hover:text-black transition-colors duration-200"
+                                disabled={processing}
+                            >
+                                {processing ? "Saving..." : "Save Changes"}
                             </button>
-                            </a>
                         </div>
-                    </div>
+                    </form>
                 </div>
+                <label className="modal-backdrop" htmlFor="addCategory">
+                    Close
+                </label>
             </div>
 
-            {/* card profile for desktop end */}
-
-            {/* view profile from tablet */}
-            <div className="div-device-tablet">
-                {/* card profile for tablet  */}
-                <div className="div-profile-tablet">
-                    <div className="div-tablet-font">
-                        <p>Profile</p>
-                    </div>
-
-                    <div className="div-cardprofile-tablet">
-                        <img
-                            src="https://wallpapercat.com/w/full/7/0/2/1290-3840x2160-desktop-4k-among-us-background.jpg"
-                            className="img-background-tablet-profile"
-                        />
-
-                        <div className="div-container-dataprofile-tablet">
-                            <div className="div-pictureprofile-tablet">
-                                <img
-                                    src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                    className="img-dataprofile-tablet"
-                                />
-                            </div>
-
-                            <div className="div-dataprofile-tablet">
-                                <div className="div-container-data-profile-tablet">
-                                    <p className="p-dataprofile-tablet">
-                                        @Karevlaneis
-                                    </p>
-                                    <p className="p-sincejoin">
-                                        Since 2020 Join
-                                    </p>
-                                </div>
-
-                                <a
-                                    href="/EditProfile"
-                                    className="button-editprofile-tablet"
-                                >
-                                    <button>Edit Profile</button>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* card profile for tablet end */}
-
-                {/* unggahan tweet user from tablet */}
-                <div className="div-unggahan-tablet">
-                    <div className="div-tweet-tablet">
-                        <div className="div-tablet-post">
-                            <article class="rounded-xl border border-gray-700 bg-gray-800 p-4">
-                                <div class="flex items-center gap-4">
-                                    <img
-                                        alt=""
-                                        src="https://images.unsplash.com/photo-1614644147724-2d4785d69962?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80"
-                                        class="size-16 rounded-full object-cover"
-                                    />
-
-                                    <div>
-                                        <h3 class="text-lg font-medium text-white">
-                                            @Karevlaneis
-                                        </h3>
-                                    </div>
-                                </div>
-
-                                <div className="div-title-unggahan-tablet">
-                                    <p>Bumi Manusia - Pramodya Ananta toer </p>
-                                </div>
-
-                                <ul class="mt-4 space-y-2">
-                                    <p className="p-tweet-user">
-                                        Punya mimpi tak akan pernah mudah.
-                                        Habibie dan Ainun tahu itu. Cinta mereka
-                                        terbangun dalam perjalanan mewujudkan
-                                        mimpi. Dinginnya salju Jerman,
-                                        pengorbanan, rasa sakit, kesendirian
-                                        serta godaan harta dan kuasa saat mereka
-                                        kembali ke Indonesia mengiringi
-                                        perjalanan dua hidup menjadi satu.
-                                    </p>
-                                </ul>
-                            </article>
-                        </div>
-                    </div>
-
-                    <div className="div-tweet-tablet1">
-                        <div className="div-tablet-post">
-                            <article class="rounded-xl border border-gray-700 bg-gray-800 p-4">
-                                <div class="flex items-center gap-4">
-                                    <img
-                                        alt=""
-                                        src="https://images.unsplash.com/photo-1614644147724-2d4785d69962?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80"
-                                        class="size-16 rounded-full object-cover"
-                                    />
-
-                                    <div>
-                                        <h3 class="text-lg font-medium text-white">
-                                            @Karevlaneis
-                                        </h3>
-                                    </div>
-                                </div>
-
-                                <div className="div-title-unggahan-tablet">
-                                    <p>Laskar Pelangi - Andrea Hirata </p>
-                                </div>
-
-                                <ul class="mt-4 space-y-2">
-                                    Kalau kemanusiaan tersinggung, semua orang
-                                    yang berperasaan dan berpikiran waras ikut
-                                    tersinggung, kecuali orang gila dan orang
-                                    yang berjiwa kriminal, biarpun dia sarjana.
-                                </ul>
-
-                                <img
-                                    src="https://about.vidio.com/wp-content/uploads/2021/02/HDPM-Laskar-Pelangi-Mobile.jpg"
-                                    alt=""
-                                    className="img-tweet-profile-tablet"
-                                />
-                            </article>
-                        </div>
-                    </div>
-                </div>
-                {/* unggahan tweet user from tablet end */}
-            </div>
-            {/* view profile from tablet */}
-
-            {/* unggahan user for mobile */}
-            <div className="div-tweet-useraccount">
-                <div className="div-tweet">
-                    <article className="border border-white-300 bg-gray-800 p-4 ">
-                        <div className="flex items-center gap-4">
-                            <img
-                                alt=""
-                                src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                className="size-14 rounded-full object-cover"
-                            />
-
-                            <div>
-                                <h3 className="text-lg font-medium text-white">
-                                    @Karevlaneis
-                                </h3>
-                            </div>
-                        </div>
-
-                        <ul className="mt-2 space-y-2">
-                            <p className="p-tweet-user">
-                                Punya mimpi tak akan pernah mudah. Habibie dan
-                                Ainun tahu itu. Cinta mereka terbangun dalam
-                                perjalanan mewujudkan mimpi. Dinginnya salju
-                                Jerman, pengorbanan, rasa sakit, kesendirian
-                                serta godaan harta dan kuasa saat mereka kembali
-                                ke Indonesia mengiringi perjalanan dua hidup
-                                menjadi satu.
-                            </p>
-                        </ul>
-                    </article>
-                </div>
-
-                <div className="div-tweet">
-                    <article className="border border-white-300 bg-gray-800 p-4 ">
-                        <div className="flex items-center gap-4">
-                            <img
-                                alt=""
-                                src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                className="size-14 rounded-full object-cover"
-                            />
-
-                            <div>
-                                <h3 className="text-lg font-medium text-white">
-                                    @Karevlaneis
-                                </h3>
-                                <div className="flow-root"></div>
-                            </div>
-                        </div>
-
-                        <ul className="mt-2 space-y-2">
-                            <p className="p-tweet-user">
-                                Punya mimpi tak akan pernah mudah. Habibie dan
-                                Ainun tahu itu. Cinta mereka terbangun dalam
-                                perjalanan mewujudkan mimpi. Dinginnya salju
-                                Jerman, pengorbanan, rasa sakit, kesendirian
-                                serta godaan harta dan kuasa saat mereka kembali
-                                ke Indonesia mengiringi perjalanan dua hidup
-                                menjadi satu.
-                            </p>
-                        </ul>
-
-                        <img
-                            src="https://www.cultura.id/wp-content/uploads/2019/08/bumi_manusia.jpg"
-                            className="img-unggahan-mobile"
-                        />
-                    </article>
-                </div>
-            </div>
-            {/* unggahan user for mobile*/}
-
-            {/* unggahan user for desktop */}
-            <div className="div-unggahan-desktop">
-                <div className="div-tweet-desktop">
-                    <article className="rounded-xl border border-gray-700 bg-gray-800 p-4 ">
-                        <div className="flex items-center gap-4 ">
-                            <img
-                                alt=""
-                                src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                className="size-16 rounded-full object-cover"
-                            />
-
-                            <div>
-                                <h3 className="text-lg font-medium text-white">
-                                    @Karevlaneis
-                                </h3>
-                            </div>
-                        </div>
-
-                        <div className="div-title-unggahan-desktop">
-                            <p>Bumi Manusia - Pramodya Ananta toer </p>
-                        </div>
-
-                        <ul className="mt-4 space-y-2 text-white">
-                            Punya mimpi tak akan pernah mudah. Habibie dan Ainun
-                            tahu itu. Cinta mereka terbangun dalam perjalanan
-                            mewujudkan mimpi. Dinginnya salju Jerman,
-                            pengorbanan, rasa sakit, kesendirian serta godaan
-                            harta dan kuasa saat mereka kembali ke Indonesia
-                            mengiringi perjalanan dua hidup menjadi satu.
-                        </ul>
-                    </article>
-                </div>
-
-                <div className="div-tweet-desktop">
-                    <article className="rounded-xl border border-gray-700 bg-gray-800 p-4">
-                        <div className="flex items-center gap-4">
-                            <img
-                                alt=""
-                                src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                className="size-16 rounded-full object-cover"
-                            />
-
-                            <div>
-                                <h3 className="text-lg font-medium text-white">
-                                    @Karevlaneis
-                                </h3>
-                            </div>
-                        </div>
-
-                        <div className="div-title-unggahan-desktop">
-                            <p>Bumi Manusia - Pramodya Ananta toer </p>
-                        </div>
-
-                        <ul className="mt-4 space-y-2 text-white">
-                            Kalau kemanusiaan tersinggung, semua orang yang
-                            berperasaan dan berpikiran waras ikut tersinggung,
-                            kecuali orang gila dan orang yang berjiwa kriminal,
-                            biarpun dia sarjana.
-                        </ul>
-
-                        <img
-                            src="https://th.bing.com/th/id/OIP.aQe_irQ8w79h04Y_xSyDWwHaEA?rs=1&pid=ImgDetMain"
-                            className="img-unggahan-desktop"
-                        />
-                    </article>
-                </div>
-            </div>
-
-            {/* unggahan user for desktop */}
         </DefaultLayout>
-    );
-};
+    )
+}
 
-export default Profile;
+export default Profile
+
