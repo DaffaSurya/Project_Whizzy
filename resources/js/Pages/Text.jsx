@@ -14,9 +14,8 @@ const Text = () => {
 
     const [karya, setKarya] = useState(null);
     const [featured, setFeatured] = useState({ data: [] });
+    const [carousel, setCarousel] = useState({ data: [] });
 
-
-    console.log(featured.data[0])
 
     // Fetch Karya data
     async function getKarya() {
@@ -40,6 +39,16 @@ const Text = () => {
         }
     }
 
+    async function getCarousel() {
+        try {
+            const response = await Axios.get('/api/carousel-karya')
+            console.log(response.data)
+            setCarousel(response.data);
+        } catch (error) {
+            console.log('error while fetching carousel = ', error)
+        }
+    }
+
     function truncateText(text, limit = 120) {
         if (!text) return "";  // Handle null or undefined text
         return text.length > limit ? text.slice(0, limit) + "..." : text;
@@ -49,6 +58,7 @@ const Text = () => {
     useEffect(() => {
         getKarya();
         getFeatured();
+        getCarousel();
     }, []);
 
     return (
@@ -72,43 +82,30 @@ const Text = () => {
                     <h1 className="text-2xl font-bold pb-3">Kreasi Terbaru</h1>
 
                     <Swiper className="w-full rounded-3xl">
-                        <SwiperSlide>
-                            <div className="relative group">
-                                <img
-                                    src="https://about.vidio.com/wp-content/uploads/2021/02/HDPM-Laskar-Pelangi-Mobile.jpg"
-                                    className="object-cover w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]"
-                                />
-                                <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-80 transition-opacity duration-300"></div>
-                                <div className="absolute inset-0 flex flex-col items-end justify-end px-4 pb-6 lg:pb-12 sm:px-16 text-start text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <h2 className="text-xl font-bold text-start w-full">Laskar Pelangi</h2>
-                                    <p className="text-sm sm:text-base">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maxime dolorem qui dicta sint ex quam perspiciatis voluptatum molestias, veniam, fugiat doloribus voluptatibus, doloremque ratione. Sapiente neque eos odio tenetur culpa?</p>
-                                </div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img
-                                src="https://www.cultura.id/wp-content/uploads/2019/08/bumi_manusia.jpg"
-                                className="object-cover w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]"
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img
-                                src="https://img1.hotstarext.com/image/upload/f_auto,t_web_m_1x/sources/r1/cms/prod/6492/1006492-h-fce8b35dde85"
-                                className="object-cover w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]"
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img
-                                src="https://www.viu.com/ott/id/articles/wp-content/uploads/2019/10/perahu-kertas-1.jpg"
-                                className="object-cover w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]"
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img
-                                src="https://wekepo.com/wp-content/uploads/2019/10/Film-Tenggelamnya-Kapal-Van-der-Wijck.jpg"
-                                className="object-cover w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]"
-                            />
-                        </SwiperSlide>
+
+                        {carousel.length === 0 ? (
+                            <p className="text-gray-500 text-center my-5">Belum ada karya</p>
+                        ) : (
+                            carousel.data.map((item) => (
+                                <SwiperSlide key={item.id}>
+                                    <div className="relative group">
+                                        <img
+                                            src={item.karya.cover_karya}
+                                            className="object-contain w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]"
+                                        />
+                                        <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-80 transition-opacity duration-300"></div>
+                                        <div className="absolute inset-0 flex flex-col items-end justify-end px-4 pb-6 lg:pb-12 sm:px-16 text-start text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <h2 className="text-xl font-bold text-start w-full">{item.karya.judul_karya}</h2>
+                                            <p className="text-sm sm:text-base">
+                                                {item.karya.deskripsi_karya}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </SwiperSlide>
+                            ))
+                        )}  
+
+
                     </Swiper>
                 </div>
 

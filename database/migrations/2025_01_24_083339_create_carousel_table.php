@@ -17,7 +17,7 @@ return new class extends Migration
                   ->references('id')
                   ->on('karya') 
                   ->onDelete('cascade');
-            $table->string('status'); 
+            $table->string('status')->default('visible')->nullable(); 
             $table->timestamps();
         });
     }

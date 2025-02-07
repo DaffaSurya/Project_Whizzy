@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ForumController;
 use App\Http\Controllers\Admin\TrashController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\KomentarChapterController;
 use App\Http\Controllers\ProfileController;
@@ -23,6 +24,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
+// Auth
+Route::inertia('/login', 'Auth/Login')->name('login');
+Route::post('/register/store', [RegisterController::class, 'register']);
+Route::post('/authenticate', [LoginController::class, 'authenticate']);
+Route::get('/logout', [LoginController::class, 'logout']);
+
+
+// Public URL's
 Route::inertia('/', 'Text');
 Route::inertia('/Cari', 'Cari');
 Route::inertia('/register', 'Register');
@@ -32,10 +42,8 @@ Route::inertia('/Garitan-Filantropi/play', 'Audio');
 Route::inertia('/EditProfile', 'EditProfile');
 Route::inertia('/Review', 'Review');
 
-// Auth
-Route::inertia('/login', 'Auth/Login')->name('login');
-Route::post('/authenticate', [LoginController::class, 'authenticate']);
-Route::get('/logout', [LoginController::class, 'logout']);
+Route::get('/search', [SearchController::class, 'search']);
+
 
 
 // Admin Route
@@ -94,10 +102,13 @@ Route::prefix('admin')->middleware(AdminMiddleware::class)->group(function () {
     Route::get('/homepage-settings', [HomepageController::class, 'index']);
     Route::post('/homepage-settings/store-featured', [HomepageController::class, 'store_featured']);
     Route::post('/homepage-settings/store-carousel', [HomepageController::class, 'store_carousel']);
+    Route::get('/homepage-settings/delete-featured/{id}', [HomepageController::class, 'delete_featured']);
+    Route::get('/homepage-settings/delete-carousel/{id}', [HomepageController::class, 'delete_carousel']);
 });
 
 
-Route::middleware(AuthMiddleware::class)->group(function(){
+// Auth User
+Route::middleware(AuthMiddleware::class)->group(function () {
 
     // karya 
     Route::get('/karya/{id}/{slug}', [AudiobookController::class, 'showKarya']);
@@ -108,7 +119,7 @@ Route::middleware(AuthMiddleware::class)->group(function(){
 
     // Komentar di setiap chapter
     Route::post('/komentar/store/{userId}/{chapterId}', [KomentarChapterController::class, 'store']);
-    
+
     // Komunitas
     Route::get('/komunitas/all', [KomunitasController::class, 'index']);
     Route::get('/komunitas/show/{id}', [KomunitasController::class, 'detail']);
@@ -121,17 +132,17 @@ Route::middleware(AuthMiddleware::class)->group(function(){
     // Profile
     Route::get('/profile/{id}/{username}', [ProfileController::class, 'index']);
     Route::get('/yang-disukai/{id}/{username}', [ProfileController::class, 'likes']);
-    
+
     Route::post('/profile/{id}/{username}/update', [ProfileController::class, 'update']);
     Route::get('/profile/{id}/{username}/delete-profile-picture', [ProfileController::class, 'deleteProfilePicture']);
     Route::get('/profile/{id}/{username}/delete-cover-picture', [ProfileController::class, 'deleteCoverPicture']);
-    
+
     // Markah
     Route::get('/markah/{id}/all', [MarkahController::class, 'index']);
     Route::get('/markah/{id}/{karya_id}/save', [MarkahController::class, 'store']);
     Route::delete('/markah/{karya_id}/delete', [MarkahController::class, 'delete']);
 
-    
+
     // Likes
     Route::get('/like/{id}/{post_id}', [LikesController::class, 'like']);
     Route::get('/dislike/{id}/{post_id}', [LikesController::class, 'dislike']);
@@ -140,8 +151,7 @@ Route::middleware(AuthMiddleware::class)->group(function(){
 });
 
 
-// Cari
-Route::get('/search', [SearchController::class, 'search']);
+
 
 
 
