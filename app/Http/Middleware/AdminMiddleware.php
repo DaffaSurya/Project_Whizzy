@@ -21,10 +21,10 @@ class AdminMiddleware
             return Inertia::location('/login');
         }
 
-        if (Auth::user()->role == 3) {
-            return Inertia::location('/admin/dashboard');
+        if (Auth::user()->role_id != 2) {
+            return Inertia::location('/');
         }
-        
+
         return $next($request);
     }
 }

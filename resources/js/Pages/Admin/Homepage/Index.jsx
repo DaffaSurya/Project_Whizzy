@@ -23,16 +23,16 @@ const Index = ({ karya, featured, carousel }) => {
 
         const data = {
             karya_id: e.target.karya_id.value,
-            status: e.target.status.value,
         }
 
         try {
+            console.log(data)   
             const response = await Axios.post('/admin/homepage-settings/store-carousel', data);
 
             document.getElementById('addCarousel').checked = false;
 
-            setToastVisible(true);
-            setToastMessage("Item Added successfully.");
+            // setToastVisible(true);
+            // setToastMessage("Karya Added successfully.");
 
             setTimeout(() => {
                 router.visit('/admin/homepage-settings')
@@ -41,7 +41,7 @@ const Index = ({ karya, featured, carousel }) => {
             setLoading(false);
 
             if (error.response) {
-                console.log("Error data:", error.response.data);
+                console.log("Error data:", error.response.data.message);
                 console.log("Error status:", error.response.status);
                 console.log("Error headers:", error.response.headers);
             }
@@ -57,16 +57,16 @@ const Index = ({ karya, featured, carousel }) => {
 
         const data = {
             featured_audiobook: e.target.featured_audiobook.value,
-            status: e.target.status.value,
         }
 
         try {
+
             const response = await Axios.post('/admin/homepage-settings/store-featured', data);
 
             document.getElementById('addCategory').checked = false;
 
-            setToastVisible(true);
-            setToastMessage("Item moved successfully.");
+            // setToastVisible(true);
+            // setToastMessage("Item moved successfully.");
 
             setTimeout(() => {
                 router.visit('/admin/homepage-settings')
@@ -84,6 +84,15 @@ const Index = ({ karya, featured, carousel }) => {
         }
     }
 
+    async function deleteCarousel(id) {
+        try {
+            const response = await Axios.get(`/admin/homepage-settings/delete-carousel/${id}`)            
+        } catch (error) {
+            alert('there is an error = ', error)
+        }
+    }
+
+
     return (
         <AdminLayout title={`Homepage Settings`}>
 
@@ -98,8 +107,8 @@ const Index = ({ karya, featured, carousel }) => {
                 {carousel.length === 0 ? (
                     <p className='text-gray-500 text-center'>Carousel Masih kosong</p>
                 ) : (
-                    carousel.map((item => 
-                        <img src={item.karya.cover_karya} className='w-64 h-32 object-contain' />
+                    carousel.map((item =>
+                        <img item={item.id} src={item.karya.cover_karya} className='w-64 h-32 object-contain' />
                     ))
                 )}
             </div>
@@ -204,15 +213,15 @@ const Index = ({ karya, featured, carousel }) => {
             <input type="checkbox" id="addCarousel" className="modal-toggle" />
             <div className="modal" role="dialog">
                 <div className="modal-box bg-black border border-gray-600 rounded-lg">
-                    <h3 className="text-lg font-bold mb-3">Create New Featured</h3>
+                    <h3 className="text-lg font-bold mb-3">Create New Carousel</h3>
 
-                    <form onSubmit={newFeatured}>
+                    <form onSubmit={newCarousel}>
                         {/* audiobooks */}
                         <label className="form-control w-full mb-3">
                             <div className="label">
                                 <span className="label-text">Audiobooks</span>
                             </div>
-                            <select name='featured_audiobook' className="select select-bordered">
+                            <select name='karya_id' className="select select-bordered">
                                 <option disabled selected>Pick one</option>
                                 {karya.map((item => (
                                     <option key={item.id} value={item.id}>{item.judul_karya}</option>
@@ -230,7 +239,6 @@ const Index = ({ karya, featured, carousel }) => {
                                     <div className="flex flex-col justify-between p-4 leading-normal">
                                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{item.karya.judul_karya}</h5>
                                         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{item.karya.deskripsi_karya}</p>
-                                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400"><Trash2 /></p>
                                     </div>
                                 </div>
                             ))

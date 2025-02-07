@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Search, User, Users, Bookmark, LogOut, Star } from 'lucide-react';
+import { Home, Search, User, Users, Bookmark, LogOut, Star, ChartArea } from 'lucide-react';
 import { Link, usePage } from '@inertiajs/react';
 import logo from '../../../public/logo.png';
 
@@ -19,6 +19,8 @@ export default function Sidebar() {
       {/* Sidebar for desktop */}
       <div className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0">
         <div className="flex-1 flex flex-col min-h-0 bg-black border-r-2 border-slate-800">
+
+
           <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
             <nav className="mt-14 flex-1 px-4 space-y-3">
               <Link
@@ -86,6 +88,23 @@ export default function Sidebar() {
                 Review dan Saran
               </Link>
 
+              {currentUser ? (
+                currentUser.role_id == 2 ? (
+                  <Link
+                    href="/admin/dashboard"
+                    className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:bg-white/10 ${isActive('/Admin')}`}
+                  >
+                    <ChartArea
+                      className={`mr-3 flex-shrink-0 h-6 w-6 ${isActive('/Review')}`}
+                      aria-hidden="true"
+                    />
+                    Dashboard Admin
+                  </Link>
+                ) : null
+              ) : (
+                <div></div>
+              )}
+
             </nav>
 
             {/* profile */}
@@ -93,6 +112,7 @@ export default function Sidebar() {
               {currentUser ? (
                 <>
                   <span>{currentUser.username}</span>
+
                   <Link
                     href="/logout"
                     className="text-red-500 hover:text-red-700 text-sm font-medium"

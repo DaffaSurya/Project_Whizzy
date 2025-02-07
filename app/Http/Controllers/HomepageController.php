@@ -23,13 +23,11 @@ class HomepageController extends Controller
         // Validate the incoming request
         $request->validate([
             'featured_audiobook' => 'required|integer|exists:karya,id',
-            'status' => 'required',
         ]);
 
         // Update or create the featured karya
         $featured = FeaturedModel::updateOrCreate(
             ['featured_audiobook' => $request->featured_audiobook],
-            ['status' => $request->status]
         );
 
         // Return a success response
@@ -37,6 +35,40 @@ class HomepageController extends Controller
             'message' => 'Featured Karya updated successfully',
             'data' => $featured,
         ], 200);
+    }
+
+    public function store_carousel(Request $request)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'karya_id' => 'required|integer',
+        ]);
+
+        // Update or create the featured karya
+        $carousel = CarouselModel::create([
+            'karya_id' => $request->karya_id,
+        ]);
+
+        // Return a success response
+        return response()->json([
+            'message' => 'Carousel updated successfully',
+            'data' => $carousel,
+        ], 200);
+    }
+
+    public function delete_featured($id)
+    {
+        $data = FeaturedModel::findOrFail($id);
+        $data->delete();
+
+        return Inertia::location('/admin/homepage-settings');
+    }
+    public function delete_carousel($id)
+    {
+        $data = CarouselModel::findOrFail($id);
+        $data->delete();
+
+        return Inertia::location('/admin/homepage-settings');
     }
 
 }
