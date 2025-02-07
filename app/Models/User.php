@@ -23,6 +23,9 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'bio',
+        'profile_pict',
+        'cover_pict',
     ];
 
     /**
@@ -62,5 +65,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(KomentarKomunitasModel::class);
 
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(LikesModel::class, 'user_id');
     }
 }

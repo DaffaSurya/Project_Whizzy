@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CarouselModel;
 use App\Models\FeaturedModel;
 use App\Models\KaryaModel;
 use Illuminate\Http\Request;
@@ -13,7 +14,8 @@ class HomepageController extends Controller
     {
         $karya = KaryaModel::all();
         $featured = FeaturedModel::with('karya')->get();
-        return Inertia::render('Admin/Homepage/Index', ['karya' => $karya, 'featured' => $featured]);
+        $carousel = CarouselModel::with('karya:id,judul_karya,cover_karya,deskripsi_karya')->get();
+        return Inertia::render('Admin/Homepage/Index', ['karya' => $karya, 'featured' => $featured, 'carousel' => $carousel]);
     }
 
     public function store_featured(Request $request)

@@ -13,7 +13,7 @@ class ChapterController extends Controller
 {
     public function index()
     {
-        $karya = KaryaModel::paginate(10);
+        $karya = KaryaModel::orderBy('created_at', 'desc')->paginate(10);
         return Inertia::render('Admin/Chapter/Index', ['karya' => $karya]);
     }
 
@@ -31,8 +31,8 @@ class ChapterController extends Controller
             'judul_chapter' => 'required',
             'karya_id' => 'required',
             'status' => 'required',
-            'audio_file' => 'required|mimes:mp3,wav,ogg|max:3000',
-            'ilustrasi_karya' => 'nullable|file|mimes:mp4|max:5120', // Validate audio file
+            'audio_file' => 'required|mimes:mp3,wav,ogg|max:5120',
+            'ilustrasi_karya' => 'nullable|file|mimes:mp4|max:5110000', // Validate audio file
         ]);
 
         // Handle ilustrasi_karya file upload

@@ -33,4 +33,16 @@ class KomunitasModel extends Model
         return $this->hasMany(KomunitasModel::class, 'parent_id', 'id');
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(KomunitasModel::class, 'parent_id');
+    }
+
+    // Define a relationship for likes
+    public function likes()
+    {
+        return $this->hasMany(LikesModel::class, 'post_id');
+    }
+
+
 }

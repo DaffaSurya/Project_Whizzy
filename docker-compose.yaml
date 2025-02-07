@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: whizzy
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8000:80"
+    networks:
+      - laravel_network
+
+  db:
+    image: mysql:5.7
+    container_name: laravel_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: whizzy
+      MYSQL_ROOT_PASSWORD: 
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - laravel_network
+
+  npm:
+    image: node:16
+    container_name: laravel_npm
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    entrypoint: ["npm", "run", "watch"]
+    networks:
+      - laravel_network
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  laravel_network:
+    driver: bridge

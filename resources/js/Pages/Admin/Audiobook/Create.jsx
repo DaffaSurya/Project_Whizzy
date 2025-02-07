@@ -190,8 +190,9 @@ const Create = ({ categories }) => {
                                 <option value="" disabled selected>
                                     Select Status
                                 </option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
+                                <option value="published">Published</option>
+                                <option value="draft">Draft</option>
+                                <option value="archived">Archived</option>
                             </select>
                         </div>
 
