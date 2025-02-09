@@ -1,13 +1,14 @@
 import React, { useRef, useState } from "react";
 import AudioPlayer from "../../Components/AudioPlayer";
-import { Save } from "lucide-react";
-import { usePage } from "@inertiajs/react";
+import { ArrowLeft, Save, Trash2 } from "lucide-react";
+import { Link, router, usePage } from "@inertiajs/react";
 import Axios from "axios";
 import Pagination from "../../Components/Pagination";
+import whizzy_logo from "../../../../public/logo.png";
 
 const Play = ({ chapter, nextChapter, prevChapter }) => {
-  
-  const [comments, setComments] = useState(chapter.komentar); 
+
+  const [comments, setComments] = useState(chapter.komentar);
 
   // get current logged users
   const currentUser = usePage().props.auth.user;
@@ -22,49 +23,80 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
   // video ref
   const videoRef = useRef(null);
 
+  function timeAgo(createdAt) {
+    const seconds = Math.round((new Date() - new Date(createdAt)) / 1000);
+    const minutes = Math.round(seconds / 60);
+    const hours = Math.round(minutes / 60);
+    const days = Math.round(hours / 24);
+    const rtf = new Intl.RelativeTimeFormat('id', { numeric: 'auto' });
+
+    if (seconds < 60) return rtf.format(-seconds, 'second'); // 'detik' in Indonesian locale
+    if (minutes < 60) return rtf.format(-minutes, 'minute'); // 'menit'
+    if (hours < 24) return rtf.format(-hours, 'hour'); // 'jam'
+    return rtf.format(-days, 'day'); // 'hari'
+  }
+
   async function newKomen(e) {
     e.preventDefault();
 
     setLoading(true);
 
-    // Gather form data
+    const komentar = e.target.komentar.value;
     const data = new FormData();
-    data.append('komentar', e.target.komentar.value);
+    data.append("komentar", komentar);
 
     try {
+      const response = await Axios.post(
+        `/komentar/store/${currentUser.id}/${chapter.id}`,
+        data
+      );
 
-      // Make the POST request with form data
-      Axios.post(`/komentar/store/${currentUser.id}/${chapter.id}`, data);
-      setComments(prevComments => [...prevComments, data]);
-      setLoading(false);
+      // Update comments list with the new comment
+      setComments((prevComments) => [...prevComments, response.data]);
 
+      router.reload();
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       console.error("Error during Axios request:", error);
-      if (error.response) {
-        console.log("Error data:", error.response.data);
-        console.log("Error status:", error.response.status);
-        console.log("Error headers:", error.response.headers);
-      }
+    } finally {
+      setLoading(false);
     }
   }
 
+  async function deleteChapterComments(id) {
+    setLoading(true);
+
+    try {
+      await Axios.get(`/admin/karya/comments/delete/${id}`); // Wait for the request to complete
+      window.location.reload();
+    } catch (error) {
+      console.log('there is an error', error);
+    } finally {
+      setLoading(false); // Ensure loading is turned off after request completes
+    }
+  }
+
+
   return (
-    <div className="min-h-96 bg-black py-12 px-4 sm:px-6 lg:px-8 lg:pb-64">
+    <div className="min-h-96 bg-black py-12 px-5 sm:px-6 lg:px-8 lg:pb-64">
       <div className="max-w-4xl mx-auto space-y-8">
-        <a href={`/karya/${chapter.karya.slug}/${chapter.karya.id}`}>Back</a>
+        <Link href={`/karya/${chapter.karya.slug}/${chapter.karya.id}`}><ArrowLeft size={20} /></Link>
         <div className="rounded-lg overflow-hidden shadow-2xl">
           <div className="aspect-video">
-            <video
-              className="w-full h-full object-contain rounded-md"
-              ref={videoRef}
-              controls={false}
-              loop={true}
-              muted={true}
-            >
-              <source src={chapter.ilustrasi_karya} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+            {chapter.ilustrasi_karya == null ? (
+              <img src={whizzy_logo} alt="" className="w-full h-full object-contain rounded-md" />
+            ) : (
+              <video
+                className="w-full h-full object-contain rounded-md"
+                ref={videoRef}
+                controls={false}
+                loop={true}
+                muted={true}
+              >
+                <source src={chapter.ilustrasi_karya} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            )}
           </div>
 
           <div className="mt-5">
@@ -74,20 +106,21 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
         </div>
 
         {/* commets */}
-        <h1 className="text-2xl font-bold text-white">Comments (29)</h1>
+        <h1 className="text-2xl font-bold text-white">Comments ({comments.length})</h1>
 
         <div className="w-full max-w-7xl px-4 md:px-5 lg:px-0 mx-auto">
           <div className="w-full flex-col justify-start items-start lg:gap-14 gap-7 inline-flex">
             <div className="w-full flex-col justify-start items-start gap-8 flex">
 
               <form onSubmit={newKomen} className="w-full">
-                <textarea name="komentar" className="textarea textarea-bordered  w-full bg-black" rows={6} placeholder="Silahkan"></textarea>
+                <textarea name="komentar" className="textarea textarea-bordered  w-full bg-black" rows={3} placeholder="Silahkan"></textarea>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="mt-3 me-2 btn btn-sm bg-yellow-400 text-black hover:bg-yellow-500 focus:ring-2 focus:ring-yellow-400"
+                  className={`mt-3 me-2 btn btn-sm text-black focus:ring-2 ${loading ? "bg-gray-600 cursor-not-allowed" : "bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-400"
+                    }`}
                 >
-                  <Save size={20} /> {loading ? 'Saving...' : 'Submit'}
+                  <Save size={20} /> {loading ? "Saving..." : "Submit"}
                 </button>
               </form>
 
@@ -111,11 +144,21 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
                           <div className="flex-col justify-start items-start gap-1 inline-flex">
                             <h5 className="text-white text-sm font-semibold leading-snug">{comment.user.username}</h5>
                             <h6 className="text-gray-500 text-xs font-normal leading-5">
-                              {comment.created_at} {/* Format this date as needed */}
+                              {timeAgo(comment.created_at)} {/* Format this date as needed */}
                             </h6>
                           </div>
                         </div>
-                        <div className="group justify-end items-center flex">{/* empty space */}</div>
+                        {currentUser.id === comment.user_id ? (
+                          <button
+                            onClick={() => deleteChapterComments(comment.id)}
+                            className={`group justify-end items-center flex hover:text-red-500 ${loading ? "text-gray-800 cursor-not-allowed" : ""
+                              }`}
+                            disabled={loading}
+                          >
+                            <Trash2 />
+                          </button>
+
+                        ) : (null)}
                       </div>
 
                       <p className="text-white w-full text-start text-sm font-normal">{comment.komentar}</p>
@@ -150,7 +193,7 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
 
 
         <AudioPlayer
-          cover={chapter.karya.cover_karya}
+          cover={chapter.karya.cover_karya ? chapter.karya.cover_karya : whizzy_logo}
           judul_karya={chapter.judul_chapter}
           penyunting={chapter.karya.penyunting}
           audioFile={chapter.audio_file}

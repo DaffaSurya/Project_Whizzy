@@ -81,6 +81,8 @@ Route::prefix('admin')->middleware(AdminMiddleware::class)->group(function () {
     Route::get('/audiobook/detail/{id}', [AudiobookController::class, 'detail']);
     Route::get('/audiobook/softDelete/{id}', [AudiobookController::class, 'softDelete']);
 
+    Route::get('/karya/comments/delete/{id}', [KomentarChapterController::class, 'deleteChapterComments']);
+
     // chapter
     Route::get('/chapter', [ChapterController::class, 'index']);
     Route::get('/chapter/create/{id}', [ChapterController::class, 'create']);

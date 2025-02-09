@@ -132,7 +132,7 @@ function Detail({ detail }) {
                         {/* Tweet Text */}
                         <div className="mt-4 text-xl">
                             <p className="mb-5" style={{ whiteSpace: 'pre-wrap' }}>{detail.content}</p>
-                            <img src={detail.attachment} alt="" className="rounded-xl max-w-72" />
+                            <img src={detail.attachment} alt="" className="rounded-xl lg:max-w-80 md:max-w-96 w-max-full" />
                         </div>
 
                         {/* Tweet Timestamp */}
@@ -192,9 +192,9 @@ function Detail({ detail }) {
 
                                 {/* Comment details */}
                                 <div className="flex-1">
-                                    <div className="flex items-center space-x-2">
+                                    <div className="flex lg:gap-3 lg:flex-row md:flex-col flex-col items-start mb-2">
                                         <span className="font-bold">
-                                            {komentar.user.username}
+                                            {komentar.user.fullname}
                                         </span>
                                         <span className="text-gray-500">
                                             @{komentar.user.username.toLowerCase()}

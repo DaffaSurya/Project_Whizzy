@@ -19,6 +19,7 @@ const Profile = ({ user, post }) => {
     const [profilePreview, setProfilePreview] = useState(user.profile_pict || null);
     const [coverPreview, setCoverPreview] = useState(user.cover_pict || null);
     const [processing, setProcessing] = useState(false);
+    const [errors, setErrors] = useState({});
 
     const [likesCount, setLikesCount] = useState(post.likes_count); // Initialize likes count
     const [isLiked, setIsLiked] = useState(post.is_liked || false); // Track if the user has liked the post
@@ -68,6 +69,7 @@ const Profile = ({ user, post }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrors({});
         setProcessing(true);
 
         const formData = new FormData();
@@ -82,15 +84,25 @@ const Profile = ({ user, post }) => {
             const response = await Axios.post(`/profile/${currentUser.id}/${currentUser.username}/update`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-            router.push(`/profile/${currentUser.id}/adminuser`)
+            router.visit(`/profile/${currentUser.id}/adminuser`)
         } catch (error) {
+            setProcessing(false);
             console.error("Error updating profile:", error);
+            if (error.response) {
+                if (error.response.status === 422) {
+                    setErrors(error.response.data.errors);  // Validation errors
+                } else {
+                    setErrors({ general: "Something went wrong. Please try again." }); // Other server errors
+                }
+            } else {
+                setErrors({ general: "Network error. Please check your connection." });
+            }
         }
     };
 
     const deleteProfilePicture = async () => {
         try {
-            await axios.post(`/profile/${user.id}/${currentUser.username}/delete-profile-picture`);
+            await Axios.post(`/profile/${user.id}/${currentUser.username}/delete-profile-picture`);
             alert("Profile picture deleted successfully!");
         } catch (error) {
             console.error("Error deleting profile picture:", error);
@@ -106,7 +118,7 @@ const Profile = ({ user, post }) => {
         }
     };
 
-    console.log(post)
+
     return (
         <DefaultLayout>
             <div className="bg-black text-white min-h-screen">
@@ -132,8 +144,8 @@ const Profile = ({ user, post }) => {
                 </header>
 
                 {/* Profile Info */}
-                <div className="grid lg:grid-cols-3 mt-16 px-4">
-                    <div className="info col-span-2 lg:order-first order-last">
+                <div className="grid lg:grid-cols-12 mt-16 px-4">
+                    <div className="info col-span-10 lg:order-first">
                         <h1 className="text-xl font-bold">{user.fullname}</h1>
                         <p className="text-gray-500">@{user.username}</p>
                         <p className="mt-2">{user.bio}</p>
@@ -154,7 +166,7 @@ const Profile = ({ user, post }) => {
                             </div>
                         </div> */}
                     </div>
-                    <div className="flex items-center justify-end my-4 h-10">
+                    <div className="flex items-center lg:justify-end justify-start my-4 h-10 col-span-2">
                         {/* <button className="bg-yellow-400 text-black font-bold px-4 py-2 rounded-full">Edit profile</button> */}
                         <label htmlFor="addCategory" className="btn bg-yellow-400 text-black font-bold px-4 rounded-full hover:bg-yellow-500"><Plus size={18} /> Edit profile</label>
 
@@ -184,7 +196,7 @@ const Profile = ({ user, post }) => {
                                             {item.parent_id ? " membalas postingan" : " posted"}
                                         </span>
 
-                                        <div className="flex items-center">
+                                        <div className="flex lg:flex-row md:flex-col flex-col items-start lg:mb-2 md:mb-5 mb-5">
                                             <span className="font-bold mr-2">{user.fullname}</span>
                                             <span className="text-gray-500">{user.username} · {timeAgo(item.created_at)}</span>
                                         </div>
@@ -271,23 +283,24 @@ const Profile = ({ user, post }) => {
                             {coverPreview ? (
                                 <img src={coverPreview || "/placeholder.svg"} alt="Cover" className="w-full h-full object-cover" />
                             ) : (
-                                <div className="flex items-center justify-center h-full">
+                                <div className="flex flex-col items-center justify-center h-full">
                                     <span className="text-gray-400">No Cover Photo</span>
+                                    <span className="text-gray-500">max 2mb</span>
                                 </div>
                             )}
                             <label className="absolute bottom-3 right-3 p-2 bg-yellow-400 text-black rounded-full hover:bg-yellow-600 cursor-pointer transition-colors duration-200">
                                 <Camera size={20} />
                                 <input type="file" name="cover_pict" className="hidden" onChange={handleFileChange} accept="image/*" />
                             </label>
+                            {errors.cover_pict && <p className="text-red-600 text-xs mt-2">{errors.cover_pict[0]}</p>}
                         </div>
-
                         {/* Profile Picture */}
                         <div className="relative flex flex-col items-center">
                             <div className="w-32 h-32 rounded-full bg-gray-700 overflow-hidden flex items-center justify-center border-4 border-black -mt-16">
                                 {profilePreview ? (
                                     <img src={profilePreview || "/placeholder.svg"} alt="Profile" className="w-full h-full object-cover" />
                                 ) : (
-                                    <span className="text-gray-400">No Profile Image</span>
+                                    <span className="text-gray-400">No Profile Image (max 2mb)</span>
                                 )}
                             </div>
                             <label className="absolute bottom-0 transform translate-y-1/2 p-2 rounded-full bg-yellow-400 text-black hover:bg-yellow-600 cursor-pointer transition-colors duration-200">
@@ -311,6 +324,11 @@ const Profile = ({ user, post }) => {
                                 Delete Cover Picture
                             </Link>
                         </div>
+
+                        {/* errors */}
+                        {errors.cover_pict && <p className="text-red-600 text-xs">{errors.cover_pict[0]}</p>}
+                        {errors.profile_pict && <p className="text-red-600 text-xs">{errors.profile_pict[0]}</p>}
+                        {errors.bio && <p className="text-red-600 text-xs">{errors.bio[0]}</p>}
 
                         {/* Input Fields */}
                         <div className="space-y-4">

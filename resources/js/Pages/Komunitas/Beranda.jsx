@@ -82,8 +82,8 @@ function Beranda({ komunitas }) {
                     <Link href={`/komunitas/show/${item.id}`} key={item.id} className="flex space-x-3 rounded-xl p-6 hover:bg-zinc-950">
                         <img src={item.user.profile_pict || "https://placehold.co/400"} className="w-10 h-10 rounded-full object-cover" />
                         <div className="flex-1">
-                            <div className="flex items-center space-x-2">
-                                <span className="font-bold">{item.display_name}</span>
+                            <div className="flex lg:flex-row md:flex-col flex-col items-start mb-2">
+                                <span className="font-bold">{item.user.fullname}</span>
                                 <span className="text-gray-500">@{item.user.username} · {timeAgo(item.created_at)}</span>
                             </div>
                             <p className="mt-1 whitespace-pre-line">{item.content}</p>

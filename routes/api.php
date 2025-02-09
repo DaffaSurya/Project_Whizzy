@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/karya-list', function (Request $request) {
-    return KaryaModel::where('status', '=', 'published')->orderBy('created_at', 'desc')->paginate(20);
+    return KaryaModel::where('status', '=', 'published')->latest()->paginate(20);
 });
 
 Route::get('/featured-karya', function (Request $request) {

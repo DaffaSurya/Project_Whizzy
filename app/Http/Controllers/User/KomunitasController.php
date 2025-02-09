@@ -16,18 +16,13 @@ class KomunitasController extends Controller
 {
     public function index()
     {
-        $komunitas = KomunitasModel::with('user:id,username,profile_pict')
-            ->orderBy('created_at', 'desc')  // Sorting by the latest created at
-            ->withCount('likes')
+        $komunitas = KomunitasModel::with([
+            'user:id,username,profile_pict,fullname',
+        ])
+            ->withCount(['likes', 'comments as comment_count'])
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        // Add a comment count for each Komunitas post
-        $komunitas->getCollection()->transform(function ($item) {
-            // Count the comments for each Komunitas
-            $item->comment_count = KomunitasModel::where('parent_id', '=', $item->id)->count();
-            return $item;
-        });
-        // return $komunitas;
         return Inertia::render('Komunitas/Beranda', ['komunitas' => $komunitas]);
     }
 
@@ -40,6 +35,9 @@ class KomunitasController extends Controller
             'attachment' => 'nullable',
             'parent_id' => 'nullable'
         ]);
+
+        // Sanitize the content field
+        $validatedData['content'] = strip_tags($validatedData['content']);
 
         // Create a slug from the 'judul_komunitas' field
         $validatedData['slug'] = Str::random(10);
@@ -61,11 +59,12 @@ class KomunitasController extends Controller
         return Inertia::location('/Komunitas');
     }
 
+
     public function detail($id)
     {
         $detail = KomunitasModel::with([
-            'user:id,username,profile_pict', // Load the user with only the id and username fields
-            'comments.user:id,username'
+            'user:id,username,profile_pict,fullname', // Load the user with only the id and username fields
+            'comments.user:id,username,fullname'
         ])->withCount('likes')
             ->findOrFail($id);
 
@@ -74,18 +73,20 @@ class KomunitasController extends Controller
 
     public function storeComments(Request $request, $id, $userid)
     {
-        $request->validate([
-            'content' => 'required|string',
+
+        $validatedData = $request->validate([
+            'content' => 'required|string|max:500',
+            'parent_id' => 'nullable|exists:komentar_komunitas,id'
         ]);
 
-        $komentar = new KomentarKomunitasModel();
-        $komentar->user_id = $userid;
-        $komentar->komunitas_id = $id;
-        $komentar->content = $request->content;
-        $komentar->parent_id = $request->parent_id;
-        $komentar->save();
+        // Sanitize input
+        $validatedData['content'] = strip_tags($validatedData['content']);
+        $validatedData['user_id'] = $userid;
+        $validatedData['komunitas_id'] = $id;
 
-        return response()->json(['message' => 'success'], 200);
+        KomentarKomunitasModel::create($validatedData);
+
+        return response()->json(['message' => 'Comment added successfully'], 200);
     }
 
     public function delete($id)
@@ -100,6 +101,6 @@ class KomunitasController extends Controller
         // Hapus data dari database
         $data->delete();
 
-        return response()->json(['success'], 200);
+        return back();
     }
 }

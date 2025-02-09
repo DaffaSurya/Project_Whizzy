@@ -2,10 +2,11 @@ import React from 'react'
 import DefaultLayout from '../../Layout/DefautLayout'
 import { ArrowLeft, Bookmark, Play } from 'lucide-react';
 import { Link, usePage } from '@inertiajs/react';
+import whizzy_logo from "../../../../public/logo.png";
 
-const Show = ({ karya }) => {
+const Show = ({ karya, firstChapter }) => {
 
-    const currentUser = usePage().props.auth.user; 
+    const currentUser = usePage().props.auth.user;
 
     return (
         <DefaultLayout>
@@ -15,13 +16,13 @@ const Show = ({ karya }) => {
             <div className="detail-karya flex lg:flex-row flex-col justify-start lg:px-32 gap-10 lg:mt-0 mt-10">
 
                 <img
-                    src={karya.cover_karya}
+                    src={karya.cover_karya ? karya.cover_karya : whizzy_logo}
                     alt="Movie"
                     className="rounded-lg object-cover h-72 md:h-96 lg:h-64"
                 />
 
                 {/* properties */}
-                <div className="properties flex flex-col text-left justify-between">
+                <div className="properties flex flex-col text-left justify-start gap-3">
 
                     {/* title */}
                     <h1 className="font-bold text-white text-4xl">{karya.judul_karya}</h1>
@@ -44,7 +45,14 @@ const Show = ({ karya }) => {
                     </div>
 
                     <div className="grid grid-cols-12 w-full justify-between gap-5">
-                        <a href="/Garitan-Filantropi/play" className="col-span-10 btn bg-[#FFE786] text-black hover:bg-yellow-400 w-full">Mulai Mendengarkan</a>
+                        {firstChapter && (
+                            <Link
+                                href={`/karya/${karya.slug}/${karya.id}/chapter/${firstChapter.id}`}
+                                className="col-span-10 btn bg-[#FFE786] text-black hover:bg-yellow-400 w-full"
+                            >
+                                Mulai Mendengarkan
+                            </Link>
+                        )}
                         <Link href={`/markah/${currentUser.id}/${karya.id}/save`} className="col-span-2 btn"><Bookmark /></Link>
                     </div>
 

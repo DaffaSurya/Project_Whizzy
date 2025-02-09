@@ -9,8 +9,6 @@ const Index = ({ karya, featured, carousel }) => {
 
     const [loading, setLoading] = useState(false);
 
-    console.log(carousel)
-
     function truncateText(text, maxLength) {
         if (!text) return text;
         return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
@@ -26,7 +24,7 @@ const Index = ({ karya, featured, carousel }) => {
         }
 
         try {
-            console.log(data)   
+            console.log(data)
             const response = await Axios.post('/admin/homepage-settings/store-carousel', data);
 
             document.getElementById('addCarousel').checked = false;
@@ -34,9 +32,8 @@ const Index = ({ karya, featured, carousel }) => {
             // setToastVisible(true);
             // setToastMessage("Karya Added successfully.");
 
-            setTimeout(() => {
-                router.visit('/admin/homepage-settings')
-            }, 1000);
+            router.visit('/admin/homepage-settings');
+
         } catch (error) {
             setLoading(false);
 
@@ -67,10 +64,9 @@ const Index = ({ karya, featured, carousel }) => {
 
             // setToastVisible(true);
             // setToastMessage("Item moved successfully.");
+            
+            router.visit('/admin/homepage-settings');
 
-            setTimeout(() => {
-                router.visit('/admin/homepage-settings')
-            }, 1000);
         } catch (error) {
             setLoading(false);
 
@@ -84,38 +80,44 @@ const Index = ({ karya, featured, carousel }) => {
         }
     }
 
-    async function deleteCarousel(id) {
-        try {
-            const response = await Axios.get(`/admin/homepage-settings/delete-carousel/${id}`)            
-        } catch (error) {
-            alert('there is an error = ', error)
-        }
-    }
-
 
     return (
         <AdminLayout title={`Homepage Settings`}>
 
             {/* Carousel Settings */}
             <div className="flex flex-row justify-between">
-                <h1 className='text-lg font-bold'>Carousel Settings <span className='text-sm text-gray-600'>Maximum 4 Carousel items</span></h1>
-                <div className="controls flex flex-row items-center gap-5">
-                    <label htmlFor="addCarousel" className="btn btn-outline btn-sm text-white hover:bg-yellow-400"><Plus size={18} /> New Carousel Item</label>
-                </div>
+                <h1 className='text-lg font-bold'>Kreasi Terbaru <span className='text-sm text-gray-600'>Maximum 4 Carousel items</span></h1>
+                {carousel.length >= 4 ? (
+                    <div className="controls flex flex-row items-center gap-5">
+                        <label htmlFor="addCarousel" disabled={true} className="btn btn-outline btn-sm text-white hover:bg-yellow-400"><Plus size={18} /> New Carousel Item</label>
+                    </div>
+                ) : (
+                    <div className="controls flex flex-row items-center gap-5">
+                        <label htmlFor="addCarousel" className="btn btn-outline btn-sm text-white hover:bg-yellow-400"><Plus size={18} /> New Carousel Item</label>
+                    </div>
+                )}
             </div>
-            <div className="flex flex-row justify-start">
+            <div className="flex flex-row justify-between gap-4 max-w-full lg:gap-0 overflow-autolg:overflow-hidden">
                 {carousel.length === 0 ? (
-                    <p className='text-gray-500 text-center'>Carousel Masih kosong</p>
+                    <div className="text-center py-10 border w-full border-gray-700">
+                        <h2 className="text-lg font-bold text-gray-600">Empty Carousel</h2>
+                    </div>
                 ) : (
                     carousel.map((item =>
-                        <img item={item.id} src={item.karya.cover_karya} className='w-64 h-32 object-contain' />
+                        <div key={item.id} className="relative w-72 h-32 group border border-gray-600 rounded-xl">
+                            <img item={item.id} src={item.karya.cover_karya} className="w-64 h-32 object-contain" />
+                            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <Link href={`/admin/homepage-settings/delete-carousel/${item.id}`} className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-black rounded-md"><Trash2 size={20} /></Link>
+                            </div>
+                        </div>
                     ))
                 )}
             </div>
 
+
             {/* Featured Audiobook */}
             <div className="flex flex-row justify-between">
-                <h1 className='text-lg font-bold'>Featured Audiobooks Settings <span className='text-sm text-gray-600'>Maximum 2 Featured items</span></h1>
+                <h1 className='text-lg font-bold'>Buku Terfavorit <span className='text-sm text-gray-600'>Maximum 2 Featured items</span></h1>
 
                 <div className="controls flex flex-row items-center gap-5">
                     {featured.length >= 2 ? (
@@ -149,17 +151,17 @@ const Index = ({ karya, featured, carousel }) => {
                                             : "No description available."}
                                     </p>
                                     <div className="mt-auto">
-                                        <button className="inline-block text-white border py-2 px-4 rounded-xl hover:bg-yellow-500 hover:text-black hover:border-yellow-500 transition-colors">
+                                        <Link href={`homepage-settings/delete-featured/${item.id}`} className="inline-block text-white border py-1 px-3 rounded-xl hover:bg-yellow-500 hover:text-black hover:border-yellow-500 transition-colors">
                                             Remove from Featured
-                                        </button>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     ))
                 ) : (
-                    <div className="text-center py-10 border w-full border-gray-700">
-                        <h2 className="text-lg font-bold text-gray-600">No Featured <span className='text-yellow-200'>Content</span></h2>
+                    <div className="text-center col-span-2 py-10 border w-full border-gray-700">
+                        <h2 className="text-lg font-bold text-gray-600">Empty Featured <span className='text-yellow-200'>Content</span></h2>
                         <p className='text-gray-600'>Check back later for new updates!</p>
                     </div>
                 )}
@@ -179,22 +181,10 @@ const Index = ({ karya, featured, carousel }) => {
                                 <span className="label-text">Audiobooks</span>
                             </div>
                             <select name='featured_audiobook' className="select select-bordered">
-                                <option disabled selected>Pick one</option>
+                                <option disabled>Pick one</option>
                                 {karya.map((item => (
                                     <option key={item.id} value={item.id}>{item.judul_karya}</option>
                                 )))}
-                            </select>
-                        </label>
-
-                        {/* status */}
-                        <label className="form-control w-full mb-3">
-                            <div className="label">
-                                <span className="label-text">Status</span>
-                            </div>
-                            <select name='status' className="select select-bordered">
-                                <option disabled selected>Pick one</option>
-                                <option value='visible'>Visible</option>
-                                <option value='not_visible'>Not Visible</option>
                             </select>
                         </label>
 
@@ -222,27 +212,12 @@ const Index = ({ karya, featured, carousel }) => {
                                 <span className="label-text">Audiobooks</span>
                             </div>
                             <select name='karya_id' className="select select-bordered">
-                                <option disabled selected>Pick one</option>
+                                <option disabled>Pick one</option>
                                 {karya.map((item => (
                                     <option key={item.id} value={item.id}>{item.judul_karya}</option>
                                 )))}
                             </select>
                         </label>
-
-                        {/* carousel list */}
-                        {carousel.length === 0 ? (
-                            <p className='text-gray-500 text-center'>No Carousel yet</p>
-                        ) : (
-                            carousel.map((item =>
-                                <div className="my-3 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-sm md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-                                    <img className="object-contain w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src={item.karya.cover_karya} alt="" />
-                                    <div className="flex flex-col justify-between p-4 leading-normal">
-                                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{item.karya.judul_karya}</h5>
-                                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{item.karya.deskripsi_karya}</p>
-                                    </div>
-                                </div>
-                            ))
-                        )}
 
                         <button type='submit' disabled={loading} className={`btn btn-sm px-4 py-1 mt-3 ${loading
                             ? 'bg-yellow-600 text-white cursor-not-allowed'

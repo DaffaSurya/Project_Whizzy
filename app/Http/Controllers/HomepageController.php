@@ -63,6 +63,7 @@ class HomepageController extends Controller
 
         return Inertia::location('/admin/homepage-settings');
     }
+    
     public function delete_carousel($id)
     {
         $data = CarouselModel::findOrFail($id);
