@@ -9,6 +9,7 @@ use App\Models\ChapterModel;
 use App\Models\KaryaModel;
 use App\Models\KomentarChapterModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
@@ -25,6 +26,14 @@ class AudiobookController extends Controller
     {
         $category = CategoryModel::all();
         return Inertia::render('Admin/Audiobook/Create', ['categories' => $category]);
+    }
+
+    public function like($id)
+    {
+        DB::statement('CALL UpdateKaryaLikes(?)', [$id]);
+
+        $likes = DB::table('karya_statistics')->where('karya_id', $id)->value('likes');
+        return response()->json(['likes' => $likes]);
     }
 
     public function store(Request $request)
