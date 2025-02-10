@@ -80,6 +80,8 @@ Route::prefix('admin')->middleware(AdminMiddleware::class)->group(function () {
     Route::post('/audiobook/update/{id}', [AudiobookController::class, 'update']);
     Route::get('/audiobook/detail/{id}', [AudiobookController::class, 'detail']);
     Route::get('/audiobook/softDelete/{id}', [AudiobookController::class, 'softDelete']);
+    
+    Route::get('/karya/comments/delete/{id}', [KomentarChapterController::class, 'deleteChapterComments']);
 
     // chapter
     Route::get('/chapter', [ChapterController::class, 'index']);
@@ -113,6 +115,8 @@ Route::middleware(AuthMiddleware::class)->group(function () {
     // karya 
     Route::get('/karya/{id}/{slug}', [AudiobookController::class, 'showKarya']);
     Route::get('/karya/{slug}/{id}/chapter/{chapterId}', [AudiobookController::class, 'playChapter']);
+    Route::get('/audiobook/like/{id}', [AudiobookController::class, 'like']);
+
 
     // Users Route
     Route::get('/forum/unggah', [ForumController::class, 'unggah']);

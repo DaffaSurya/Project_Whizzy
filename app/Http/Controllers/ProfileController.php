@@ -15,20 +15,17 @@ class ProfileController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // Fetch all posts from the user
-        $post = KomunitasModel::where('user_id', $user->id)
-            ->with('parent')
-            ->withCount('likes')
+        $posts = KomunitasModel::where('user_id', $id)
+            ->with(['parent'])
+            ->withCount(['likes', 'comments as comment_count']) // Count comments efficiently
+            ->latest()
             ->get();
 
-        // Add comment count for each post
-        $post->transform(function ($item) {
-            // Count the comments for each Komunitas post
-            $item->comment_count = KomunitasModel::where('parent_id', '=', $item->id)->count();
-            return $item;
-        });
+        return Inertia::render('Profile', [
+            'user' => $user,
+            'post' => $posts
+        ]);
 
-        return Inertia::render('Profile', ['user' => $user, 'post' => $post]);
     }
 
 
@@ -40,34 +37,33 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $data = $request->only(['fullname', 'username', 'email', 'bio']);
+        $validatedData = $request->validate([
+            'fullname' => 'nullable|string|max:255',
+            'username' => 'nullable|string|max:50|unique:users,username,' . $id,
+            'email' => 'nullable|email|max:255|unique:users,email,' . $id,
+            'bio' => 'nullable|string|max:500',
+            'profile_pict' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'cover_pict' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Bersihkan input teks dengan strip_tags
+        $validatedData['fullname'] = isset($validatedData['fullname']) ? strip_tags($validatedData['fullname']) : null;
+        $validatedData['username'] = isset($validatedData['username']) ? strip_tags($validatedData['username']) : null;
+        $validatedData['email'] = isset($validatedData['email']) ? strip_tags($validatedData['email']) : null;
+        $validatedData['bio'] = isset($validatedData['bio']) ? strip_tags($validatedData['bio']) : null;
 
         // Hapus file profile_pict lama jika ada file baru yang diunggah
         if ($request->hasFile('profile_pict')) {
-            if ($user->profile_pict) {
-                $oldFile = str_replace('/storage/', '', $user->profile_pict); // Path relatif di storage
-                Storage::disk('public')->delete($oldFile);
-            }
-
-            $filename = uniqid() . '_' . now()->format('Ymd') . '.' . $request->file('profile_pict')->getClientOriginalExtension();
-            $path = $request->file('profile_pict')->storeAs('profile_pict', $filename, 'public');
-            $data['profile_pict'] = Storage::url($path);
+            $validatedData['profile_pict'] = $this->handleFileUpload($request->file('profile_pict'), $user->profile_pict, 'profile_pict');
         }
 
         // Hapus file cover_pict lama jika ada file baru yang diunggah
         if ($request->hasFile('cover_pict')) {
-            if ($user->cover_pict) {
-                $oldFile = str_replace('/storage/', '', $user->cover_pict);
-                Storage::disk('public')->delete($oldFile);
-            }
-
-            $filename = uniqid() . '_' . now()->format('Ymd') . '.' . $request->file('cover_pict')->getClientOriginalExtension();
-            $path = $request->file('cover_pict')->storeAs('cover_pict', $filename, 'public');
-            $data['cover_pict'] = Storage::url($path);
+            $validatedData['cover_pict'] = $this->handleFileUpload($request->file('cover_pict'), $user->cover_pict, 'cover_pict');
         }
 
         // Update data user
-        $user->update($data);
+        $user->update($validatedData);
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
@@ -98,6 +94,18 @@ class ProfileController extends Controller
         return redirect()->back()->with('success', 'Cover picture deleted successfully.');
     }
 
+    private function handleFileUpload($file, $oldFilePath, $folder)
+    {
+        // Delete old file if exists
+        if ($oldFilePath) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $oldFilePath));
+        }
 
+        // Generate unique filename
+        $filename = uniqid() . '_' . now()->format('Ymd') . '.' . $file->getClientOriginalExtension();
+
+        // Store the file and return its public URL
+        return Storage::url($file->storeAs($folder, $filename, 'public'));
+    }
 
 }

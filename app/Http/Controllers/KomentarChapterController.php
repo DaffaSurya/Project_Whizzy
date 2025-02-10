@@ -22,4 +22,12 @@ class KomentarChapterController extends Controller
         return response()->json(['message' => 'success'], 200);
     }
 
+    public function deleteChapterComments($id)
+    {
+        $data = KomentarChapterModel::findOrFail($id);
+        $data->delete();
+
+        return response()->json(['message' => 'success'], 200);
+    }
+
 }

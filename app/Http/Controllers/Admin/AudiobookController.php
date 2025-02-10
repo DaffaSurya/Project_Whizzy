@@ -7,7 +7,9 @@ use App\Models\AudiobookModel;
 use App\Models\CategoryModel;
 use App\Models\ChapterModel;
 use App\Models\KaryaModel;
+use App\Models\KomentarChapterModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
@@ -24,6 +26,14 @@ class AudiobookController extends Controller
     {
         $category = CategoryModel::all();
         return Inertia::render('Admin/Audiobook/Create', ['categories' => $category]);
+    }
+
+    public function like($id)
+    {
+        DB::statement('CALL UpdateKaryaLikes(?)', [$id]);
+
+        $likes = DB::table('karya_statistics')->where('karya_id', $id)->value('likes');
+        return response()->json(['likes' => $likes]);
     }
 
     public function store(Request $request)
@@ -119,14 +129,21 @@ class AudiobookController extends Controller
 
     public function showKarya($slug, $id)
     {
-        $karya = KaryaModel::with('chapters')
+        $karya = KaryaModel::with([
+            'chapters' => function ($query) {
+                $query->orderBy('created_at'); // Order by oldest first
+            }
+        ])
             ->where('id', $id)
             ->where('slug', $slug)
             ->firstOrFail();
 
+        $firstChapter = $karya->chapters->first();
+
         return Inertia::render('Audiobook/Show', [
             'karya' => $karya,
             'chapters' => $karya->chapters,
+            'firstChapter' => $firstChapter,
         ]);
     }
 
@@ -136,9 +153,9 @@ class AudiobookController extends Controller
         $chapter = ChapterModel::with([
             'karya',
             'komentar' => function ($query) {
-                $query->select('id', 'user_id', 'chapter_id', 'komentar') // Specify the fields you want for comments
+                $query->select('id', 'user_id', 'chapter_id', 'komentar', 'created_at') // Specify the fields you want for comments
                     ->with('user:id,username') // Eager load the user details (id and username)
-                    ->paginate(3); // Paginate the comments, adjust the number as needed
+                    ->get(); // Paginate the comments, adjust the number as needed
             }
         ])
             ->where('id', $chapterId)

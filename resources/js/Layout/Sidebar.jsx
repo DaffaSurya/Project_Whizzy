@@ -169,21 +169,40 @@ export default function Sidebar() {
               Profle
             </Link>
           )}
-
-          <Link
-            href="/Komunitas"
-            className={`hover:bg-white/10 group flex flex-col items-center px-2 py-2 text-xs font-medium ${isActive('/Komunitas')}`}
-          >
-            <Users className={`mb-1 h-6 w-6 ${isActive('/Komunitas')}`} aria-hidden="true" />
-            Komunitas
-          </Link>
-          <a
-            href="/Favorit"
-            className={`hover:bg-white/10 group flex flex-col items-center px-2 py-2 text-xs font-medium ${isActive('/Favorit')}`}
-          >
-            <Bookmark className={`mb-1 h-6 w-6 ${isActive('/Favorit')}`} aria-hidden="true" />
-            Markah
-          </a>
+          {currentUser ? (
+            <Link
+              href="/komunitas/all"
+              className={`hover:bg-white/10 group flex flex-col items-center px-2 py-2 text-xs font-medium ${isActive('/komunitas')}`}
+            >
+              <Users className={`mb-1 h-6 w-6 ${isActive('/komunitas')}`} aria-hidden="true" />
+              Komunitas
+            </Link>
+          ) : (
+            <Link
+              href="/komunitas/all"
+              className={`hover:bg-white/10 group flex flex-col items-center px-2 py-2 text-xs font-medium ${isActive('/komunitas')}`}
+            >
+              <Users className={`mb-1 h-6 w-6 ${isActive('/komunitas')}`} aria-hidden="true" />
+              Komunitas
+            </Link>
+          )}
+          {currentUser ? (
+            <Link
+              href={`/markah/${currentUser.id}/all`}
+              className={`hover:bg-white/10 group flex flex-col items-center px-2 py-2 text-xs font-medium ${isActive('/markah')}`}
+            >
+              <Bookmark className={`mb-1 h-6 w-6 ${isActive('/markah')}`} aria-hidden="true" />
+              Markah
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className={`hover:bg-white/10 group flex flex-col items-center px-2 py-2 text-xs font-medium ${isActive('/markah')}`}
+            >
+              <Bookmark className={`mb-1 h-6 w-6 ${isActive('/markah')}`} aria-hidden="true" />
+              Markah
+            </Link>
+          )}
         </nav>
       </div>
     </>

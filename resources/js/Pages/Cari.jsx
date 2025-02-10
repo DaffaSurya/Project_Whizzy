@@ -4,6 +4,7 @@ import { Home, Search } from 'lucide-react';
 import debounce from 'lodash/debounce';
 import DefaultLayout from '../Layout/DefautLayout'
 import Axios from 'axios';
+import whizzy_logo from "../../../public/logo.png"
 
 const Cari = ({ initialResults = [], initialQuery = '' }) => {
     const [query, setQuery] = useState('');
@@ -136,7 +137,7 @@ const Cari = ({ initialResults = [], initialQuery = '' }) => {
                                                     {/* Image Section */}
                                                     <div className="flex-shrink-0">
                                                         <img
-                                                            src={result.cover_karya || '/default-placeholder.png'}
+                                                            src={result.cover_karya || whizzy_logo}
                                                             alt={result.judul_karya || 'Image placeholder'}
                                                             className="w-36 lg:w-48 h-full object-cover"
                                                         />

@@ -1,14 +1,12 @@
 import { NavLink } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import GaritanIMG from "../assets/Garitan Filantropi.jpg";
 import "react-multi-carousel/lib/styles.css";
-import "../Style/style.css";
-
 import { Link } from '@inertiajs/react'
 import "swiper/css";
 import DefaultLayout from "../Layout/DefautLayout";
 import { useEffect, useState } from "react";
 import Axios from "axios";
+import whizzy_logo from "../../../public/logo.png"
 
 const Text = () => {
 
@@ -79,18 +77,16 @@ const Text = () => {
 
                 {/* carousel */}
                 <div className="carousel flex flex-col pb-5">
-                    <h1 className="text-2xl font-bold pb-3">Kreasi Terbaru</h1>
-
-                    <Swiper className="w-full rounded-3xl">
-
-                        {carousel.length === 0 ? (
-                            <p className="text-gray-500 text-center my-5">Belum ada karya</p>
-                        ) : (
-                            carousel.data.map((item) => (
+                    <h1 className="text-2xl text-white font-bold pb-3">Kreasi Terbaru</h1>
+                    {carousel.length === 0 ? (
+                        <p className="text-gray-500 text-center my-5">Belum ada karya</p>
+                    ) : (
+                        carousel.data.map((item) => (
+                            <Swiper className="w-full rounded-3xl">
                                 <SwiperSlide key={item.id}>
                                     <div className="relative group">
                                         <img
-                                            src={item.karya.cover_karya}
+                                            src={item.karya.cover_karya ? item.karya.cover_karya : whizzy_logo}
                                             className="object-contain w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]"
                                         />
                                         <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-80 transition-opacity duration-300"></div>
@@ -102,11 +98,9 @@ const Text = () => {
                                         </div>
                                     </div>
                                 </SwiperSlide>
-                            ))
-                        )}  
-
-
-                    </Swiper>
+                            </Swiper>
+                        ))
+                    )}
                 </div>
 
 
@@ -124,7 +118,7 @@ const Text = () => {
                                     <div className="flex bg-black rounded-xl shadow-xl border border-gray-700 h-64 overflow-hidden">
                                         <div className="flex-shrink-0">
                                             <img
-                                                src={item.karya.cover_karya}
+                                                src={item.karya.cover_karya ? item.karya.cover_karya : whizzy_logo}
                                                 alt={item.karya.judul_karya}
                                                 className="w-36 lg:w-48 h-full object-cover"
                                             />
@@ -149,7 +143,7 @@ const Text = () => {
                                 </div>
                             ))
                         ) : featured && Array.isArray(featured.data) && featured.data.length === 0 ? (
-                            <div className="col-span-full text-center text-white py-8">
+                            <div className="col-span-full text-center text-white py-24">
                                 <p className="text-lg">Belum ada karya yang disorot</p>
                             </div>
                         ) : (
@@ -176,9 +170,9 @@ const Text = () => {
                                     karya.data.map((item) => (
                                         <li key={item.id}>
                                             <div className="group block overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow relative">
-                                                <div className="relative w-full pt-[150%] bg-gray-800 rounded-lg overflow-hidden">
+                                                <div className="relative w-full pt-[150%] bg-black border rounded-lg overflow-hidden">
                                                     <img
-                                                        src={item.cover_karya}
+                                                        src={item.cover_karya ? item.cover_karya : whizzy_logo}
                                                         alt={item.judul_karya}
                                                         className="absolute top-0 left-0 w-full h-full object-cover transition-opacity group-hover:opacity-30"
                                                         loading="lazy"
