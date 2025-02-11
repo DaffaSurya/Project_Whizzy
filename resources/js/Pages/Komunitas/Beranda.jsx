@@ -58,8 +58,6 @@ function Beranda({ komunitas }) {
         });
     }, [currentUser.id, komunitas.id]);
 
-    console.log(komunitas)
-
     return (
         <DefaultLayout>
 

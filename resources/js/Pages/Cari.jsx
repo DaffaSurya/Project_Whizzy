@@ -26,7 +26,6 @@ const Cari = ({ initialResults = [], initialQuery = '' }) => {
                 const response = await Axios.get('/search', {
                     params: { query: searchQuery },
                 });
-                console.log('API Response:', response.data);
 
                 setKaryaResults(response.data.karya_results || []);
                 setUserResults(response.data.user_results || []);
