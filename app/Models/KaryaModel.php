@@ -29,4 +29,10 @@ class KaryaModel extends Model
         return $this->hasMany(FeaturedModel::class, 'featured_audiobook');
     }
 
+    public function statistic()
+    {
+        return $this->hasOne(KaryaStatisticModel::class, 'karya_id');
+    }
+
+
 }

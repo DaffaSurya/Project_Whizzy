@@ -15,7 +15,7 @@ class KaryaSeeder extends Seeder
     {
         $faker = \Faker\Factory::create('id_ID');
 
-        for ($i = 0; $i < 12; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             KaryaModel::create([
                 'judul_karya' => $faker->sentence,
                 'penyunting' => $faker->name,
