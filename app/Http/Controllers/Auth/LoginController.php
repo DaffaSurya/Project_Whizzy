@@ -19,7 +19,7 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $request->rememberMe)) {
             return response()->json(['message' => 'login successful', 'redirectTo' => '/admin/dashboard'], 200);
         }
 

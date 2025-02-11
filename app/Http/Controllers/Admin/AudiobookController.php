@@ -7,9 +7,11 @@ use App\Models\AudiobookModel;
 use App\Models\CategoryModel;
 use App\Models\ChapterModel;
 use App\Models\KaryaModel;
+use App\Models\KaryaStatisticModel;
 use App\Models\KomentarChapterModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
@@ -162,6 +164,19 @@ class AudiobookController extends Controller
             ->where('karya_id', $id)
             ->whereRelation('karya', 'slug', $slug)
             ->firstOrFail();
+
+        // // Check session to prevent duplicate count from the same user
+        // $sessionKey = 'viewed_karya_' . $id;
+        // if (!Session::has($sessionKey)) {
+        //     Session::put($sessionKey, true);
+
+        //     // Debugging: Check if Laravel calls the SP
+        //     try {
+        //         DB::statement("CALL IncrementKaryaViews(?)", [$id]);
+        //     } catch (\Exception $e) {
+        //         \Log::error('Stored Procedure Call Failed: ' . $e->getMessage());
+        //     }
+        // }
 
 
         // Find the previous chapter

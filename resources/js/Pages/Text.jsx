@@ -1,19 +1,20 @@
 import { NavLink } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "react-multi-carousel/lib/styles.css";
-import { Link } from '@inertiajs/react'
+import { Link, usePage } from '@inertiajs/react'
 import "swiper/css";
 import DefaultLayout from "../Layout/DefautLayout";
 import { useEffect, useState } from "react";
 import Axios from "axios";
 import whizzy_logo from "../../../public/logo.png"
+import { LogOut } from "lucide-react";
 
 const Text = () => {
 
     const [karya, setKarya] = useState(null);
     const [featured, setFeatured] = useState({ data: [] });
     const [carousel, setCarousel] = useState({ data: [] });
-
+    const currentUser = usePage().props.auth.user;
 
     // Fetch Karya data
     async function getKarya() {
@@ -40,14 +41,13 @@ const Text = () => {
     async function getCarousel() {
         try {
             const response = await Axios.get('/api/carousel-karya')
-            console.log(response.data)
             setCarousel(response.data);
         } catch (error) {
             console.log('error while fetching carousel = ', error)
         }
     }
 
-    function truncateText(text, limit = 120) {
+    function truncateText(text, limit = 90) {
         if (!text) return "";  // Handle null or undefined text
         return text.length > limit ? text.slice(0, limit) + "..." : text;
     }
@@ -62,18 +62,35 @@ const Text = () => {
     return (
         <DefaultLayout>
 
-            <div className="flex flex-col pb-24 lg:px-8">
+            <div className=" flex flex-col pb-24 lg:px-8">
 
                 {/* users name */}
-                {/* <div className="flex flex-row pb-5">
-                    <div className="flex flex-row items-center gap-4">
-                        <img
-                            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            className="w-12 h-12 rounded-full fit object-cover"
-                        />
-                        <p className="">Selamat Datang , <span className="text-yellow-200 font-bold">Kareva</span></p>
+                {currentUser ? (
+                    <div className="flex flex-row py-8 md:hidden"> {/* Hide on desktop */}
+                        <div className="flex flex-row items-center w-full justify-between gap-4">
+                            <div className="flex flex-row gap-5">
+                                <img
+                                    src={currentUser.profile_pict || whizzy_logo}
+                                    className="w-12 h-12 rounded-full fit object-cover"
+                                />
+                                <p className="">Selamat Datang, <br /><span className="text-yellow-200 font-bold">{currentUser.username}</span></p>
+                            </div>
+                            <Link href="/logout" className="text-red-500"><LogOut size={20} /></Link>
+                        </div>
                     </div>
-                </div> */}
+                ) : (
+                    <div className="flex flex-row pt-5 pb-5 md:hidden"> {/* Hide on desktop */}
+                        <div className="flex flex-row w-full justify-between items-center gap-4">
+                            <img
+                                src={whizzy_logo}
+                                className="w-12 h-12 rounded-full fit object-cover"
+                            />
+                            <p className=""><Link href="/login" className="text-yellow-200 font-bold">login</Link></p>
+                        </div>
+                    </div>
+                )}
+
+
 
                 {/* carousel */}
                 <div className="carousel flex flex-col pb-5">

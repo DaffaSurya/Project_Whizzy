@@ -17,18 +17,18 @@ class UserSeeder extends Seeder
             'fullname' => 'Admin User',
             'username' => 'adminuser',
             'role_id' => '2', // admin
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('1234567890')
+            'email' => 'admin@whizzy.com',
+            'password' => bcrypt('whizzy-unair-2024')
         ]);
 
-        for ($i = 1; $i <= 11; $i++) {
-            User::create([
-                'fullname' => 'User ' . $i,
-                'username' => 'user' . $i,
-                'role_id' => 3,  // Regular user role ID (adjust if needed)
-                'email' => 'user' . $i . '@example.com',
-                'password' => bcrypt('password' . $i)  // Example password
-            ]);
-        }
+        // for ($i = 1; $i <= 11; $i++) {
+        //     User::create([
+        //         'fullname' => 'User ' . $i,
+        //         'username' => 'user' . $i,
+        //         'role_id' => 3,  // Regular user role ID (adjust if needed)
+        //         'email' => 'user' . $i . '@example.com',
+        //         'password' => bcrypt('password' . $i)  // Example password
+        //     ]);
+        // }
     }
 }
