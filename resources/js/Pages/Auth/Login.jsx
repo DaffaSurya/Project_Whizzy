@@ -3,6 +3,7 @@ import { Link } from "@inertiajs/react"
 import axios from "axios"
 import { router } from "@inertiajs/react"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
+import whizzy_logo from "../../../../public/logo.png"
 
 const Login = () => {
     const [errors, setErrors] = useState({})
@@ -49,7 +50,7 @@ const Login = () => {
         <div className="flex h-screen bg-black">
             {/* Image Section */}
             <div className="hidden lg:flex w-1/2 bg-white justify-center items-center">
-                <img src="https://i.postimg.cc/15j6NgVS/2-1.png" alt="Login" className="max-w-lg rounded-lg" />
+                <img src={whizzy_logo} alt="Login" className="max-w-lg rounded-lg" />
             </div>
 
             {/* Form Section */}
@@ -57,7 +58,7 @@ const Login = () => {
                 <div className="max-w-md w-full p-6">
                     <div className="space-y-3 mb-6">
                         <div className="flex items-center gap-2">
-                            <img src="https://placehold.co/400" alt="Whizzy Logo" className="w-6 h-6" />
+                            <img src={whizzy_logo} alt="Whizzy Logo" className="w-6 h-6" />
                             <h1 className="text-xl font-semibold">Whizzy</h1>
                         </div>
                     </div>
@@ -113,11 +114,11 @@ const Login = () => {
                                     name="rememberMe"
                                     className="h-4 w-4 text-yellow-400 focus:ring-yellow-400 border-gray-300 rounded"
                                 />
-                                <span className="text-sm">Remember me</span>
+                                <span className="text-sm">Ingat Saya</span>
                             </label>
-                            <a href="#" className="text-sm font-medium text-gray-500 hover:text-yellow-500">
+                            {/* <a href="#" className="text-sm font-medium text-gray-500 hover:text-yellow-500">
                                 Lupa Password ?
-                            </a>
+                            </a> */}
                         </div>
 
                         <button

@@ -163,9 +163,9 @@ export default function Sidebar() {
           ) : (
             <Link
               href="/login"
-              className="hover:bg-white/10 group flex flex-col items-center px-2 py-2 text-xs font-medium"
+              className="hover:bg-white/10 group flex flex-col items-center px-2 py-2 text-xs font-medium text-white"
             >
-              <User className="mb-1 h-6 w-6" aria-hidden="true" />
+              <User className="mb-1 h-6 w-6 text-white" aria-hidden="true"/>
               Profle
             </Link>
           )}

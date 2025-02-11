@@ -24,14 +24,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-
-// Auth
-Route::inertia('/login', 'Auth/Login')->name('login');
-Route::post('/register/store', [RegisterController::class, 'register']);
-Route::post('/authenticate', [LoginController::class, 'authenticate']);
-Route::get('/logout', [LoginController::class, 'logout']);
-
-
 // Public URL's
 Route::inertia('/', 'Text');
 Route::inertia('/Cari', 'Cari');
@@ -44,6 +36,11 @@ Route::inertia('/Review', 'Review');
 
 Route::get('/search', [SearchController::class, 'search']);
 
+// Auth
+Route::inertia('/login', 'Auth/Login')->name('login');
+Route::post('/register/store', [RegisterController::class, 'register']);
+Route::post('/authenticate', [LoginController::class, 'authenticate']);
+Route::get('/logout', [LoginController::class, 'logout']);
 
 
 // Admin Route
@@ -80,7 +77,7 @@ Route::prefix('admin')->middleware(AdminMiddleware::class)->group(function () {
     Route::post('/audiobook/update/{id}', [AudiobookController::class, 'update']);
     Route::get('/audiobook/detail/{id}', [AudiobookController::class, 'detail']);
     Route::get('/audiobook/softDelete/{id}', [AudiobookController::class, 'softDelete']);
-    
+
     Route::get('/karya/comments/delete/{id}', [KomentarChapterController::class, 'deleteChapterComments']);
 
     // chapter

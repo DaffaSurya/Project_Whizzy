@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('karya_statistic', function (Blueprint $table) {
             $table->id();
             $table->foreignId('karya_id')->references('id')->on('karya');
-            $table->string('views');
+            $table->integer('views')->default(0);
             $table->integer('likes');
             $table->timestamps();
         });

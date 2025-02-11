@@ -21,6 +21,13 @@ class AuthMiddleware
             return redirect('login');
         }
 
+        // if (Auth::check() && $request->is('login')) {
+        //     if (Auth::user()->role_id == 2) {
+        //         return redirect('/admin/dashboard');
+        //     }
+        //     return redirect('/');
+        // }
+
         return $next($request);
     }
 }
