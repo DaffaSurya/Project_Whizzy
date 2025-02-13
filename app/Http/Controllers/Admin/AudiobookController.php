@@ -10,6 +10,7 @@ use App\Models\KaryaModel;
 use App\Models\KaryaStatisticModel;
 use App\Models\KomentarChapterModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -134,7 +135,8 @@ class AudiobookController extends Controller
         $karya = KaryaModel::with([
             'chapters' => function ($query) {
                 $query->orderBy('created_at'); // Order by oldest first
-            }
+            },
+            'statistic'
         ])
             ->where('id', $id)
             ->where('slug', $slug)
@@ -146,6 +148,7 @@ class AudiobookController extends Controller
             'karya' => $karya,
             'chapters' => $karya->chapters,
             'firstChapter' => $firstChapter,
+            'views' => $karya->statistic->views ?? 0,
         ]);
     }
 
@@ -165,20 +168,6 @@ class AudiobookController extends Controller
             ->whereRelation('karya', 'slug', $slug)
             ->firstOrFail();
 
-        // // Check session to prevent duplicate count from the same user
-        // $sessionKey = 'viewed_karya_' . $id;
-        // if (!Session::has($sessionKey)) {
-        //     Session::put($sessionKey, true);
-
-        //     // Debugging: Check if Laravel calls the SP
-        //     try {
-        //         DB::statement("CALL IncrementKaryaViews(?)", [$id]);
-        //     } catch (\Exception $e) {
-        //         \Log::error('Stored Procedure Call Failed: ' . $e->getMessage());
-        //     }
-        // }
-
-
         // Find the previous chapter
         $prevChapter = ChapterModel::where('karya_id', $id)
             ->select('id')
@@ -192,6 +181,17 @@ class AudiobookController extends Controller
             ->where('id', '>', $chapterId) // Get chapters with IDs greater than the current one
             ->orderBy('id', 'asc') // Get the next larger ID
             ->first();
+
+        // views count
+        $userId = Auth::id();
+        $viewedKey = "viewed_karya_{$id}_user_{$userId}";
+
+        if (!session()->has($viewedKey)) {
+            DB::statement('CALL IncrementViews(?)', [$id]);
+
+            // Store in session to prevent multiple counts
+            session()->put($viewedKey, true);
+        }
 
         return Inertia::render('Audiobook/Play', [
             'chapter' => $chapter,

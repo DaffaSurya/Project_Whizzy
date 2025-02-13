@@ -25,7 +25,7 @@ class KomunitasSeeder extends Seeder
         // Get all users from the database (assuming users already exist)
         $users = User::all();
 
-        for ($i = 1; $i <= 12; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             // Randomly pick a user_id from existing users
             $user = $users->random();
 
@@ -40,7 +40,7 @@ class KomunitasSeeder extends Seeder
                 'user_id' => $user->id,  // Random user ID
                 'slug' => 'komunitas-' . Str::slug($faker->sentence(3)),  // Generate slug from a fake sentence
                 'content' => $faker->paragraph,  // Generate random content (paragraph)
-                'attachment' => rand(0, 1) ? $faker->imageUrl(150, 150) : null,  // Random image URL or null
+                // 'attachment' => rand(0, 1) ? $faker->imageUrl(150, 150) : null,  // Random image URL or null
                 'parent_id' => $parent_id,  // Set parent_id if it exists
             ]);
         }

@@ -1,29 +1,36 @@
-import { NavLink } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "react-multi-carousel/lib/styles.css";
 import { Link, usePage } from '@inertiajs/react'
 import "swiper/css";
 import DefaultLayout from "../Layout/DefautLayout";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Axios from "axios";
 import whizzy_logo from "../../../public/logo.png"
 import { LogOut } from "lucide-react";
 
 const Text = () => {
 
-    const [karya, setKarya] = useState(null);
+    const [karya, setKarya] = useState([]);
     const [featured, setFeatured] = useState({ data: [] });
     const [carousel, setCarousel] = useState({ data: [] });
+    const [nextPage, setNextPage] = useState("/api/karya-list");
+    const [loading, setLoading] = useState(false);
+    const observer = useRef();
+
     const currentUser = usePage().props.auth.user;
 
     // Fetch Karya data
     async function getKarya() {
+        if (!nextPage || loading) return;
+        setLoading(true);
         try {
-            const response = await Axios.get("/api/karya-list");
-            setKarya(response.data);  // Set the entire response data
+            const response = await Axios.get(nextPage);
+            setKarya((prev) => [...prev, ...response.data.data]); // Merge new data
+            setNextPage(response.data.next_page_url); // Set next page URL
         } catch (error) {
             console.error("Error fetching Karya:", error);
-            alert("An error occurred while fetching data.");
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -51,6 +58,18 @@ const Text = () => {
         if (!text) return "";  // Handle null or undefined text
         return text.length > limit ? text.slice(0, limit) + "..." : text;
     }
+
+    const lastElementRef = (node) => {
+        if (loading) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && nextPage) {
+                getKarya();
+            }
+        });
+        if (node) observer.current.observe(node);
+    };
+
 
     // Fetch data when the component mounts
     useEffect(() => {
@@ -182,42 +201,39 @@ const Text = () => {
                             </h2>
                         </header>
                         <ul className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-                            {karya && karya.data ? (
-                                karya.data.length > 0 ? (
-                                    karya.data.map((item) => (
-                                        <li key={item.id}>
-                                            <div className="group block overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow relative">
-                                                <div className="relative w-full pt-[150%] bg-black border rounded-lg overflow-hidden">
-                                                    <img
-                                                        src={item.cover_karya ? item.cover_karya : whizzy_logo}
-                                                        alt={item.judul_karya}
-                                                        className="absolute top-0 left-0 w-full h-full object-cover transition-opacity group-hover:opacity-30"
-                                                        loading="lazy"
-                                                    />
-                                                    <div className="absolute top-0 left-0 w-full h-full bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
-                                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <div className="text-center text-white p-4">
-                                                            <h3 className="text-xl font-semibold">{item.judul_karya}</h3>
-                                                            <a
-                                                                href={`/karya/${item.slug}/${item.id}`}
-                                                                className="mt-2 inline-block px-6 py-2 text-sm font-medium text-black bg-yellow-400 rounded-lg hover:bg-yellow-600 transition-colors"
-                                                            >
-                                                                View Details
-                                                            </a>
-                                                        </div>
+                            {karya.length > 0 ? (
+                                karya.map((item, index) => (
+                                    <li key={item.id} ref={index === karya.length - 1 ? lastElementRef : null}>
+                                        <div className="group block overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow relative">
+                                            <div className="relative w-full pt-[150%] bg-black border rounded-lg overflow-hidden">
+                                                <img
+                                                    src={item.cover_karya || "/default-image.jpg"} // Change to default image
+                                                    alt={item.judul_karya}
+                                                    className="absolute top-0 left-0 w-full h-full object-cover transition-opacity group-hover:opacity-30"
+                                                    loading="lazy"
+                                                />
+                                                <div className="absolute top-0 left-0 w-full h-full bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
+                                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <div className="text-center text-white p-4">
+                                                        <h3 className="text-xl font-semibold">{item.judul_karya}</h3>
+                                                        <a
+                                                            href={`/karya/${item.slug}/${item.id}`}
+                                                            className="mt-2 inline-block px-6 py-2 text-sm font-medium text-black bg-yellow-400 rounded-lg hover:bg-yellow-600 transition-colors"
+                                                        >
+                                                            View Details
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </li>
-                                    ))
-                                ) : (
-                                    <div className="col-span-full text-center text-white py-8">
-                                        <p className="text-lg">Belum ada karya nih, nantikan terus ya...</p>
-                                    </div>
-                                )
+                                        </div>
+                                    </li>
+                                ))
                             ) : (
-                                <span className="col-span-full text-center text-white loading loading-dots loading-md"></span>
+                                <div className="col-span-full text-center text-white py-8">
+                                    <p className="text-lg">Belum ada karya nih, nantikan terus ya...</p>
+                                </div>
                             )}
+                            {loading && <span className="col-span-full text-center text-white loading loading-dots loading-md"></span>}
 
                         </ul>
                     </div>

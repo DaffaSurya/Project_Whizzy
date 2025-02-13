@@ -2,15 +2,20 @@
 import DefaultLayout from "../../Layout/DefautLayout";
 import FloatingButton from "../../Components/FloatingButton";
 import Garitan from "../../assets/Garitan Filantropi.jpg";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Heart, MessageCircle, Settings, Star, User } from "lucide-react";
 import { Link, router, usePage } from "@inertiajs/react";
 import Axios from "axios";
 
 
-function Beranda({ komunitas }) {
+function Beranda({ komunitas: initialKomunitas }) {
 
     const currentUser = usePage().props.auth.user;
+
+    const [komunitas, setKomunitas] = useState(initialKomunitas.data);
+    const [nextPage, setNextPage] = useState(initialKomunitas.next_page_url);
+    const [loading, setLoading] = useState(false);
+    const observer = useRef();
 
     const [isLiked, setIsLiked] = useState(komunitas.user_liked);
     const [likesCount, setLikesCount] = useState(komunitas.likes_count);
@@ -27,6 +32,39 @@ function Beranda({ komunitas }) {
         if (hours < 24) return rtf.format(-hours, 'hour'); // 'jam'
         return rtf.format(-days, 'day'); // 'hari'
     }
+
+    const loadMoreKomunitas = () => {
+        if (!nextPage || loading) {
+            return;
+        }
+        
+        setLoading(true);
+    
+        router.visit(nextPage, {
+            method: "get",
+            preserveScroll: true,
+            preserveState: true,
+            only: ["komunitas"],
+            onSuccess: (page) => {
+                console.log("✅ Data received:", page.props.komunitas);
+                setKomunitas((prev) => [...prev, ...page.props.komunitas.data]);
+                setNextPage(page.props.komunitas.next_page_url);
+            },
+            onFinish: () => setLoading(false),
+        });
+    };
+    
+
+    const lastElementRef = (node) => {
+        if (loading) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && nextPage) {
+                loadMoreKomunitas();
+            }
+        });
+        if (node) observer.current.observe(node);
+    };
 
 
     const handleLike = async () => {
@@ -58,8 +96,6 @@ function Beranda({ komunitas }) {
         });
     }, [currentUser.id, komunitas.id]);
 
-    console.log(komunitas)
-
     return (
         <DefaultLayout>
 
@@ -78,8 +114,8 @@ function Beranda({ komunitas }) {
             {komunitas.length === 0 ? (
                 <p className="text-gray-500 mt-10">belum ada postingan</p>
             ) : (
-                komunitas.data.map((item) => (
-                    <Link href={`/komunitas/show/${item.id}`} key={item.id} className="flex space-x-3 rounded-xl p-6 hover:bg-zinc-950">
+                komunitas.map((item, index) => ( // ❌ Remove `.data`
+                    <Link href={`/komunitas/show/${item.id}`} key={item.id} ref={index === komunitas.length - 1 ? lastElementRef : null} className="flex space-x-3 rounded-xl p-6 hover:bg-zinc-950">
                         <img src={item.user.profile_pict || "https://placehold.co/400"} className="w-10 h-10 rounded-full object-cover" />
                         <div className="flex-1">
                             <div className="flex lg:gap-3 lg:flex-row md:flex-col flex-col items-start mb-2">
@@ -102,7 +138,7 @@ function Beranda({ komunitas }) {
                                     <Heart
                                         className="w-4 h-4"
                                         fill={isLiked ? "currentColor" : "none"}
-                                        stroke="currentColor" // Ensure stroke is visible
+                                        stroke="currentColor"
                                     />
                                     <span>{item.likes_count}</span>
                                 </button>

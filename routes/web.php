@@ -19,13 +19,24 @@ use App\Http\Controllers\User\MarkahController;
 use App\Http\Controllers\User\SearchController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
-use App\Models\KomentarChapterModel;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 // Public URL's
-Route::inertia('/', 'Text');
+Route::get('/', function (Request $request) {
+    DB::statement('CALL InsertVisit(?, ?, ?, ?)', [
+        $request->header('User-Agent'),
+        1,
+        'Unknown',
+        'Unknown'
+    ]);
+
+    return Inertia::render('Text');
+});
+
+
 Route::inertia('/Cari', 'Cari');
 Route::inertia('/register', 'Register');
 Route::inertia('/Komunitas', 'Komunitas/Beranda');

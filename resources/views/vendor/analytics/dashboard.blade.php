@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <title>Laravel Analytics</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body>
     <div class="min-h-screen bg-gray-100 text-gray-500 py-6 flex flex-col sm:py-16">
         <div class="px-4 w-full lg:px-0 sm:max-w-5xl sm:mx-auto">
@@ -30,17 +32,18 @@
         const filterButton = document.getElementById('filter-button');
         const filterDropdown = document.getElementById('filter-dropdown');
 
-        filterButton.addEventListener('click', function (e) {
+        filterButton.addEventListener('click', function(e) {
             e.preventDefault();
 
             filterDropdown.style.display = 'block';
         });
 
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', function(e) {
             if (!filterButton.contains(e.target) && !filterDropdown.contains(e.target)) {
                 filterDropdown.style.display = 'none';
             }
         });
     </script>
 </body>
+
 </html>

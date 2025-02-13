@@ -4,7 +4,7 @@ import { ArrowLeft, Bookmark, Play } from 'lucide-react';
 import { Link, usePage } from '@inertiajs/react';
 import whizzy_logo from "../../../../public/logo.png";
 
-const Show = ({ karya, firstChapter }) => {
+const Show = ({ karya, firstChapter, views }) => {
 
     const currentUser = usePage().props.auth.user;
 
@@ -39,20 +39,29 @@ const Show = ({ karya, firstChapter }) => {
                         <div className="stats bg-black">
                             <div className="stat px-0">
                                 <div className="stat-title">Didengar</div>
-                                <div className="stat-value">89,400</div>
+                                <div className="stat-value">{views}</div>
                             </div>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-12 w-full justify-between gap-5">
-                        {firstChapter && (
+                        {!firstChapter ? (
+                            <Link
+                                className="col-span-10 btn text-black hover:bg-yellow-400 w-full"
+                                disabled={true}
+                                >
+                                Belum ada chapter
+                            </Link>
+                        ) : (
                             <Link
                                 href={`/karya/${karya.slug}/${karya.id}/chapter/${firstChapter.id}`}
                                 className="col-span-10 btn bg-[#FFE786] text-black hover:bg-yellow-400 w-full"
+
                             >
                                 Mulai Mendengarkan
                             </Link>
                         )}
+
                         <Link href={`/markah/${currentUser.id}/${karya.id}/save`} className="col-span-2 btn"><Bookmark /></Link>
                     </div>
 

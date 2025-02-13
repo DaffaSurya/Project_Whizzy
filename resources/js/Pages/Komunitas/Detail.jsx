@@ -17,7 +17,7 @@ function Detail({ detail }) {
 
     const [content, setContent] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    console.log(detail);
+
 
     // likes
     const handleLike = async () => {
