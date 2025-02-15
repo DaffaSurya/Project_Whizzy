@@ -10,7 +10,7 @@ const Show = ({ karya, firstChapter, views }) => {
 
     return (
         <DefaultLayout>
-            <a href="/" className="btn bg-transparent mb-5 lg:mx-32"><ArrowLeft /></a>
+            <a href="/" className="btn bg-transparent my-5 border-none lg:mx-32"><ArrowLeft /></a>
 
             {/* detail karya */}
             <div className="detail-karya flex lg:flex-row flex-col justify-start lg:px-32 gap-10 lg:mt-0 mt-10">
@@ -26,20 +26,20 @@ const Show = ({ karya, firstChapter, views }) => {
 
                     {/* title */}
                     <h1 className="font-bold text-white text-4xl">{karya.judul_karya}</h1>
-                    <h1 className="">{karya.penyunting}</h1>
+                    <h1 className="text-white">{karya.penyunting}</h1>
 
                     {/* likes and listen */}
                     <div className="flex flex-row justify-between text-center">
                         <div className="stats bg-black ">
                             <div className="stat px-0">
-                                <div className="stat-title">Suka</div>
-                                <div className="stat-value">1,293</div>
+                                <div className="text-gray-500">Suka</div>
+                                <div className="stat-value text-white">1,293</div>
                             </div>
                         </div>
                         <div className="stats bg-black">
                             <div className="stat px-0">
-                                <div className="stat-title">Didengar</div>
-                                <div className="stat-value">{views}</div>
+                                <div className="text-gray-500">Didengar</div>
+                                <div className="stat-value text-white">{views}</div>
                             </div>
                         </div>
                     </div>
