@@ -92,7 +92,7 @@ const Text = () => {
                                     src={currentUser.profile_pict || whizzy_logo}
                                     className="w-12 h-12 rounded-full fit object-cover"
                                 />
-                                <p className="text-white">Selamat Datang, <br /><span className="text-yellow-200 font-bold">{currentUser.username}</span></p>
+                                <p className="">Selamat Datang, <br /><span className="text-yellow-200 font-bold">{currentUser.username}</span></p>
                             </div>
                             <Link href="/logout" className="text-red-500"><LogOut size={20} /></Link>
                         </div>
@@ -160,7 +160,7 @@ const Text = () => {
                                             />
                                         </div>
                                         <div className="flex flex-col p-4 flex-grow">
-                                            <h2 className="text-lg font-semibold mb-2 text-white">
+                                            <h2 className="text-lg font-semibold mb-2">
                                                 {item.karya.judul_karya}
                                             </h2>
                                             <p className="text-sm text-gray-600 mb-4">
