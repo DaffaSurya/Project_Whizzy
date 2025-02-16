@@ -25,8 +25,12 @@ const Register = () => {
 
     try {
       setLoading(true);
+      
       await Axios.post('/register/store', form);
+      
       setLoading(false);
+      
+      window.location.href = '/';
     } catch (error) {
       setLoading(false);
       if (error.response) {

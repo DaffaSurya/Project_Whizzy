@@ -80,22 +80,19 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
   return (
     <div className="min-h-96 bg-black py-12 px-5 sm:px-6 lg:px-8 lg:pb-64">
       <div className="max-w-4xl mx-auto space-y-8">
-        <Link href={`/karya/${chapter.karya.slug}/${chapter.karya.id}`}><ArrowLeft size={20} /></Link>
+        <Link href={`/karya/${chapter.karya.slug}/${chapter.karya.id}`}>
+          <ArrowLeft size={20} />
+        </Link>
+
         <div className="rounded-lg overflow-hidden shadow-2xl">
           <div className="aspect-video">
-            {chapter.ilustrasi_karya == null ? (
-              <img src={whizzy_logo} alt="" className="w-full h-full object-contain rounded-md" />
-            ) : (
-              <video
-                className="w-full h-full object-contain rounded-md"
-                ref={videoRef}
-                controls={false}
-                loop={true}
-                muted={true}
-              >
+            {chapter.ilustrasi_karya ? (
+              <video className="w-full h-full object-contain rounded-md" ref={videoRef} controls={false} loop muted>
                 <source src={chapter.ilustrasi_karya} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
+            ) : (
+              <img src={whizzy_logo} alt="" className="w-full h-full object-contain rounded-md" />
             )}
           </div>
 
@@ -105,95 +102,47 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
           </div>
         </div>
 
-        {/* commets */}
         <h1 className="text-2xl font-bold text-white">Comments ({comments.length})</h1>
 
         <div className="w-full max-w-7xl px-4 md:px-5 lg:px-0 mx-auto">
-          <div className="w-full flex-col justify-start items-start lg:gap-14 gap-7 inline-flex">
-            <div className="w-full flex-col justify-start items-start gap-8 flex">
+          <div className="w-full flex-col justify-start items-start gap-7 lg:gap-14 inline-flex">
+            <form onSubmit={newKomen} className="w-full">
+              <textarea name="komentar" className="textarea textarea-bordered w-full bg-black" rows={3} placeholder="Silahkan"></textarea>
+              <button
+                type="submit"
+                disabled={loading}
+                className={`mt-3 me-2 btn btn-sm text-black focus:ring-2 ${loading ? "bg-gray-600 cursor-not-allowed" : "bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-400"}`}
+              >
+                <Save size={20} /> {loading ? "Saving..." : "Submit"}
+              </button>
+            </form>
 
-              <form onSubmit={newKomen} className="w-full">
-                <textarea name="komentar" className="textarea textarea-bordered  w-full bg-black" rows={3} placeholder="Silahkan"></textarea>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className={`mt-3 me-2 btn btn-sm text-black focus:ring-2 ${loading ? "bg-gray-600 cursor-not-allowed" : "bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-400"
-                    }`}
-                >
-                  <Save size={20} /> {loading ? "Saving..." : "Submit"}
-                </button>
-              </form>
-
-
-              <div className="w-full flex flex-col gap-5">
-                {chapter.komentar.map((comment) => (
-                  <div
-                    key={comment.id}
-                    className="w-full lg:p-8 p-5 bg-black rounded-3xl border border-gray-700 flex-col justify-start items-end gap-2.5 flex"
-                  >
-                    <div className="w-full flex-col justify-start items-end gap-3.5 flex">
-                      <div className="w-full justify-between items-center inline-flex">
-                        <div className="w-full justify-start items-center gap-2.5 flex">
-                          <div className="w-10 h-10 bg-slate-400 rounded-full justify-start items-start gap-2.5 flex">
-                            <img
-                              className="w-10 h-10 rounded-full object-cover"
-                              src={comment.user.avatar || 'https://via.placeholder.com/150'} // Replace with actual avatar or fallback image
-                              alt={`${comment.user.name} image`}
-                            />
-                          </div>
-                          <div className="flex-col justify-start items-start gap-1 inline-flex">
-                            <h5 className="text-white text-sm font-semibold leading-snug">{comment.user.username}</h5>
-                            <h6 className="text-gray-500 text-xs font-normal leading-5">
-                              {timeAgo(comment.created_at)} {/* Format this date as needed */}
-                            </h6>
-                          </div>
-                        </div>
-                        {currentUser.id === comment.user_id ? (
-                          <button
-                            onClick={() => deleteChapterComments(comment.id)}
-                            className={`group justify-end items-center flex hover:text-red-500 ${loading ? "text-gray-800 cursor-not-allowed" : ""
-                              }`}
-                            disabled={loading}
-                          >
-                            <Trash2 />
-                          </button>
-
-                        ) : (null)}
+            <div className="w-full flex flex-col gap-5">
+              {chapter.komentar.map((comment) => (
+                <div key={comment.id} className="w-full p-5 lg:p-8 bg-black rounded-3xl border border-gray-700 flex flex-col gap-2.5">
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex items-center gap-2.5">
+                      <img className="w-10 h-10 rounded-full object-cover" src={comment.user.avatar || 'https://placehold.co/400'} alt={`${comment.user.name} image`} />
+                      <div className="flex flex-col">
+                        <h5 className="text-white text-sm font-semibold">{comment.user.username}</h5>
+                        <h6 className="text-gray-500 text-xs">{timeAgo(comment.created_at)}</h6>
                       </div>
-
-                      <p className="text-white w-full text-start text-sm font-normal">{comment.komentar}</p>
-
-                      {/* <Pagination links={comment.link} total={comment.total}/> */}
-
-                      {/* admin */}
-                      {/* <div className="w-full justify-end items-start gap-6 inline-flex">
-                        <button
-                          className="sm:w-fit w-full px-5 py-2.5 rounded-xl shadow-[0px_1px_2px_0px_rgba(16,_24,_40,_0.05)] hover:bg-gray-200 hover:border-transparent transition-all duration-700 ease-in-out border border-gray-200 justify-center items-center flex"
-                          onClick={() => handleDelete(comment.id)}
-                        >
-                          <span className="px-2 text-gray-900 text-base font-semibold leading-relaxed">Delete</span>
-                        </button>
-                        <button
-                          className="sm:w-fit w-full px-5 py-2.5 bg-green-600 hover:bg-green-700 transition-all duration-700 ease-in-out rounded-xl shadow-[0px_1px_2px_0px_rgba(16,_24,_40,_0.05)] justify-center items-center flex"
-                          onClick={() => handleEdit(comment.id)}
-                        >
-                          <span className="px-2 py-px text-white text-base font-semibold leading-relaxed">Edit</span>
-                        </button>
-                      </div> */}
                     </div>
+                    {currentUser.id === comment.user_id && (
+                      <button onClick={() => deleteChapterComments(comment.id)} className={`group hover:text-red-500 ${loading ? "text-gray-800 cursor-not-allowed" : ""}`} disabled={loading}>
+                        <Trash2 />
+                      </button>
+                    )}
                   </div>
-                ))}
-              </div>
-
-
+                  <p className="text-white text-sm">{comment.komentar}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-
-
         <AudioPlayer
-          cover={chapter.karya.cover_karya ? chapter.karya.cover_karya : whizzy_logo}
+          cover={chapter.karya.cover_karya || whizzy_logo}
           judul_karya={chapter.judul_chapter}
           penyunting={chapter.karya.penyunting}
           audioFile={chapter.audio_file}

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import DefaultLayout from "../../Layout/DefautLayout";
-import { ArrowLeft, MoreHorizontal, MessageCircle, Repeat2, Heart, Share, Bookmark } from 'lucide-react';
+import { ArrowLeft, Heart, Share, BookAudio } from 'lucide-react';
 import { Link, router, usePage } from "@inertiajs/react";
 import Axios from "axios";
-
+import Toast from "../../Components/Toast.jsx";
 
 function Detail({ detail }) {
 
-
     // get current user
     const currentUser = usePage().props.auth.user;
+
     const parent_id = detail.id;
 
     const [isLiked, setIsLiked] = useState(detail.user_liked);
@@ -17,6 +17,9 @@ function Detail({ detail }) {
 
     const [content, setContent] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const [toastVisible, setToastVisible] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
 
 
     // likes
@@ -99,6 +102,16 @@ function Detail({ detail }) {
         }
     };
 
+    const copyCurrentUrl = () => {
+        navigator.clipboard.writeText(window.location.href)
+            .then(() => {
+                setToastMessage("URL copied to clipboard!");
+                setToastVisible(true);
+                setTimeout(() => setToastVisible(false), 3000); // Hilang setelah 3 detik
+            })
+            .catch(err => console.error("Failed to copy: ", err));
+    };
+
 
     return (
         <>
@@ -110,6 +123,8 @@ function Detail({ detail }) {
                         <h1 className="text-xl font-bold">Post</h1>
                     </Link>
                 </header>
+
+                <Toast show={toastVisible} message={toastMessage} />
 
                 {/* Main Content */}
                 <main className="px-0">
@@ -135,6 +150,19 @@ function Detail({ detail }) {
                             <img src={detail.attachment} alt="" className="rounded-xl lg:max-w-80 md:max-w-96 w-max-full" />
                         </div>
 
+                        {/* Replying to karya */}
+                        {detail.chapter && (
+                            <div className="flex items-center lg:w-fit md:w-fit gap-4 p-4 text-gray-300 rounded-lg border border-yellow-400 hover:shadow-md transition-shadow duration-300">
+                                <div className="flex items-center justify-center w-12 h-12 rounded-full">
+                                    <BookAudio size={30} />
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-medium">{detail.chapter.karya.judul_karya}</span>
+                                    <span className="text-lg font-semibold">{detail.chapter.judul_chapter}</span>
+                                </div>
+                            </div>
+                        )}
+
                         {/* Tweet Timestamp */}
                         <div className="mt-4 flex space-x-1 text-gray-500 text-sm">
                             <span>{timeAgo(detail.created_at)}</span>
@@ -156,7 +184,7 @@ function Detail({ detail }) {
                             </button>
 
 
-                            <button className="hover:text-blue-500">
+                            <button onClick={copyCurrentUrl} className="hover:text-blue-500">
                                 <Share className="w-5 h-5" />
                             </button>
                         </div>
@@ -165,18 +193,18 @@ function Detail({ detail }) {
 
                     {/* Reply Input */}
                     <form onSubmit={handleSubmit}>
-                        <div className="p-4 flex space-x-3 border-b border-gray-800">
-                            <div className="w-10 h-10 rounded-full bg-gray-700" />
-                            <div className="flex flex-row justify-between w-full">
-                                <textarea
-                                    type="text"
-                                    rows={5}
-                                    name="content"
-                                    placeholder="Post your reply!"
-                                    className="w-full bg-transparent text-white placeholder-gray-500 focus:outline-none"
-                                />
-                                <button type="submit" disabled={isSubmitting} className="btn btn-outline btn-sm text-white hover:bg-yellow-400">{isSubmitting ? 'Submitting...' : 'Submit Comment'}</button>
-                            </div>
+                        <div className="p-4 flex lg:flex-row flex-col space-x-3 border-b border-gray-800">
+                                <div className="flex lg:flex-row flex-col justify-between w-full gap-5">
+                                    <img src={detail.user.profile_pict || "https://placehold.co/400"} className="w-12 h-12 object-cover rounded-full bg-gray-700" />
+                                    <textarea
+                                        type="text"
+                                        rows={5}
+                                        name="content"
+                                        placeholder="Post your reply!"
+                                        className="w-full bg-transparent text-white placeholder-gray-500 focus:outline-none"
+                                    />
+                                </div>
+                            <button type="submit" disabled={isSubmitting} className="btn btn-outline btn-sm text-white hover:bg-yellow-400">{isSubmitting ? 'Submitting...' : 'Submit Comment'}</button>
                         </div>
                     </form>
 
@@ -199,11 +227,11 @@ function Detail({ detail }) {
                                         <span className="text-gray-500">
                                             @{komentar.user.username.toLowerCase()}
                                         </span>
-                                       
-                                            <span className="text-gray-500">
-                                               {timeAgo(komentar.created_at)}
-                                            </span>
-                                        
+
+                                        <span className="text-gray-500">
+                                            {timeAgo(komentar.created_at)}
+                                        </span>
+
                                     </div>
 
                                     <p className="mt-1" style={{ whiteSpace: 'pre-wrap' }}>{komentar.content}</p>

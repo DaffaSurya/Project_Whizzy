@@ -9,6 +9,7 @@ use App\Models\ChapterModel;
 use App\Models\KaryaModel;
 use App\Models\KaryaStatisticModel;
 use App\Models\KomentarChapterModel;
+use App\Models\RatingsModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -136,11 +137,24 @@ class AudiobookController extends Controller
             'chapters' => function ($query) {
                 $query->orderBy('created_at'); // Order by oldest first
             },
-            'statistic'
+            'statistic',
         ])
             ->where('id', $id)
             ->where('slug', $slug)
             ->firstOrFail();
+
+        $ratings = RatingsModel::where('rateable_id', $id)
+            ->where('rateable_type', 'App\Models\Karya')
+            ->avg('rating');
+        $ratingsCount = RatingsModel::where('rateable_id', $id)
+            ->where('rateable_type', 'App\Models\Karya')
+            ->count();
+        $ratingsFormatted = number_format($ratings, 1, ',', '');
+
+        $userRating = RatingsModel::where('rateable_id', $id)
+            ->where('rateable_type', 'App\Models\Karya')
+            ->where('user_id', Auth::id()) // Ambil rating user saat ini
+            ->value('rating'); // Ambil langsung nilai rating (bukan object)
 
         $firstChapter = $karya->chapters->first();
 
@@ -149,8 +163,12 @@ class AudiobookController extends Controller
             'chapters' => $karya->chapters,
             'firstChapter' => $firstChapter,
             'views' => $karya->statistic->views ?? 0,
+            'averageRating' => $ratingsFormatted,
+            'userRating' => $userRating,
+            'ratingsCount' => $ratingsCount,
         ]);
     }
+
 
     public function playChapter($slug, $id, $chapterId)
     {
@@ -159,7 +177,7 @@ class AudiobookController extends Controller
             'karya',
             'komentar' => function ($query) {
                 $query->select('id', 'user_id', 'chapter_id', 'komentar', 'created_at') // Specify the fields you want for comments
-                    ->with('user:id,username') // Eager load the user details (id and username)
+                    ->with('user:id,username,profile_pict') // Eager load the user details (id and username)
                     ->get(); // Paginate the comments, adjust the number as needed
             }
         ])

@@ -68,14 +68,14 @@ const Login = () => {
                     <form onSubmit={login} method="post" className="space-y-4">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium">
-                                Email or Phone Number
+                                Email
                             </label>
                             <input
                                 type="text"
                                 id="email"
                                 name="email"
                                 placeholder="Email atau nomor telepon"
-                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400"
+                                className="mt-1 block w-full px-3 py-2 border bg-black rounded-md shadow-sm focus:ring-yellow-400 focus:border-yellow-400"
                                 required
                             />
                         </div>
@@ -90,7 +90,7 @@ const Login = () => {
                                     id="password"
                                     name="password"
                                     placeholder="Masukkan password"
-                                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400"
+                                    className="block w-full px-3 py-2 border bg-black rounded-md shadow-sm focus:ring-yellow-400 focus:border-yellow-400"
                                     required
                                 />
                                 <button
@@ -114,7 +114,7 @@ const Login = () => {
                                     name="rememberMe"
                                     className="h-4 w-4 text-yellow-400 focus:ring-yellow-400 border-gray-300 rounded"
                                 />
-                                <span className="text-sm">Ingat Saya</span>
+                                <span className="text-sm text-gray-500">Ingat Saya</span>
                             </label>
                             {/* <a href="#" className="text-sm font-medium text-gray-500 hover:text-yellow-500">
                                 Lupa Password ?
@@ -124,8 +124,8 @@ const Login = () => {
                         <button
                             type="submit"
                             className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black ${isLoading
-                                    ? "bg-yellow-300 cursor-not-allowed"
-                                    : "bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400"
+                                ? "bg-yellow-300 cursor-not-allowed"
+                                : "bg-yellow-400 hover:bg-yellow-500 focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400"
                                 }`}
                             disabled={isLoading}
                         >
@@ -133,7 +133,7 @@ const Login = () => {
                         </button>
                     </form>
 
-                    <p className="mt-4 text-center text-sm text-gray-600">
+                    <p className="mt-4 text-center text-sm text-gray-500">
                         Belum Punya Akun ?{" "}
                         <Link href="/register" className="font-medium text-yellow-400">
                             Buat Sekarang

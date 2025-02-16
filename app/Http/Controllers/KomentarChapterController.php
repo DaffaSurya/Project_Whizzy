@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\KomentarChapterModel;
+use App\Models\KomunitasModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class KomentarChapterController extends Controller
 {
@@ -17,7 +19,18 @@ class KomentarChapterController extends Controller
         $validatedData['user_id'] = $userId;
         $validatedData['chapter_id'] = $chapterId;
 
+        // Simpan komen di setiap chapter
         KomentarChapterModel::create($validatedData);
+        
+        // munculkan juga di komunitas
+        KomunitasModel::create([
+            'user_id' => $userId,
+            'slug' => $validatedData['slug'] = Str::random(10),
+            'content' => $validatedData['komentar'],
+            'attachment' => null,
+            'parent_id' => null,
+            'chapter_id' => $chapterId,
+        ]);
 
         return response()->json(['message' => 'success'], 200);
     }

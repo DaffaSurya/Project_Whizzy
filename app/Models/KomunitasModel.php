@@ -44,5 +44,8 @@ class KomunitasModel extends Model
         return $this->hasMany(LikesModel::class, 'post_id');
     }
 
-
+    public function chapter()
+    {
+        return $this->belongsTo(ChapterModel::class, 'chapter_id');
+    }
 }
