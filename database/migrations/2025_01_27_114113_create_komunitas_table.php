@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('slug');
             $table->text('content');
             $table->text('attachment')->nullable();
+            $table->foreignId('chapter_id')->nullable()->constrained('chapter')->onDelete('cascade');
 
             $table->string('parent_id', 16)->nullable();
             $table->foreign('parent_id')->references('id')->on('komunitas')->onDelete('cascade');

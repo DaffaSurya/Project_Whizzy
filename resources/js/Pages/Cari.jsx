@@ -113,7 +113,7 @@ const Cari = ({ initialResults = [], initialQuery = '' }) => {
                                                     <h4 className="text-white font-semibold">{user.fullname}</h4>
                                                     <p className="text-gray-400">@{user.username}</p>
                                                     <Link
-                                                        href={`/profile/${user.id}`}
+                                                        href={`/profile/${user.id}/${user.username}`}
                                                         className="text-yellow-400 hover:underline text-sm"
                                                     >
                                                         View Profile

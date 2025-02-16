@@ -3,6 +3,7 @@ import DefaultLayout from '../Layout/DefautLayout'
 import { Link, router, useForm, usePage } from "@inertiajs/react"
 import { useState } from "react";
 import Axios from "axios";
+import FloatingButton from "../Components/FloatingButton";
 
 const Profile = ({ user, post }) => {
 
@@ -121,6 +122,10 @@ const Profile = ({ user, post }) => {
 
     return (
         <DefaultLayout>
+
+            {/* Floating Button */}
+            <FloatingButton currentUserid={currentUser ? currentUser.id : null} />
+
             <div className="bg-black text-white min-h-screen">
                 {/* Header */}
                 <header className="relative lg:pt-0 pt-6">
@@ -168,7 +173,7 @@ const Profile = ({ user, post }) => {
                     </div>
                     <div className="flex items-center lg:justify-end justify-start my-4 h-10 col-span-2">
                         {/* <button className="bg-yellow-400 text-black font-bold px-4 py-2 rounded-full">Edit profile</button> */}
-                        <label htmlFor="addCategory" className="btn bg-yellow-400 text-black font-bold px-4 rounded-full hover:bg-yellow-500"><Plus size={18} /> Edit profile</label>
+                        <label htmlFor="editProfile" className="btn bg-yellow-400 text-black font-bold px-4 rounded-full hover:bg-yellow-500"><Plus size={18} /> Edit profile</label>
 
                     </div>
                 </div>
@@ -272,7 +277,7 @@ const Profile = ({ user, post }) => {
             </div>
 
             {/* Add category modal */}
-            <input type="checkbox" id="addCategory" className="modal-toggle" />
+            <input type="checkbox" id="editProfile" className="modal-toggle" />
             <div className="modal" role="dialog">
                 <div className="modal-box w-11/12 max-w-3xl bg-black border border-gray-600 rounded-lg">
                     <h3 className="text-2xl font-bold mb-6 text-white">Edit Profile</h3>
@@ -378,7 +383,7 @@ const Profile = ({ user, post }) => {
                         </div>
                     </form>
                 </div>
-                <label className="modal-backdrop" htmlFor="addCategory">
+                <label className="modal-backdrop" htmlFor="editProfile">
                     Close
                 </label>
             </div>

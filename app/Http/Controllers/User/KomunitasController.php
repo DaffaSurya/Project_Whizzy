@@ -18,6 +18,8 @@ class KomunitasController extends Controller
     {
         $komunitas = KomunitasModel::with([
             'user:id,username,profile_pict,fullname',
+            'chapter:id,judul_chapter,karya_id', // Ambil judul chapter
+            'chapter.karya:id,judul_karya,slug' // Ambil judul karya dari chapter
         ])
             ->withCount(['likes', 'comments as comment_count'])
             ->orderBy('created_at', 'desc')
@@ -64,7 +66,9 @@ class KomunitasController extends Controller
     {
         $detail = KomunitasModel::with([
             'user:id,username,profile_pict,fullname', // Load the user with only the id and username fields
-            'comments.user:id,username,fullname'
+            'comments.user:id,username,fullname',
+            'chapter:id,judul_chapter,karya_id',
+            'chapter.karya:id,judul_karya'
         ])->withCount('likes')
             ->findOrFail($id);
 

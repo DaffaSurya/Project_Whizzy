@@ -34,5 +34,9 @@ class KaryaModel extends Model
         return $this->hasOne(KaryaStatisticModel::class, 'karya_id');
     }
 
+    public function ratings()
+    {
+        return $this->morphMany(RatingsModel::class, 'rateable');
+    }
 
 }

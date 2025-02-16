@@ -16,6 +16,7 @@ use App\Http\Controllers\User\KomunitasController;
 use App\Http\Controllers\User\LikesController;
 use App\Http\Controllers\User\LikesModel;
 use App\Http\Controllers\User\MarkahController;
+use App\Http\Controllers\User\RatingController;
 use App\Http\Controllers\User\SearchController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
@@ -37,9 +38,12 @@ Route::get('/', function (Request $request) {
 });
 
 
+
+
 Route::inertia('/Cari', 'Cari');
 Route::inertia('/register', 'Register');
 Route::inertia('/Komunitas', 'Komunitas/Beranda');
+Route::inertia('/Komunitas/forum', 'Forum/Index');
 Route::inertia('/Garitan-Filantropi/detail', 'Mendengarkan');
 Route::inertia('/Garitan-Filantropi/play', 'Audio');
 Route::inertia('/EditProfile', 'EditProfile');
@@ -114,6 +118,7 @@ Route::prefix('admin')->middleware(AdminMiddleware::class)->group(function () {
     Route::post('/homepage-settings/store-carousel', [HomepageController::class, 'store_carousel']);
     Route::get('/homepage-settings/delete-featured/{id}', [HomepageController::class, 'delete_featured']);
     Route::get('/homepage-settings/delete-carousel/{id}', [HomepageController::class, 'delete_carousel']);
+
 });
 
 
@@ -124,7 +129,6 @@ Route::middleware(AuthMiddleware::class)->group(function () {
     Route::get('/karya/{id}/{slug}', [AudiobookController::class, 'showKarya']);
     Route::get('/karya/{slug}/{id}/chapter/{chapterId}', [AudiobookController::class, 'playChapter']);
     Route::get('/audiobook/like/{id}', [AudiobookController::class, 'like']);
-
 
     // Users Route
     Route::get('/forum/unggah', [ForumController::class, 'unggah']);
@@ -159,6 +163,9 @@ Route::middleware(AuthMiddleware::class)->group(function () {
     Route::get('/like/{id}/{post_id}', [LikesController::class, 'like']);
     Route::get('/dislike/{id}/{post_id}', [LikesController::class, 'dislike']);
     Route::get('/check-like/{user_id}/{post_id}', [LikesController::class, 'checkLike']);
+
+    // Rating
+    Route::post('/rate-karya', [RatingController::class, 'rate']);
 
 });
 
