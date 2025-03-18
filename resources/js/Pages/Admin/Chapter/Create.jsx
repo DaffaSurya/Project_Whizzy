@@ -207,12 +207,12 @@ const Create = ({ karya, chapter }) => {
                         </div>
 
                         <div className="mb-3 flex flex-col">
-                            <label htmlFor="">Ilustrasi Karya <span className='text-sm text-gray-600'>Optional | .mp4 | Max 10MB</span></label>
+                            <label htmlFor="">Ilustrasi Karya <span className='text-sm text-gray-600'>Optional | .mp4 | Max 10mb</span></label>
                             <input type="file" name="ilustrasi_karya" accept="video/mp4" />
                         </div>
 
                         <div className="mb-3 flex flex-col">
-                            <label htmlFor="">Audio <span className='text-sm text-gray-600'>.mp3 | Max 5MB</span></label>
+                            <label htmlFor="">Audio <span className='text-sm text-gray-600'>.mp3 .wav| Max 20mb</span></label>
                             <input type="file" name="audio_file" accept="audio/*" required />
                         </div>
 
