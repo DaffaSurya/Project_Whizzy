@@ -231,7 +231,7 @@ const Create = ({ categories }) => {
                     <div className="">
                         <label className="form-control w-full file-input-xl">
                             <div className="label">
-                                <span className="label-text">Cover Karya <span className='text-sm text-gray-600'>OPTIONAL | .jpg .jpeg .png | max 5mb </span></span>
+                                <span className="label-text">Cover Karya <span className='text-sm text-gray-600'>OPTIONAL | .jpg .jpeg .png | max 10mb </span></span>
                             </div>
                             <input
                                 type="file"

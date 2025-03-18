@@ -50,7 +50,7 @@ class AudiobookController extends Controller
             'status' => 'required',
             'categories' => 'required|array',
             'categories.*' => 'exists:category,id', // Ensure all selected categories exist in 'category' table
-            'cover_karya' => 'nullable|file|mimes:jpg,jpeg,png|max:5120', // Handle file validation
+            'cover_karya' => 'nullable|file|mimes:jpg,jpeg,png|max:10000', // Handle file validation
             'ilustrasi_karya' => 'nullable|file|mimes:mp4|max:10000', // Handle file validation
         ]);
 

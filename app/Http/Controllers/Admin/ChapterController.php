@@ -31,8 +31,8 @@ class ChapterController extends Controller
             'judul_chapter' => 'required',
             'karya_id' => 'required',
             'status' => 'required',
-            'audio_file' => 'required|mimes:mp3,wav,ogg|max:5120',
-            'ilustrasi_karya' => 'nullable|file|mimes:mp4|max:10000', // Validate audio file
+            'audio_file' => 'required|mimes:mp3,wav,ogg|max:20000', // max 20mb
+            'ilustrasi_karya' => 'nullable|file|mimes:mp4|max:6000', // max 10mb
         ]);
 
         // Handle ilustrasi_karya file upload
