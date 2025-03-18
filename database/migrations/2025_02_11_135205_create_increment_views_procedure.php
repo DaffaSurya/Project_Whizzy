@@ -11,6 +11,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        DB::unprepared("DROP PROCEDURE IF EXISTS IncrementViews");
+        
         DB::unprepared("
             CREATE PROCEDURE IncrementViews(IN karyaId INT)
             BEGIN

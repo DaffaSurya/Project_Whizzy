@@ -11,6 +11,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        DB::unprepared("DROP PROCEDURE IF EXISTS InsertVisit");
+        
         DB::unprepared("
         CREATE PROCEDURE InsertVisit(
             IN userAgent VARCHAR(255),
