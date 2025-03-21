@@ -71,8 +71,29 @@ class ChapterController extends Controller
     public function update()
     {
     }
-    public function delete()
+    public function delete($id)
     {
+        // Temukan data berdasarkan ID
+        $data = ChapterModel::find($id);
+
+        if (!$data) {
+            return response()->json(['message' => 'Data not found'], 404);
+        }
+
+        // Hapus file audio jika ada
+        if ($data->audio_file) {
+            // Konversi URL menjadi path yang sesuai untuk Storage
+            $filePath = str_replace('/storage/', '', $data->audio_file);
+
+            if (Storage::disk('public')->exists($filePath)) {
+                Storage::disk('public')->delete($filePath);
+            }
+        }
+
+        // Hapus data dari database
+        $data->delete();
+
+        return back();
     }
 }
 ;

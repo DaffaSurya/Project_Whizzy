@@ -10,6 +10,8 @@ const Show = ({ karya, firstChapter, views, averageRating, userRating, ratingsCo
     const currentUser = usePage().props.auth.user;
     console.log(averageRating);
 
+    const { flash } = usePage().props;
+
     return (
         <DefaultLayout>
 
@@ -17,6 +19,18 @@ const Show = ({ karya, firstChapter, views, averageRating, userRating, ratingsCo
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Kembali
             </Link>
+
+            {flash.error && (
+                <div className="bg-red-500 text-white p-2 rounded mb-3">
+                    {flash.error}
+                </div>
+            )}
+            {flash.success && (
+                <div className="bg-green-500 text-white p-2 rounded mb-3">
+                    {flash.success}
+                </div>
+            )}
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <img
