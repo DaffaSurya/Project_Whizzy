@@ -16,14 +16,22 @@ class MarkahController extends Controller
     }
     public function store($userId, $postId, Request $request)
     {
+        // Cek apakah sudah ada data dengan user_id dan karya_id yang sama
+        $existing = MarkahModel::where('user_id', $userId)
+            ->where('karya_id', $postId)
+            ->exists();
 
+        if ($existing) {
+            return redirect()->back()->with('error', 'Sudah Termarkah');
+        }
+
+        // Jika belum ada, simpan data baru
         MarkahModel::create([
             'user_id' => $userId,
             'karya_id' => $postId,
         ]);
 
-        return response()->json(['success'], 200);
-
+        return redirect()->back()->with('success', 'Audiobook berhasil termarkah');
     }
     public function delete($karyaId)
     {

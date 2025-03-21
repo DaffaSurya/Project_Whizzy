@@ -100,6 +100,7 @@ Route::prefix('admin')->middleware(AdminMiddleware::class)->group(function () {
     Route::get('/chapter/create/{id}', [ChapterController::class, 'create']);
     Route::post('/chapter/store', [ChapterController::class, 'store']);
     Route::get('/chapter/detail/{id}', [ChapterController::class, 'detail']);
+    Route::get('/chapter/delete/{id}', [ChapterController::class, 'delete']);
 
     // trash
     Route::get('/trash', [TrashController::class, 'index']);

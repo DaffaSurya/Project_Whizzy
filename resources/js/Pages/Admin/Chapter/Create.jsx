@@ -167,8 +167,8 @@ const Create = ({ karya, chapter }) => {
                                                 >
                                                     {playing === index ? <Pause size={20} /> : <Play size={20} />}
                                                 </button>
-                                                <Link disabled={true} href={`/admin/audiobook/edit/${item.id}`} className="btn btn-outline btn-sm px-0 border-0 hover:bg-transparent hover:text-yellow-400"><UserRoundPen size={20} /> Edit</Link>
-                                                <Link href={`/admin/audiobook/delete/${item.id}`} className="btn btn-outline btn-sm px-0 border-0 hover:bg-transparent hover:text-red-500"><Trash2 size={20} /> Delete</Link>
+                                                <Link disabled={true} href={`/admin/chapter/edit/${item.id}`} className="btn btn-outline btn-sm px-0 border-0 hover:bg-transparent hover:text-yellow-400"><UserRoundPen size={20} /> Edit</Link>
+                                                <Link href={`/admin/chapter/delete/${item.id}`} className="btn btn-outline btn-sm px-0 border-0 hover:bg-transparent hover:text-red-500"><Trash2 size={20} /> Delete</Link>
                                             </td>
                                         </tr>
                                     ))

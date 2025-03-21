@@ -54,6 +54,8 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
       // Update comments list with the new comment
       setComments((prevComments) => [...prevComments, response.data]);
 
+      e.target.reset();
+      
       router.reload();
     } catch (error) {
       setLoading(false);
@@ -107,7 +109,7 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
         <div className="w-full max-w-7xl px-4 md:px-5 lg:px-0 mx-auto">
           <div className="w-full flex-col justify-start items-start gap-7 lg:gap-14 inline-flex">
             <form onSubmit={newKomen} className="w-full">
-              <textarea name="komentar" className="textarea textarea-bordered w-full bg-black" rows={3} placeholder="Silahkan"></textarea>
+              <textarea name="komentar" className="textarea textarea-bordered w-full bg-black" rows={3}  placeholder="Silahkan"></textarea>
               <button
                 type="submit"
                 disabled={loading}
