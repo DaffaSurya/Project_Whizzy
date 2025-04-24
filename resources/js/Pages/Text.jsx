@@ -220,7 +220,7 @@ const Text = () => {
                                                             href={`/karya/${item.slug}/${item.id}`}
                                                             className="mt-2 inline-block px-6 py-2 text-sm font-medium text-black bg-yellow-400 rounded-lg hover:bg-yellow-600 transition-colors"
                                                         >
-                                                            View Details
+                                                            Lihat Detail
                                                         </a>
                                                     </div>
                                                 </div>

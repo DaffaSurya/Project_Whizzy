@@ -249,4 +249,18 @@ class AudiobookController extends Controller
         return;
     }
 
+    public function deleteComments($id)
+    {
+        $comment = KomentarChapterModel::find($id);
+
+        if (!$comment) {
+            return response()->json(['message' => 'Comment not found'], 404);
+        }
+
+        if (Auth::id() !== $comment->user_id) return response()->json(['message' => 'Unauthorized'], 403);
+
+        $comment->delete();
+
+        return response()->json(['message' => 'Comment deleted successfully'], 200);
+    }
 }

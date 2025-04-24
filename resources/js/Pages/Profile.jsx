@@ -198,7 +198,7 @@ const Profile = ({ user, post }) => {
 
                                         {/* info */}
                                         <span className="text-gray-500 text-sm">
-                                            {item.parent_id ? " membalas postingan" : " posted"}
+                                            {item.parent_id ? " membalas postingan" : " memposting"}
                                         </span>
 
                                         <div className="flex lg:flex-row md:flex-col flex-col items-start lg:mb-2 md:mb-5 mb-5">
@@ -378,7 +378,7 @@ const Profile = ({ user, post }) => {
                                 className="btn btn-outline text-white hover:bg-yellow-400 hover:text-black transition-colors duration-200"
                                 disabled={processing}
                             >
-                                {processing ? "Saving..." : "Save Changes"}
+                                {processing ? "Simpan..." : "Simpan"}
                             </button>
                         </div>
                     </form>

@@ -73,7 +73,7 @@ const Cari = ({ initialResults = [], initialQuery = '' }) => {
                         value={query}
                         onChange={handleQueryChange}
                         onKeyPress={handleKeyPress}
-                        placeholder="Search here..."
+                        placeholder="Cari karya / pengguna..."
                         className="flex-1 bg-transparent text-white placeholder-gray-400 focus:outline-none"
                     />
                     {/* <button

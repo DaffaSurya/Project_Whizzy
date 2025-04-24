@@ -4,6 +4,7 @@ import { ArrowLeft, Save, Trash2 } from "lucide-react";
 import { Link, router, usePage } from "@inertiajs/react";
 import Axios from "axios";
 import Pagination from "../../Components/Pagination";
+import Toast from "../../Components/Toast";
 import whizzy_logo from "../../../../public/logo.png";
 
 const Play = ({ chapter, nextChapter, prevChapter }) => {
@@ -11,7 +12,7 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
   const [comments, setComments] = useState(chapter.komentar);
 
   // get current logged users
-  const currentUser = usePage().props.auth.user;  
+  const currentUser = usePage().props.auth.user;
   console.log(chapter.komentar)
 
   // loading
@@ -56,7 +57,7 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
       setComments((prevComments) => [...prevComments, response.data]);
 
       e.target.reset();
-      
+
       router.reload();
     } catch (error) {
       setLoading(false);
@@ -70,14 +71,22 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
     setLoading(true);
 
     try {
-      await Axios.get(`/admin/karya/comments/delete/${id}`); // Wait for the request to complete
+      const response = await Axios.delete(`/admin/karya/comments/delete/${id}`);
+
+      setComments((prevComments) => prevComments.filter((c) => c.id !== id));
+
+      setToastMessage("Comment deleted successfully");
+      setToastVisible(true);
       window.location.reload();
     } catch (error) {
-      console.log('there is an error', error);
+      console.error("Delete failed:", error);
+      setToastMessage("Failed to delete comment");
+      setToastVisible(true);
     } finally {
-      setLoading(false); // Ensure loading is turned off after request completes
+      setLoading(false);
     }
   }
+
 
 
   return (
@@ -86,6 +95,8 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
         <Link href={`/karya/${chapter.karya.slug}/${chapter.karya.id}`}>
           <ArrowLeft size={20} />
         </Link>
+
+        <Toast show={toastVisible} message={toastMessage} />
 
         <div className="rounded-lg overflow-hidden shadow-2xl">
           <div className="aspect-video">
@@ -110,7 +121,7 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
         <div className="w-full max-w-7xl px-4 md:px-5 lg:px-0 mx-auto">
           <div className="w-full flex-col justify-start items-start gap-7 lg:gap-14 inline-flex">
             <form onSubmit={newKomen} className="w-full">
-              <textarea name="komentar" className="textarea textarea-bordered text-white w-full bg-black" rows={3}  placeholder="Silahkan"></textarea>
+              <textarea name="komentar" className="textarea textarea-bordered text-white w-full bg-black" rows={3} placeholder="Silahkan"></textarea>
               <button
                 type="submit"
                 disabled={loading}
@@ -132,12 +143,17 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
                       </div>
                     </div>
                     {currentUser.id === comment.user_id && (
-                      <button onClick={() => deleteChapterComments(comment.id)} className={`group hover:text-red-500 ${loading ? "text-gray-800 cursor-not-allowed" : ""}`} disabled={loading}>
+                      <button
+                        onClick={() => deleteChapterComments(comment.id)}
+                        className={`group hover:text-red-500 ${loading ? "text-gray-800 cursor-not-allowed" : ""}`}
+                        disabled={loading}
+                      >
                         <Trash2 />
                       </button>
+
                     )}
                   </div>
-                  <p className="text-white text-sm">{comment.komentar}</p>
+                  <p className="text-white text-sm">{comment.komentar} - {comment.id}</p>
                 </div>
               ))}
             </div>
