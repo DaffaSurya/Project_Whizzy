@@ -1,7 +1,7 @@
 import DefaultLayout from "../Layout/DefautLayout";
 import { Link, usePage, router } from "@inertiajs/react";
 import Axios from "axios";
-import { BookmarkCheck, BookmarkMinus } from "lucide-react";
+import { BookmarkCheck, BookmarkMinus, BookmarkX } from "lucide-react";
 const Favorit = ({ markah }) => {
 
   const currentUser = usePage().props.auth.user;
