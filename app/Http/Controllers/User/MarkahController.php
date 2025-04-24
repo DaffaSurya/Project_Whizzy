@@ -31,7 +31,7 @@ class MarkahController extends Controller
             'karya_id' => $postId,
         ]);
 
-        return redirect()->back()->with('success', 'Audiobook berhasil termarkah');
+        return redirect()->back()->with('success', 'Audiobook berhasil ditambahkan');
     }
     public function delete($karyaId)
     {

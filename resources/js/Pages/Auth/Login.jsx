@@ -67,7 +67,7 @@ const Login = () => {
 
                     <form onSubmit={login} method="post" className="space-y-4">
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium">
+                            <label htmlFor="email" className="block text-sm font-medium text-white">
                                 Email
                             </label>
                             <input
@@ -75,13 +75,13 @@ const Login = () => {
                                 id="email"
                                 name="email"
                                 placeholder="Email atau nomor telepon"
-                                className="mt-1 block w-full px-3 py-2 border bg-black rounded-md shadow-sm focus:ring-yellow-400 focus:border-yellow-400"
+                                className="mt-1 block w-full px-3 py-2 border bg-black rounded-md shadow-sm focus:ring-yellow-400 focus:border-yellow-400 text-white"
                                 required
                             />
                         </div>
 
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium">
+                            <label htmlFor="password" className="block text-sm font-medium text-white">
                                 Password
                             </label>
                             <div className="mt-1 relative">
@@ -90,7 +90,7 @@ const Login = () => {
                                     id="password"
                                     name="password"
                                     placeholder="Masukkan password"
-                                    className="block w-full px-3 py-2 border bg-black rounded-md shadow-sm focus:ring-yellow-400 focus:border-yellow-400"
+                                    className="block w-full px-3 py-2 border bg-black rounded-md shadow-sm focus:ring-yellow-400 focus:border-yellow-400 text-white"
                                     required
                                 />
                                 <button
@@ -114,7 +114,7 @@ const Login = () => {
                                     name="rememberMe"
                                     className="h-4 w-4 text-yellow-400 focus:ring-yellow-400 border-gray-300 rounded"
                                 />
-                                <span className="text-sm text-gray-500">Ingat Saya</span>
+                                <span className="text-sm text-white">Ingat Saya</span>
                             </label>
                             {/* <a href="#" className="text-sm font-medium text-gray-500 hover:text-yellow-500">
                                 Lupa Password ?
@@ -133,7 +133,7 @@ const Login = () => {
                         </button>
                     </form>
 
-                    <p className="mt-4 text-center text-sm text-gray-500">
+                    <p className="mt-4 text-center text-sm text-white">
                         Belum Punya Akun ?{" "}
                         <Link href="/register" className="font-medium text-yellow-400">
                             Buat Sekarang
