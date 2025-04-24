@@ -11,7 +11,8 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
   const [comments, setComments] = useState(chapter.komentar);
 
   // get current logged users
-  const currentUser = usePage().props.auth.user;
+  const currentUser = usePage().props.auth.user;  
+  console.log(chapter.komentar)
 
   // loading
   const [loading, setLoading] = useState(false);
@@ -124,7 +125,7 @@ const Play = ({ chapter, nextChapter, prevChapter }) => {
                 <div key={comment.id} className="w-full p-5 lg:p-8 bg-black rounded-3xl border border-gray-700 flex flex-col gap-2.5">
                   <div className="w-full flex justify-between items-center">
                     <div className="flex items-center gap-2.5">
-                      <img className="w-10 h-10 rounded-full object-cover" src={comment.user.avatar || 'https://placehold.co/400'} alt={`${comment.user.name} image`} />
+                      <img className="w-10 h-10 rounded-full object-cover" src={comment.user.profile_pict || 'https://placehold.co/400'} alt={`${comment.user.name} image`} />
                       <div className="flex flex-col">
                         <h5 className="text-white text-sm font-semibold">{comment.user.username}</h5>
                         <h6 className="text-gray-500 text-xs">{timeAgo(comment.created_at)}</h6>

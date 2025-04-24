@@ -5,6 +5,7 @@ import { Link } from '@inertiajs/react'
 import Axios from 'axios'
 import Toast from '../../../Components/Toast'
 import whizzy_logo from "../../../../../public/logo.png"
+import LoadingModal from '../../../Components/LoadingModal'
 
 
 const Create = ({ karya, chapter }) => {
@@ -89,6 +90,7 @@ const Create = ({ karya, chapter }) => {
 
             <Toast show={toastVisible} message={toastMessage} />
 
+            {loading && <LoadingModal />}
 
             {/* properties */}
             <div className="detail-karya flex lg:flex-row flex-col justify-start gap-10 lg:mt-0 mt-10">
