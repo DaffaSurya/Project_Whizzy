@@ -52,7 +52,7 @@ function Audio() {
                                     <div className="w-6 h-6 bg-yellow-300 rounded-full" />
                                     <span className="text-white">{comment.user}</span>
                                 </div>
-                                <p className="text-gray-300">{comment.text}</p>
+                                <p className="text-white">{comment.text}</p>
                             </div>
                         ))}
                     </div>

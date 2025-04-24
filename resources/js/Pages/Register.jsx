@@ -66,7 +66,7 @@ const Register = () => {
                 name="username"
                 value={form.username}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400"
+                className="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 text-white"
                 required
               />
               {errors.name && <p className="text-red-600 text-xs mt-2">{errors.name[0]}</p>}
@@ -81,7 +81,7 @@ const Register = () => {
                 name="fullname"
                 value={form.fullname}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400"
+                className="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 text-white"
                 required
               />
               {errors.name && <p className="text-red-600 text-xs mt-2">{errors.name[0]}</p>}
@@ -97,7 +97,7 @@ const Register = () => {
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400"
+                className="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 text-white"
                 required
               />
               {errors.email && <p className="text-red-600 text-xs mt-2">{errors.email[0]}</p>}
@@ -114,7 +114,7 @@ const Register = () => {
                   name="password"
                   value={form.password}
                   onChange={handleChange}
-                  className="block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400"
+                  className="block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 text-white"
                   required
                 />
                 <button
@@ -141,7 +141,7 @@ const Register = () => {
 
             </div>
           </form>
-          <p className="mt-4 text-center text-sm text-gray-600">
+          <p className="mt-4 text-center text-sm text-white">
             Sudah punya akun?{" "}
             <Link href="/login" className="font-medium text-yellow-400 hover:text-yellow-500">
               Masuk
