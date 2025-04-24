@@ -90,7 +90,7 @@ const Login = () => {
                                     id="password"
                                     name="password"
                                     placeholder="Masukkan password"
-                                    className="block w-full px-3 py-2 border bg-black rounded-md shadow-sm focus:ring-yellow-400 focus:border-yellow-400"
+                                    className="block w-full px-3 py-2 pr-10 border bg-black text-white rounded-md shadow-sm focus:ring-yellow-400 focus:border-yellow-400"
                                     required
                                 />
                                 <button
