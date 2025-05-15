@@ -70,7 +70,6 @@ const Text = () => {
         if (node) observer.current.observe(node);
     };
 
-
     // Fetch data when the component mounts
     useEffect(() => {
         getKarya();
@@ -117,25 +116,31 @@ const Text = () => {
                     {carousel.length === 0 ? (
                         <p className="text-gray-500 text-center my-5">Belum ada karya</p>
                     ) : (
-                        carousel.data.map((item) => (
-                            <Swiper className="w-full rounded-3xl">
+                        <Swiper
+                            spaceBetween={30}
+                            slidesPerView={1}
+                            loop={true}
+                            className="w-full rounded-3xl"
+                        >
+                            {carousel.data.map((item) => (
                                 <SwiperSlide key={item.id}>
                                     <div className="relative group">
                                         <img
-                                            src={item.karya.cover_karya ? item.karya.cover_karya : whizzy_logo}
+                                            src={item.file ? `/storage/${item.file}` : whizzy_logo}
+                                            alt={item.judul_karya || 'Karya Image'}
                                             className="object-contain w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]"
                                         />
                                         <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-80 transition-opacity duration-300"></div>
                                         <div className="absolute inset-0 flex flex-col items-end justify-end px-4 pb-6 lg:pb-12 sm:px-16 text-start text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <h2 className="text-xl font-bold text-start w-full">{item.karya.judul_karya}</h2>
-                                            <p className="text-sm sm:text-base">
-                                                {item.karya.deskripsi_karya}
-                                            </p>
+                                            <h2 className="text-xl font-bold text-start w-full">
+                                                {item.judul_karya || 'Featured Banner'}
+                                            </h2>
+                                            <p className="text-sm sm:text-base">{item.deskripsi_karya}</p>
                                         </div>
                                     </div>
                                 </SwiperSlide>
-                            </Swiper>
-                        ))
+                            ))}
+                        </Swiper>
                     )}
                 </div>
 
