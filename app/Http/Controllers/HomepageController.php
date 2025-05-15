@@ -39,22 +39,28 @@ class HomepageController extends Controller
 
     public function store_carousel(Request $request)
     {
-        // Validate the incoming request
         $request->validate([
-            'karya_id' => 'required|integer',
+            'karya_id' => 'nullable|integer|exists:karya,id',
+            'file' => 'nullable|file|mimes:jpg,jpeg,png,mp3,wav|max:2048', // adjust mime types as needed
         ]);
 
-        // Update or create the featured karya
+        $filePath = null;
+
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('carousel_files', 'public'); // stores in storage/app/public/carousel_files
+        }
+
         $carousel = CarouselModel::create([
             'karya_id' => $request->karya_id,
+            'file' => $filePath,
         ]);
 
-        // Return a success response
         return response()->json([
-            'message' => 'Carousel updated successfully',
+            'message' => 'Carousel saved successfully',
             'data' => $carousel,
         ], 200);
     }
+
 
     public function delete_featured($id)
     {
@@ -63,7 +69,7 @@ class HomepageController extends Controller
 
         return Inertia::location('/admin/homepage-settings');
     }
-    
+
     public function delete_carousel($id)
     {
         $data = CarouselModel::findOrFail($id);
@@ -71,5 +77,4 @@ class HomepageController extends Controller
 
         return Inertia::location('/admin/homepage-settings');
     }
-
 }
