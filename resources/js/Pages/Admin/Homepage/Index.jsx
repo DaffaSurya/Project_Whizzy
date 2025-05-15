@@ -14,40 +14,44 @@ const Index = ({ karya, featured, carousel }) => {
             : text;
     }
 
+    console.log(carousel);
+
     async function newCarousel(e) {
         e.preventDefault();
 
         setLoading(true);
 
-        const data = {
-            karya_id: e.target.karya_id.value,
-        };
+        const formData = new FormData();
+        const karyaId = e.target.karya_id.value;
+        const fileInput = e.target.file;
+
+        if (karyaId) formData.append("karya_id", karyaId);
+        if (fileInput && fileInput.files.length > 0) {
+            formData.append("file", fileInput.files[0]);
+        }
 
         try {
-            console.log(data);
             const response = await Axios.post(
                 "/admin/homepage-settings/store-carousel",
-                data
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
             );
 
             document.getElementById("addCarousel").checked = false;
 
-            // setToastVisible(true);
-            // setToastMessage("Karya Added successfully.");
-
+            // Redirect after successful upload
             router.visit("/admin/homepage-settings");
         } catch (error) {
-            setLoading(false);
-
-            if (error.response) {
-                console.log("Error data:", error.response.data.message);
-                console.log("Error status:", error.response.status);
-                console.log("Error headers:", error.response.headers);
-            }
+            console.error("Upload failed:", error.response?.data || error.message);
         } finally {
             setLoading(false);
         }
     }
+
 
     async function newFeatured(e) {
         e.preventDefault();
@@ -114,7 +118,7 @@ const Index = ({ karya, featured, carousel }) => {
                     </div>
                 )}
             </div>
-            <div className="flex flex-row justify-between gap-4 max-w-full lg:gap-0 overflow-autolg:overflow-hidden">
+            <div className="flex flex-row justify-start max-w-full lg:gap-0 overflow-autolg:overflow-hidden">
                 {carousel.length === 0 ? (
                     <div className="text-center py-10 border w-full border-gray-700">
                         <h2 className="text-lg font-bold text-gray-600">
@@ -125,12 +129,12 @@ const Index = ({ karya, featured, carousel }) => {
                     carousel.map((item) => (
                         <div
                             key={item.id}
-                            className="relative w-72 h-32 group border border-gray-600 rounded-xl"
+                            className="relative w-72 h-32 me-5 group border border-gray-600 rounded-xl overflow-hidden bg-black"
                         >
                             <img
                                 item={item.id}
-                                src={item.karya.cover_karya}
-                                className="w-64 h-32 object-contain"
+                                src={`/storage/${item.file}`}
+                                 className="w-full h-full object-contain"
                             />
                             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <Link
@@ -190,11 +194,11 @@ const Index = ({ karya, featured, carousel }) => {
                                     </h2>
                                     <p className="text-sm text-gray-600 mb-4">
                                         {featured.length > 0 &&
-                                        item?.karya?.deskripsi_karya
+                                            item?.karya?.deskripsi_karya
                                             ? truncateText(
-                                                  item.karya.deskripsi_karya,
-                                                  320
-                                              )
+                                                item.karya.deskripsi_karya,
+                                                320
+                                            )
                                             : "No description available."}
                                     </p>
                                     <div className="mt-auto">
@@ -252,11 +256,10 @@ const Index = ({ karya, featured, carousel }) => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`btn btn-sm px-4 py-1 mt-3 ${
-                                loading
+                            className={`btn btn-sm px-4 py-1 mt-3 ${loading
                                     ? "bg-yellow-600 text-white cursor-not-allowed"
                                     : "bg-yellow-400 text-black hover:bg-yellow-500"
-                            }`}
+                                }`}
                         >
                             {loading ? "Processing..." : "Save"}
                         </button>
@@ -311,16 +314,15 @@ const Index = ({ karya, featured, carousel }) => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`btn btn-sm px-4 py-1 mt-3 ${
-                                loading
+                            className={`btn btn-sm px-4 py-1 mt-3 ${loading
                                     ? "bg-yellow-600 text-white cursor-not-allowed"
                                     : "bg-yellow-400 text-black hover:bg-yellow-500"
-                            }`}
+                                }`}
                         >
                             {loading ? "Processing..." : "Save"}
                         </button>
                     </form>
-                    
+
                 </div>
                 <label className="modal-backdrop" htmlFor="addCarousel">
                     Close
