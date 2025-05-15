@@ -3,7 +3,8 @@ import AdminLayout from '../../../Layout/AdminLayout'
 import { Ban, Save } from 'lucide-react'
 import { Link, router } from '@inertiajs/react'
 import Axios from 'axios'
-import Toast from '../../../Components/Toast'
+import LoadingModal from '../../../Components/LoadingModal'
+
 
 
 const Create = ({ categories }) => {
@@ -111,14 +112,7 @@ const Create = ({ categories }) => {
         <AdminLayout title="Audiobook | Create">
 
             {/* Progress bar */}
-            {loading && (
-                <div className="w-full bg-gray-200 rounded h-4 mb-4">
-                    <div
-                        className="bg-yellow-400 h-4 rounded"
-                        style={{ width: `${progress}%` }}
-                    ></div>
-                </div>
-            )}
+            {loading && <LoadingModal />}
 
 
             <form onSubmit={newKarya} className="w-full space-y-4">

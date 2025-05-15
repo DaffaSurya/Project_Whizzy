@@ -130,6 +130,9 @@ Route::middleware(AuthMiddleware::class)->group(function () {
     Route::get('/karya/{id}/{slug}', [AudiobookController::class, 'showKarya']);
     Route::get('/karya/{slug}/{id}/chapter/{chapterId}', [AudiobookController::class, 'playChapter']);
     Route::get('/audiobook/like/{id}', [AudiobookController::class, 'like']);
+    Route::delete('/admin/karya/comments/delete/{id}', [AudiobookController::class, 'deleteComments']);
+
+
 
     // Users Route
     Route::get('/forum/unggah', [ForumController::class, 'unggah']);
